@@ -19,16 +19,31 @@ model user {
   name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  collections collection[]
 }
 
-model collection {
+model moedas {
   id          Int      @id @default(autoincrement())
-  title       String
+  year        Int
+  value       Float
+  description String?
+  country     String
+  userId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model actionsFigures {
+  id          Int      @id @default(autoincrement())
+  name        String
+  series      String?
   description String?
   userId      Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user user @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
-
