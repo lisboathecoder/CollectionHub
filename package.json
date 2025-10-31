@@ -1,0 +1,33 @@
+{
+  "name": "collectionhub",
+  "version": "1.0.0",
+  "description": "Sistema de coleções para organizar seus itens favoritos.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lisboathecoder/CollectionHub.git"
+  },
+  "keywords": [
+    "coleções",
+    "organização",
+    "itens favoritos",
+    "sistema de coleções"
+  ],
+  "author": "CollectionHub Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lisboathecoder/CollectionHub/issues"
+  },
+  "homepage": "https://github.com/lisboathecoder/CollectionHub#readme",
+  "dependencies": {
+    "@prisma/client": "^6.18.0",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10",
+    "prisma": "^6.18.0"
+  }
+}
