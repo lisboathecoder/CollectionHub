@@ -4,9 +4,20 @@
   "description": "Sistema de coleções para organizar seus itens favoritos.",
   "main": "server.js",
   "type": "module",
+  "files": [
+    "dist/cards.json",
+    "dist/sets.json",
+    "dist/rarity.json"
+  ],
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "prisma:seed": "prisma db seed"
   },
   "repository": {
     "type": "git",
@@ -26,6 +37,7 @@
   "homepage": "https://github.com/lisboathecoder/CollectionHub#readme",
   "dependencies": {
     "@prisma/client": "^6.18.0",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "nodemon": "^3.1.10",
     "prisma": "^6.18.0"
