@@ -1,11 +1,12 @@
 import express from "express";
-import c from "../controllers/Pokémon/setsController.js";
+import * as setModule from "../controllers/Pokémon/setsController.js";
+
 const router = express.Router();
 
-router.get("/", c.list);
-router.get("/:code", c.get);
-router.post("/", c.create);
-router.put("/:code", c.update);
-router.delete("/:code", c.remove);
+router.get("/", setModule.listarSets);
+router.get("/:code", setModule.listarSetPorCodigo);
+router.post("/", setModule.criarSet);
+router.put("/:code", setModule.atualizarSet);
+router.delete("/:code", setModule.deletarSet);
 
 export default router;

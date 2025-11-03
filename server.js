@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import cors from "cors";
 import { fileURLToPath } from "url";
-import apiRouter from "./routes/index.js";
+import apiRouter from "./src/routes/index.js";
 
 const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);

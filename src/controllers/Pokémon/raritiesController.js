@@ -122,3 +122,12 @@ export const deletarRaridade = async (req, res) => {
     });
   }
 };
+
+
+export default {
+  list: listarRaridades,
+  get: listarRaridadePorCodigo,
+  create: criarRaridade,
+  update: atualizarRaridade,
+  remove: deletarRaridade,
+};
