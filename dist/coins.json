@@ -1,0 +1,39 @@
+{
+  "coins": [
+    {
+      "name": "Moeda de 1 Real",
+      "year": 1994,
+      "material": "Aço inoxidável",
+      "value": 1,
+      "image": "images/coins/1-real.png"
+    },
+    {
+      "name": "Moeda de 50 Centavos",
+      "year": 1998,
+      "material": "Cobre-níquel",
+      "value": 0.5,
+      "image": "images/coins/50-centavos.png"
+    },
+    {
+      "name": "Moeda de 25 Centavos",
+      "year": 2000,
+      "material": "Aço inoxidável",
+      "value": 0.25,
+      "image": "images/coins/25-centavos.png"
+    },
+    {
+      "name": "Moeda de 10 Centavos",
+      "year": 2003,
+      "material": "Aço inoxidável",
+      "value": 0.1,
+      "image": "images/coins/10-centavos.png"
+    },
+    {
+      "name": "Moeda de 5 Centavos",
+      "year": 2004,
+      "material": "Aço inoxidável",
+      "value": 0.05,
+      "image": "images/coins/5-centavos.png"
+    }
+  ]
+}

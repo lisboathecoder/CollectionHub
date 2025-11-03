@@ -84,6 +84,21 @@ async function main() {
   console.log('Seed concluído.');
 }
 
+async function main() {
+  // Seed coins data
+  for (const coin of coinsData) {
+    await prisma.coin.create({
+      data: {
+        name: coin.name,
+        year: coin.year,
+        country: coin.country,
+        imageUrl: coin.imageUrl,
+      },
+    });
+  }
+   console.log('Seed concluído.');
+}
+
 main()
   .catch((e) => {
     console.error(e);
