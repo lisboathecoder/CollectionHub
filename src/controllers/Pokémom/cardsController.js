@@ -1,5 +1,5 @@
 import CardModel from "../models/cardModel.js";
-import { ok, fail } from "./utils.js";
+import { ok, fail } from "../utils/utils.js";
 
 export default {
   async list(req, res) {
