@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
@@ -13,37 +9,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  collections collection[]
+model Set {
+  code        String   @id
+  nameEn      String
+  releaseDate DateTime?
+  count       Int?
+  packs       Pack[]
+  cards       Card[]
 }
 
-model moedas {
-  id          Int      @id @default(autoincrement())
-  year        Int
-  value       Float
-  description String?
-  country     String
-  userId      Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model Pack {
+  id      Int    @id @default(autoincrement())
+  name    String
+  setCode String
+  set     Set    @relation(fields: [setCode], references: [code], onDelete: Cascade)
+  cards   Card[]
 
-  user User @relation(fields: [userId], references: [id])
+  @@unique([setCode, name]) // cada pack é único dentro do set
 }
 
-model actionsFigures {
-  id          Int      @id @default(autoincrement())
-  name        String
-  series      String?
-  description String?
-  userId      Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model Rarity {
+  code  String @id // ex.: C, U, R, RR, ...
+  name  String // ex.: Common, Uncommon, ...
+  cards Card[]
+}
 
-  user User @relation(fields: [userId], references: [id])
+model Card {
+  id         Int      @id @default(autoincrement())
+  setCode    String
+  number     Int
+  set        Set      @relation(fields: [setCode], references: [code], onDelete: Cascade)
+
+  nameEn     String?
+  slug       String?
+  imageName  String?
+
+  rarityCode String?
+  rarity     Rarity?  @relation(fields: [rarityCode], references: [code])
+
+  packs      Pack[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([setCode, number])
 }
