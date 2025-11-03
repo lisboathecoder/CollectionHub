@@ -17,7 +17,7 @@ export const create = async (data) => {
   return prisma.rarity.create({
     data: {
       code: data.code,
-      name: data.name,
+      name: data.name
     }
   });
 };
@@ -26,7 +26,7 @@ export const update = async (code, data) => {
   return prisma.rarity.update({
     where: { code },
     data: {
-      ...(data.name && { name: data.name }),
+      ...(data.name && { name: data.name })
     }
   });
 };
