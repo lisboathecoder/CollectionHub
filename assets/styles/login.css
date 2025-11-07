@@ -1,0 +1,78 @@
+* {
+    background-color: #121212;
+}
+
+.imagem-direita {
+    float: right; 
+    width: 45%; 
+    height: auto; 
+    margin: 0 0 15px 15px;
+}
+.container-de-conteudo::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+@media screen and (max-width: 600px) {
+    
+    .imagem-direita {
+        width: 100%; 
+        float: none; 
+        margin: 15px 0; 
+        display: block;
+    }
+}
+
+.login-container {
+    /* Ocupa metade da tela (ou a proporção que você preferir) */
+    flex: 1;
+    background-color: #121212; /* Cor de fundo escura, como na imagem */
+
+    /* --- Centralização Flexbox --- */
+    display: flex;
+    flex-direction: column; /* Organiza os itens (título, formulário, etc.) em coluna */
+    justify-content: center; /* Centraliza **verticalmente** */
+    align-items: center; /* Centraliza **horizontalmente** o bloco do formulário */
+
+    /* Ajuste o preenchimento interno e a largura máxima do conteúdo */
+    padding: 40px;
+    max-width: 450px; /* Limita a largura do conteúdo interno */
+    margin: auto; /* Garante que o 'login-box' fique centralizado dentro de sua coluna do flex container */
+    
+    /* Nota: Se você usar `flex: 1` no .login-box, você pode centralizar o *conteúdo* dele */
+}
+
+/* Para centralizar os itens de login dentro da caixa */
+.login-content {
+    width: 100%; /* Ocupa a largura máxima disponível dentro do .login-box */
+    max-width: 350px; /* Define uma largura fixa para os campos de input e botões */
+}
+
+.welcome {
+    color: white;
+}
+
+.message {
+    color: rgb(114, 114, 114);
+}
+
+.botao {
+    display: flex; /* Habilita o Flexbox */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a linha de baixo se não houver espaço */
+    justify-content: center; /* Centraliza as imagens no contêiner */
+    gap: 20px; /* Adiciona um espaço (gap) entre as imagens (opcional, mas recomendado) */
+}
+
+/* 2. Estilo para as Imagens (Tamanho Fixo e Responsividade) */
+.botao img {
+    /* Define o tamanho Fixo (aqui o "tamanho fixo" que você pediu) */
+    width: 300px;
+    height: 200px; 
+    
+    /* Garante a responsividade, impedindo que a imagem ultrapasse o contêiner */
+    max-width: 100%;
+    
+    /* Propriedades para garantir que a imagem preencha o espaço sem distorcer */
+    object-fit: cover; /* Recorta para preencher, mantendo a proporção */
+}
