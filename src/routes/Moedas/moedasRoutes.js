@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as MoedasRoutes from "../../controllers/Moedas/moedasController";
+import * as MoedasRoutes from "../../controllers/Moedas/moedasController.js";
 
 const router = Router();
 
