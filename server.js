@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import cors from "cors";
 import { fileURLToPath } from "url";
-import PokemonRoutes from "./src/routes/Pokemon/index.js";
+import routes from "./routes.js";
 
 const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
@@ -38,7 +38,8 @@ app.get(/^\/images\/(.*)/, (req, res) => {
   res.sendFile(filePath);
 });
 
-app.use("/poke", PokemonRoutes);
+app.use("/api", routes);
+
 
 app.get("/", (req, res) => res.sendFile(path.join(PUBLIC_DIR, "index.html")));
 
