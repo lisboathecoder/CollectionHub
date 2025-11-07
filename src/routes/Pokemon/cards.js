@@ -1,5 +1,5 @@
 import express from "express";
-import * as cards from "../controllers/Pokémon/cardsController.js";
+import * as cards from "../../controllers/Pokemon/cardsController.js";
 const router = express.Router();
 
 router.get("/", cards.listarCards);

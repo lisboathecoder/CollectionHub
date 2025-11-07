@@ -1,4 +1,4 @@
-import * as CardModel from "../../model/Pokémon/cardModel.js";
+import * as CardModel from "../../model/Pokemon/cardModel.js";
 
 export const listarCards = async (req, res) => {
   try {

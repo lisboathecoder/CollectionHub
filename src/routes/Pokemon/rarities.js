@@ -1,5 +1,5 @@
 import express from "express";
-import * as rarities from "../controllers/Pokémon/raritiesController.js";
+import * as rarities from "../../controllers/Pokemon/rarityController.js";
 const router = express.Router();
 
 router.get("/", rarities.listarRaridades);

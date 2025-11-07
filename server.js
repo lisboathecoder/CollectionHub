@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import cors from "cors";
 import { fileURLToPath } from "url";
-import apiRouter from "./src/routes/index.js";
+import PokemonRoutes from "./src/routes/Pokemon/index.js";
 
 const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
@@ -47,7 +47,7 @@ app.get(/^\/images\/(.*)/, (req, res) => {
 });
 
 // API routes
-app.use("/api", apiRouter);
+app.use("/poke", PokemonRoutes);
 
 // Fallback to index for root
 app.get("/", (req, res) => res.sendFile(path.join(PUBLIC_DIR, "index.html")));

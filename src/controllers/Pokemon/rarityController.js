@@ -1,4 +1,4 @@
-import * as RarityModel from "../../model/Pokémon/rarityModel.js";
+import * as RarityModel from "../../model/Pokemon/rarityModel.js";
 
 export const listarRaridades = async (req, res) => {
   try {
