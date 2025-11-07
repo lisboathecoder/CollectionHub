@@ -14,11 +14,10 @@ async function readJSON(p) {
 }
 
 async function main() {
-  const rarity = await readJSON('rarity.json'); // { "C": "Common", ... }
-  const sets = await readJSON('sets.json');     // [{ code, label.en, packs, ... }]
-  const cards = await readJSON('cards.json');   // [{ set, number, label, packs, ... }]
+  const rarity = await readJSON('rarity.json'); 
+  const sets = await readJSON('sets.json');     
+  const cards = await readJSON('cards.json');   
 
-  // 1) Raridades
   for (const [code, name] of Object.entries(rarity)) {
     await prisma.rarity.upsert({
       where: { code },
@@ -27,7 +26,7 @@ async function main() {
     });
   }
 
-  // 2) Sets e Packs
+ 
   for (const s of sets) {
     const code = s.code;
     const nameEn = s.label?.en ?? code;
@@ -40,7 +39,7 @@ async function main() {
       create: { code, nameEn, releaseDate, count },
     });
 
-    // packs do set
+
     for (const packName of (s.packs ?? [])) {
       await prisma.pack.upsert({
         where: { setCode_name: { setCode: code, name: packName } },
@@ -50,9 +49,9 @@ async function main() {
     }
   }
 
-  // 3) Cartas
+
   for (const c of cards) {
-    if (!c.set || !Number.isFinite(c.number)) continue; // ignora entradas inválidas
+    if (!c.set || !Number.isFinite(c.number)) continue; 
 
     const data = {
       setCode: c.set,
@@ -63,7 +62,7 @@ async function main() {
       rarityCode: c.rarityCode ?? null,
     };
 
-    // garanta que os packs do set já existem (vieram de sets.json)
+
     const connects = (Array.isArray(c.packs) ? c.packs : [])
       .map((name) => ({ setCode_name: { setCode: c.set, name } }));
 
@@ -71,7 +70,7 @@ async function main() {
       where: { setCode_number: { setCode: c.set, number: c.number } },
       update: {
         ...data,
-        // sincroniza conexões (conecta os que estiverem faltando)
+
         packs: { connect: connects },
       },
       create: {
@@ -82,6 +81,21 @@ async function main() {
   }
 
   console.log('Seed concluído.');
+}
+
+async function main() {
+
+  for (const coin of coinsData) {
+    await prisma.coin.create({
+      data: {
+        name: coin.name,
+        year: coin.year,
+        country: coin.country,
+        imageUrl: coin.imageUrl,
+      },
+    });
+  }
+   console.log('Seed concluído.');
 }
 
 main()
