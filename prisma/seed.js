@@ -6,7 +6,7 @@ import path from 'node:path';
 const prisma = new PrismaClient();
 
 const root = process.cwd();
-const file = (p) => path.join(root, 'dist', p);
+const file = (p) => path.join(root, '/assets/dist', p);
 
 async function readJSON(p) {
   const buf = await fs.readFile(file(p), 'utf8');
@@ -83,20 +83,7 @@ async function main() {
   console.log('Seed concluído.');
 }
 
-async function main() {
 
-  for (const coin of coinsData) {
-    await prisma.coin.create({
-      data: {
-        name: coin.name,
-        year: coin.year,
-        country: coin.country,
-        imageUrl: coin.imageUrl,
-      },
-    });
-  }
-   console.log('Seed concluído.');
-}
 
 main()
   .catch((e) => {
