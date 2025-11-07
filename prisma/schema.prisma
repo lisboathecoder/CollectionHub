@@ -10,7 +10,7 @@ datasource db {
 }
 
 model Set {
-  code        String   @id
+  code        String    @id
   nameEn      String
   releaseDate DateTime?
   count       Int?
@@ -35,22 +35,75 @@ model Rarity {
 }
 
 model Card {
-  id         Int      @id @default(autoincrement())
-  setCode    String
-  number     Int
-  set        Set      @relation(fields: [setCode], references: [code], onDelete: Cascade)
+  id      Int    @id @default(autoincrement())
+  setCode String
+  number  Int
+  set     Set    @relation(fields: [setCode], references: [code], onDelete: Cascade)
 
-  nameEn     String?
-  slug       String?
-  imageName  String?
+  nameEn    String?
+  slug      String?
+  imageName String?
 
   rarityCode String?
-  rarity     Rarity?  @relation(fields: [rarityCode], references: [code])
+  rarity     Rarity? @relation(fields: [rarityCode], references: [code])
 
-  packs      Pack[]
+  packs Pack[]
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Collection Collection[]
 
   @@unique([setCode, number])
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  username   String       @unique
+  email      String       @unique
+  password   String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Collection Collection[]
+}
+
+model Collection {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  cardId    Int
+  moedaId   Int
+  quantity  Int      @default(1)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card      Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  moeda     Moeda    @relation(fields: [moedaId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, cardId])
+}
+
+model Country {
+  code String @id @unique
+  name String @unique
+
+  moedas Moeda[]
+}
+
+model Moeda {
+  id               Int     @id @default(autoincrement())
+  nome             String
+  ano              Int
+  material         String
+  countryCode      String
+  country          Country @relation(fields: [countryCode], references: [code])
+  valorFacial      String
+  descricao        String?
+  peso_g           Float?
+  imageNameAnverso String?
+  imageNameReverso String?
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Collection Collection[]
+
+  @@unique([countryCode, nome, ano])
 }
