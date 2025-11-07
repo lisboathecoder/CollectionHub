@@ -7,6 +7,8 @@
       "en": "Genetic Apex"
     },
     "packs": ["Charizard", "Mewtwo", "Pikachu"]
+    ,
+    "imageUrl": "https://i.ibb.co/JFH2gxzL/LOGO-expansion-A1-en-US.webp"
   },
   {
     "code": "A1A",
@@ -16,6 +18,8 @@
       "en": "Mythical Island"
     },
     "packs": ["Mew"]
+    ,
+    "imageUrl": "https://i.ibb.co/Mx4LF0Bj/LOGO-expansion-A1-A-en-US.webp"
   },
   {
     "code": "A2",
@@ -25,6 +29,8 @@
       "en": "Space-Time Smackdown"
     },
     "packs": ["Dialga", "Palkia"]
+    ,
+    "imageUrl": "https://i.ibb.co/7tsrnh7F/LOGO-expansion-A2-en-US.webp"
   },
   {
     "code": "A2A",
@@ -36,6 +42,8 @@
       "es": "Luz Triunfal"
     },
     "packs": ["Arceus"]
+    ,
+    "imageUrl": "https://i.ibb.co/HDJKYY9B/LOGO-expansion-A2-A-en-US.webp"
   },
   {
     "code": "A2B",
@@ -45,6 +53,8 @@
       "en": "Shining Revelry"
     },
     "packs": ["Shining"]
+    ,
+    "imageUrl": "https://i.ibb.co/8DpYB66d/LOGO-expansion-A2-B-en-US.webp"
   },
   {
     "code": "A3",
@@ -54,6 +64,8 @@
       "en": "Celestial Guardians"
     },
     "packs": ["Lunala", "Solgaleo"]
+    ,
+    "imageUrl": "https://i.ibb.co/Ng9Z8NtS/LOGO-expansion-A3-en-US.webp"
   },
   {
     "code": "A3A",
@@ -63,6 +75,8 @@
       "en": "Extradimensional Crisis"
     },
     "packs": ["Extradimensional"]
+    ,
+    "imageUrl": "https://i.ibb.co/WNfxg3W4/LOGO-expansion-A3-A-en-US.webp"
   },
   {
     "code": "A3B",
@@ -72,6 +86,8 @@
       "en": "Eevee Grove"
     },
     "packs": ["Eevee"]
+    ,
+    "imageUrl": "https://i.ibb.co/F4cbCqbN/LOGO-expansion-A3-B-en-US.webp"
   },
   {
     "code": "A4",
@@ -81,6 +97,8 @@
       "en": "Wisdom of Sea and Sky"
     },
     "packs": ["Ho-Oh", "Lugia"]
+    ,
+    "imageUrl": "https://i.ibb.co/9mNDC3Ct/LOGO-expansion-A4-en-US.webp"
   },
   {
     "code": "A4A",
@@ -90,6 +108,8 @@
       "en": "Secluded Springs"
     },
     "packs": ["Secluded"]
+    ,
+    "imageUrl": "https://i.ibb.co/wDXnz9K/LOGO-expansion-A4-A-en-US.webp"
   },
   {
     "code": "A4B",
@@ -99,6 +119,8 @@
       "en": "Deluxe Pack: ex"
     },
     "packs": ["Deluxe"]
+    ,
+    "imageUrl": "https://i.ibb.co/Pv18yXWk/LOGO-expansion-A4-B-en-US.webp"
   },
   {
     "code": "PROMO-A",
@@ -122,6 +144,8 @@
       "Vol. 12",
       "Vol. 13"
     ]
+    ,
+    "imageUrl": "https://i.ibb.co/Xx8FWqrk/LOGO-expansion-PROMO-A-en-US.webp"
   },
   {
     "code": "B1",
@@ -131,6 +155,8 @@
       "en": "Mega Rising"
     },
     "packs": ["Mega Altaria", "Mega Blaziken", "Mega Gyarados"]
+    ,
+    "imageUrl": "https://i.ibb.co/1cBjRxD/LOGO-expansion-B1-en-US.webp"
   },
   {
     "code": "PROMO-B",
@@ -139,5 +165,7 @@
       "en": "Promo B"
     },
     "packs": []
+    ,
+    "imageUrl": "https://i.ibb.co/sd9sWXZN/LOGO-expansion-PROMO-B-en-US.webp"
   }
 ]
