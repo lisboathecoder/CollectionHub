@@ -1,4 +1,4 @@
-import * as SetModel from "../../model/Pokemon/setModel.js";
+import * as SetModel from "../../models/Pokemon/setModel.js";
 
 export const listarSets = async (req, res) => {
   try {
