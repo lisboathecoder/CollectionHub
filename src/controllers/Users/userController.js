@@ -102,9 +102,7 @@ export const loginUser = async (req, res) => {
     return res.status(400).json({ error: "Dados inválidos" });
 
   try {
-    // procurar por username ou email
-    const user = await userModel.findOneByUsernameOrEmail(usernameOrEmail);
-    // -> você precisa adicionar essa função no model, ou usar findMany/findFirst diretamente.
+    const user = await userModel.findByUsernameOrEmail(usernameOrEmail);
 
     if (!user) return res.status(401).json({ error: "Credenciais inválidas" });
 
