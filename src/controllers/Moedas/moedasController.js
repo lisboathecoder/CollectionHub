@@ -1,4 +1,4 @@
-import * as moedaModel from "../../models/Moedas/moedasModel";
+import * as moedaModel from "../../models/Moedas/moedasModel.js";
 
 export const listarTodos = async (req, res) => {
   try {
