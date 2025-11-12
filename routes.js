@@ -1,14 +1,12 @@
 import express from "express";
 import PokemonRoutes from "./src/routes/Pokemon/pokemonRoutes.js";
 import UsersRoutes from "./src/routes/Users/usersRoutes.js";
-import MoedasRoutes from "./src/routes/Moedas/moedasRoutes.js"
 
 const router = express.Router();
 
 
 router.use("/pokemon", PokemonRoutes);
 router.use("/users", UsersRoutes);
-router.use("/moedas", MoedasRoutes);
 
 
 router.get("/health", (req, res) =>
