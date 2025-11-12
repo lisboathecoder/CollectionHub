@@ -1,42 +1,217 @@
-# CollectHub
+# CollectionHub
 
-Bem-vindo ao **CollectHub**! Somos uma plataforma digital dedicada a entusiastas e colecionadores. Nossa missão é oferecer um espaço centralizado, intuitivo e encantador para você organizar, exibir e gerenciar suas coleções, desde Action Figures e Moedas raras até Cartas Pokémon.
+![GitHub repo size](https://img.shields.io/github/repo-size/lisboathecoder/CollectionHub?style=for-the-badge)
+![GitHub language count](https://img.shields.io/github/languages/count/lisboathecoder/CollectionHub?style=for-the-badge)
 
-## 🚀 Status do Projeto
+> Plataforma digital dedicada a entusiastas e colecionadores. Uma solução centralizada, intuitiva e encantadora para organizar, exibir e gerenciar suas coleções, desde Action Figures e Moedas raras até Cartas Pokémon TCG Pocket.
 
-**Concluído** (Ciclo de desenvolvimento inicial finalizado).
+### Ajustes e melhorias
 
-## ✨ O que oferecemos (Funcionalidades Principais)
+O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas para as seguintes tarefas:
 
-* **Galeria de Itens:** Uma galeria principal (`index.html`) e uma página de detalhes (`detalhe.html`) funcionais para explorar os colecionáveis.
-* **Banco de Dados Populado:** O sistema é iniciado com um *seed* de 100 itens colecionáveis e 3 categorias pré-definidas (Action Figures, Moedas, Cartas Pokémon).
-* **API RESTful Completa:** Um backend robusto que oferece operações de **C**reate, **R**ead, **U**pdate e **D**elete (CRUD) para todos os colecionáveis.
-* **Filtragem Avançada (API):** A API permite filtros dinâmicos na listagem de itens, buscando por `tipo`, `ano` e `condição` (via *query params*).
-* **Gestão de Usuários (API):** Endpoints prontos para o registro (com senha criptografada) e login de usuários.
-* **Design Responsivo:** A interface (baseada no Figma) se adapta a diferentes tamanhos de tela, de dispositivos móveis a desktops.
-* **Tratamento de Erros:** O backend inclui tratamento de erros e códigos de status HTTP corretos, e o frontend exibe *loading states* e alertas de erro.
+- [x] API RESTful completa com Prisma + PostgreSQL
+- [x] Sistema de autenticação JWT + bcrypt
+- [x] Filtros avançados por set, raridade e número
+- [ ] Sistema de coleções de usuários (Collection CRUD)
+- [ ] Dashboard de estatísticas e progresso
+- [ ] Sistema de busca avançada com Elasticsearch
+
+## 💻 Pré-requisitos
+
+Antes de começar, verifique se você atendeu aos seguintes requisitos:
+
+- Você instalou a versão mais recente de `Node.js (v18+)` e `PostgreSQL (v14+)`
+- Você tem uma máquina `Windows / Linux / Mac`
+- Você leu a documentação do [Prisma ORM](https://www.prisma.io/docs/)
+
+## 🚀 Instalando CollectionHub
+
+Para instalar o CollectionHub, siga estas etapas:
+
+**Clone o repositório:**
+
+```bash
+git clone https://github.com/lisboathecoder/CollectionHub.git
+cd CollectionHub
+```
+
+**Instale as dependências:**
+
+```bash
+npm install
+```
+
+**Configure o banco de dados:**
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/collectionhub"
+JWT_SECRET="seu_secret_muito_seguro_aqui"
+PORT=3000
+```
+
+**Execute as migrações do Prisma:**
+
+```bash
+npx prisma migrate dev
+```
+
+**Popule o banco com dados iniciais (seed):**
+
+```bash
+npx prisma db seed
+```
+
+## ☕ Usando CollectionHub
+
+Para usar o CollectionHub, siga estas etapas:
+
+**Inicie o servidor:**
+
+```bash
+npm start
+```
+
+**Acesse a aplicação:**
+
+```
+http://localhost:3000
+```
+
+**Exemplos de uso da API:**
+
+```bash
+# Listar todos os cards
+GET http://localhost:3000/api/pokemon/cards
+
+# Filtrar cards por set
+GET http://localhost:3000/api/pokemon/cards?set=A1
+
+# Filtrar por set com ordenação por raridade
+GET http://localhost:3000/api/pokemon/cards?set=A1&orderBy=rarity
+
+# Buscar card específico por set e número
+GET http://localhost:3000/api/pokemon/cards/A1/1
+
+# Login de usuário
+POST http://localhost:3000/api/users/login
+Body: { "usernameOrEmail": "usuario", "password": "senha123" }
+```
 
 ## 🛠️ Tecnologias Utilizadas
 
 ### Backend & Dados
-* **Servidor:** Node.js, Express.js
-* **Banco de Dados:** PostgreSQL
-* **ORM:** Prisma
+
+- Node.js
+- Express.js 5.1.0
+- PostgreSQL
+- Prisma ORM 6.18.0
+- JWT (jsonwebtoken 9.0.2)
+- bcrypt 6.0.0
 
 ### Frontend & Design
-* **Interface:** HTML5, CSS3, JavaScript (ES6+ Fetch API)
-* **Design & Prototipação:** Figma
 
-### Ferramentas & Metodologia
-* **Modelagem de Dados:** BrModeloWeb
-* **Testes de API:** Postman
-* **Gerenciamento de Projeto:** Trello, Notion
+- HTML5, CSS3, JavaScript (ES6+)
+- Figma
+
+### Ferramentas
+
+- Postman (testes de API)
+- Trello, Notion (gerenciamento)
+- BrModeloWeb (modelagem de dados)
+
+## 📂 Estrutura do Projeto
+
+```
+CollectionHub/
+├── dist/               # Dados estáticos (JSONs, imagens)
+├── pages/              # Páginas HTML
+├── prisma/             # Schema e migrações
+├── routes/             # Rotas principais
+├── src/
+│   ├── controllers/    # Lógica de negócio
+│   ├── models/         # Camada de acesso ao banco
+│   └── routes/         # Rotas da API
+└── server.js           # Ponto de entrada
+```
+
+## 📫 Contribuindo para CollectionHub
+
+Para contribuir com CollectionHub, siga estas etapas:
+
+1. Bifurque este repositório
+2. Crie um branch: `git checkout -b feature/nova-funcionalidade`
+3. Faça suas alterações e confirme-as: `git commit -m 'Adiciona nova funcionalidade X'`
+4. Envie para o branch original: `git push origin feature/nova-funcionalidade`
+5. Crie a solicitação de pull
+
+Como alternativa, consulte a documentação do GitHub em [como criar uma solicitação pull](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+
+## 🤝 Colaboradores
+
+Agradecemos às seguintes pessoas que contribuíram para este projeto:
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/lisboathecoder" title="Gustavo Lisboa">
+        <img src="https://github.com/lisboathecoder.png" width="100px;" alt="Foto do Gustavo Lisboa no GitHub"/><br>
+        <sub>
+          <b>Gustavo Lisboa</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Jvsilvagomes" title="João Victor">
+        <img src="https://github.com/Jvsilvagomes.png" width="100px;" alt="Foto do João Victor"/><br>
+        <sub>
+          <b>João Victor</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Fabiox7778" title="Fabio">
+        <img src="https://github.com/Fabiox7778.png" width="100px;" alt="Foto do Fabio"/><br>
+        <sub>
+          <b>Fabio Henrique </b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/PedroUE" title="Pedro">
+        <img src="https://github.com/PedroUE.png" width="100px;" alt="Foto do Pedro"/><br>
+        <sub>   
+          <b>Pedro Urbano</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Rafael-1108" title="Rafael">
+        <img src="https://github.com/Rafael-1108.png" width="100px;" alt="Foto do Rafael"/><br>
+        <sub>
+          <b>Rafael Mendes</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/CiaociaoStopiglia" title="João Stopiglia">
+        <img src="https://github.com/CiaociaoStopiglia.png" width="100px;" alt="Foto do João Stopiglia"/><br>
+        <sub>
+          <b>João Stopiglia</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
+</table>
+
+
+## 📝 Licença
+
+Esse projeto está sob licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
-## 👥 Equipe
-
-* **Product Owner (Gerenciamento):** João Victor
-* **Backend Development:** Fabio, Gustavo Lisboa
-* **Frontend Development:** Fabio, Gustavo Lisboa, Pedro, Rafael
-* **UI/UX Design:** João Stopiglia, Pedro, Rafael
+[⬆ Voltar ao topo](#collectionhub)

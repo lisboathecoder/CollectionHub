@@ -53,6 +53,8 @@ model Card {
   updatedAt  DateTime     @updatedAt
   Collection Collection[]
 
+  // Composite key: garante unicidade por set + número do card
+  // Usado para queries otimizadas: GET /cards/:set/:number
   @@unique([setCode, number])
 }
 
@@ -79,4 +81,3 @@ model Collection {
 
   @@unique([userId, cardId])
 }
-

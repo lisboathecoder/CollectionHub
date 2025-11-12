@@ -8,7 +8,7 @@ const includeCard = {
   packs: true
 };
 
-export const list = async ({ q, set, number, rarity, page = 1, pageSize = 50 }) => {
+export const list = async ({ q, set, number, rarity, page = 1, pageSize = 50, orderBy = 'default' }) => {
   const where = {};
   if (set) where.setCode = set;
   if (number) where.number = Number(number);
@@ -22,6 +22,18 @@ export const list = async ({ q, set, number, rarity, page = 1, pageSize = 50 }) 
 
   const skip = (Number(page) - 1) * Number(pageSize);
 
+  let orderByClause;
+  if (orderBy === 'rarity') {
+    orderByClause = [
+      { rarity: { code: 'desc' } },
+      { number: 'asc' }
+    ];
+  } else {
+    orderByClause = [
+      { setCode: "asc" }, 
+      { number: "asc" }
+    ];
+  }
 
   const [items, total] = await Promise.all([
     prisma.card.findMany({
@@ -29,7 +41,7 @@ export const list = async ({ q, set, number, rarity, page = 1, pageSize = 50 }) 
       include: includeCard,
       skip,
       take: Number(pageSize),
-      orderBy: [{ setCode: "asc" }, { number: "asc" }],
+      orderBy: orderByClause,
     }),
     prisma.card.count({ where }),
   ]);
