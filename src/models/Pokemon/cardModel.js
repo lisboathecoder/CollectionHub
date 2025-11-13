@@ -25,7 +25,6 @@ export const list = async ({ q, set, number, rarity, page = 1, pageSize = 50, or
   let orderByClause;
   if (orderBy === 'rarity') {
     orderByClause = [
-      { rarity: { code: 'desc' } },
       { number: 'asc' }
     ];
   } else {
@@ -45,6 +44,29 @@ export const list = async ({ q, set, number, rarity, page = 1, pageSize = 50, or
     }),
     prisma.card.count({ where }),
   ]);
+
+  if (orderBy === 'rarity') {
+    const rarityOrder = {
+      'C': 1,
+      'U': 2,
+      'R': 3,
+      'RR': 4,
+      'AR': 5,
+      'SR': 6,
+      'SAR': 7,
+      'IM': 8,
+      'UR': 9,
+      'S': 10,
+      'SSR': 11
+    };
+
+    items.sort((a, b) => {
+      const orderA = rarityOrder[a.rarityCode] || 999;
+      const orderB = rarityOrder[b.rarityCode] || 999;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.number - b.number;
+    });
+  }
 
   return { items, total, page: Number(page), pageSize: Number(pageSize) };
 };

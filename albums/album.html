@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álbum - CollectionHub</title>
+    <link rel="stylesheet" href="/assets/styles/global.css">
+    <link rel="stylesheet" href="/albums/styles/album-detail.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/albums" class="btn-back">← Voltar</a>
+            <div class="album-header">
+                <h1 id="albumTitle">Carregando...</h1>
+                <div class="album-actions">
+                    <button class="btn-secondary" onclick="editarAlbum()">Editar</button>
+                    <button class="btn-danger" onclick="deletarAlbum()">Excluir</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="add-card-section">
+            <button class="btn-primary" onclick="mostrarModalAdicionarCard()">+ Adicionar Card</button>
+        </div>
+
+        <div id="albumCards" class="cards-grid">
+            <p class="loading">Carregando cards...</p>
+        </div>
+    </div>
+
+    <div id="modalAdicionarCard" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <h2>Adicionar Card ao Álbum</h2>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="trocarTab('banco')">Do Banco</button>
+                <button class="tab-btn" onclick="trocarTab('custom')">Customizado</button>
+            </div>
+
+            <div id="tabBanco" class="tab-content active">
+                <div class="form-group">
+                    <label for="searchCard">Buscar Card</label>
+                    <input type="text" id="searchCard" placeholder="Digite o nome do card">
+                    <button onclick="buscarCards()">Buscar</button>
+                </div>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+
+            <div id="tabCustom" class="tab-content">
+                <form id="formCardCustomizado">
+                    <div class="form-group">
+                        <label for="customCardName">Nome do Card</label>
+                        <input type="text" id="customCardName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customCardImage">Imagem</label>
+                        <input type="file" id="customCardImage" accept="image/*" required>
+                        <p class="help-text">Ou cole a URL da imagem:</p>
+                        <input type="url" id="customCardImageUrl" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label for="customQuantity">Quantidade</label>
+                        <input type="number" id="customQuantity" value="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="customNotes">Notas (opcional)</label>
+                        <textarea id="customNotes" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Adicionar Card</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/albums/js/album-detail.js"></script>
+</body>
+</html>
