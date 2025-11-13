@@ -73,3 +73,44 @@
     border-radius: 10px;
     margin-top: 10px;
 } 
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form label {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #b0b0b0;
+}
+
+.login-form input {
+    background-color: #2b2b2b;
+    border: 1px solid #444444; 
+    border-radius: 5px;
+    padding: 15px 10px;
+    font-size: 16px;
+    color: #ffffff;
+    outline: none;
+    width: 300px;
+    box-sizing: border-box; 
+}
+
+.login-form input:focus {
+    border-color: #666666;
+}
+
+.forgot-password {
+    margin-top: 15px;
+    text-align: left;
+    color: #4a90e2;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
