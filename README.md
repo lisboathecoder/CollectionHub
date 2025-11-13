@@ -3,18 +3,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/lisboathecoder/CollectionHub?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/lisboathecoder/CollectionHub?style=for-the-badge)
 
-> Plataforma digital dedicada a entusiastas e colecionadores. Uma solução centralizada, intuitiva e encantadora para organizar, exibir e gerenciar suas coleções, desde Action Figures e Moedas raras até Cartas Pokémon TCG Pocket.
-
-### Ajustes e melhorias
-
-O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas para as seguintes tarefas:
-
-- [x] API RESTful completa com Prisma + PostgreSQL
-- [x] Sistema de autenticação JWT + bcrypt
-- [x] Filtros avançados por set, raridade e número
-- [ ] Sistema de coleções de usuários (Collection CRUD)
-- [ ] Dashboard de estatísticas e progresso
-- [ ] Sistema de busca avançada com Elasticsearch
+> Plataforma digital dedicada a entusiastas e colecionadores. Uma solução centralizada, intuitiva e encantadora para organizar, exibir e gerenciar suas coleções de Cartas Pokémon TCG Pocket.
 
 ## 💻 Pré-requisitos
 
