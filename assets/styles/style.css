@@ -1,6 +1,7 @@
 html, body {
     margin: 0;
     padding: 0;
+    padding-top: 70px
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
@@ -44,7 +45,9 @@ a {
     justify-content: space-between;
     align-items: center;
     padding: 15px 50px;
-    position:relative ;
+    position:absolute;
+    left: 0;
+    right: 0;
     top: 0;
     z-index: 100;
 }
@@ -146,201 +149,236 @@ a {
 /* --- Seção Principal (Hero) --- */
 
 .hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
-    padding-top: 50px;
+    padding: 80px 20px 60px;
     position: relative;
 }
 
-.hero-content {
-    margin-bottom: 50px;
-    z-index: 2; /* Para garantir que o texto fique acima dos itens flutuantes */
+.weapon-left {
+    position: absolute;
+    left: 10%;
+    top: 20%;
+    width: 150px;
+    opacity: 0.7;
 }
 
-.free-access {
-    color: var(--primary-color);
-    font-weight: 600;
-    margin-bottom: 10px;
-    font-size: 1.1em;
+.weapon-right {
+    position: absolute;
+    right: 10%;
+    top: 30%;
+    width: 120px;
+    opacity: 0.7;
 }
 
-.hero h1 {
-    font-size: 3.5em;
-    font-weight: 700;
-    max-width: 800px;
+.grenade {
+    position: absolute;
+    left: 15%;
+    top: 50%;
+    width: 80px;
+    opacity: 0.6;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-bottom: 30px;
+}
+
+.badge-dot {
+    width: 8px;
+    height: 8px;
+    background: #ff4757;
+    border-radius: 50%;
+}
+
+h1 {
+    font-size: 64px;
+    font-weight: 800;
     line-height: 1.2;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .subtitle {
-    opacity: 0.7;
-    font-size: 0.9em;
+    color: #888;
+    font-size: 16px;
+    margin-bottom: 60px;
 }
-
-/* --- Cartas (Cards) --- */
 
 .cards-container {
     display: flex;
     justify-content: center;
-    position: relative;
-    height: 400px; /* Altura para acomodar as cartas */
-    margin-top: 50px;
+    align-items: center;
+    gap: 20px;
+    padding: 0 20px;
+    perspective: 1000px;
+    margin-bottom: 40px;
 }
 
 .card {
-    width: 250px;
-    height: 350px;
-    border-radius: 20px;
-    position: absolute;
-    bottom: 0;
-    background-size: cover;
-    background-position: center;
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start;
-    padding: 20px;
-    transition: transform 0.5s ease;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    width: 280px;
+    height: 380px;
+    border-radius: 24px;
+    padding: 24px;
+    position: relative;
+    transition: transform 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     cursor: pointer;
-    overflow: hidden;
 }
 
-.card-rating {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.8em;
+.card:hover {
+    transform: translateY(-10px) scale(1.05);
 }
-
-.card-info {
-    font-size: 1.2em;
-    font-weight: 600;
-}
-
-/* Posições e Inclinações */
 
 .card-fortnite {
-    background-color: #c00000; /* Simulação de cor base */
-    left: -180px;
-    transform: rotate(-25deg) scale(0.7);
-    opacity: 0.5;
-    z-index: 1;
+    background: linear-gradient(135deg, #4169E1 0%, #1e3a8a 100%);
+    transform: rotate(-8deg);
 }
 
 .card-kaiba {
-    background-color: #1a0a5a; /* Simulação de cor base */
-    left: 10px;
-    transform: rotate(-15deg) scale(0.8);
-    opacity: 0.7;
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+    transform: rotate(-4deg);
     z-index: 2;
 }
 
 .card-pokemon {
-    background-color: #4CAF50; /* Simulação de cor base (Verde do Bulbassauro) */
-    z-index: 5;
-    transform: rotate(0deg) scale(1);
+    background: linear-gradient(135deg, #00D4FF 0%, #0099CC 100%);
+    transform: rotate(0deg);
+    z-index: 3;
+    position: relative;
 }
 
 .card-moedas {
-    background-color: #ffc107; /* Simulação de cor base (Amarelo/Ouro) */
-    right: 10px;
-    transform: rotate(15deg) scale(0.8);
-    opacity: 0.7;
-    z-index: 3;
+    background: linear-gradient(135deg, #F4A460 0%, #8B4513 100%);
+    transform: rotate(4deg);
+    z-index: 2;
 }
 
-.card-cs {
-    background-color: #333333; /* Simulação de cor base */
-    right: -180px;
-    transform: rotate(25deg) scale(0.7);
-    opacity: 0.5;
-    z-index: 1;
+.card-counter {
+    background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+    transform: rotate(8deg);
 }
 
-/* Imagem central (Bulbassauro) */
-.card-pokemon .card-image {
+.card-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-members {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.card-image {
+    width: 100%;
+    height: 330px;
+    border-radius: 16px;
+    object-fit: cover;
+    margin-top: auto;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%; /* Ajuste conforme a imagem */
-    height: auto;
-    object-fit: contain;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    width: calc(100% - 48px);
 }
-
-/* --- Itens Flutuantes (Simulação) --- */
-
-/* Nota: Para ter os modelos 3D exatos, você precisaria de imagens, SVGs ou modelos 3D reais. 
-   Aqui, apenas definiremos o posicionamento. */
-
-.floating-items div {
+.card-image-cs {
+    width: 100%;
+    height: 290px;
+    border-radius: 16px;
+    object-fit: cover;
+    margin-top: auto;
     position: absolute;
-    opacity: 0.3;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    width: calc(100% - 48px);
 }
 
-.float-gun-left {
-    /* Simulação de posição e rotação da arma superior esquerda */
-    top: 150px;
-    left: 100px;
-    width: 200px;
-    height: 50px;
-    background: green; /* Cor de placeholder */
-    transform: rotate(-15deg);
-}
-
-.float-rocket-left-small {
-    /* Simulação de posição e rotação do míssil pequeno esquerdo */
-    top: 350px;
-    left: 80px;
-    width: 150px;
-    height: 40px;
-    background: lightgreen; /* Cor de placeholder */
-    transform: rotate(-10deg);
-}
-
-.float-rocket-right {
-    /* Simulação de posição e rotação do míssil direito */
-    top: 200px;
-    right: 100px;
-    width: 100px;
-    height: 200px;
-    background: yellowgreen; /* Cor de placeholder */
-    transform: rotate(20deg);
-}
-
-/* Ajustes para telas menores (Responsividade básica) */
 @media (max-width: 1200px) {
     .cards-container {
-        overflow-x: auto;
-        justify-content: flex-start;
-        padding: 0 20px;
-        width: 100%;
+        flex-wrap: wrap;
     }
+    
     .card {
-        position: static;
-        flex-shrink: 0;
-        margin: 0 10px;
-        transform: none !important;
-        opacity: 1 !important;
+        transform: rotate(0deg) !important;
     }
+}
 
-    .card-fortnite { margin-left: -50px; }
-    .card-cs { margin-right: -50px; }
-
-    .floating-items {
-        display: none; /* Esconde elementos flutuantes em telas pequenas */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 42px;
     }
-    .hero h1 {
-        font-size: 2.5em;
+    
+    .weapon-left, .weapon-right, .grenade {
+        display: none;
+    }
+}
+
+.footer {
+    background: #000000;
+    padding: 30px 20px;
+    margin-top: 80px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-content p {
+    color: #888;
+    font-size: 14px;
+}
+
+.footer-social {
+    display: flex;
+    gap: 20px;
+}
+
+.social-link {
+    color: #888;
+    transition: color 0.3s, transform 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-link:hover {
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+.social-link svg {
+    width: 24px;
+    height: 24px;
+}
+
+@media (max-width: 600px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
     }
 }
