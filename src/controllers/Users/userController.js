@@ -124,7 +124,12 @@ export const loginUser = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.json({ id: user.id, username: user.username });
+    res.json({ 
+      id: user.id, 
+      username: user.username,
+      email: user.email,
+      token: token
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal server error" });

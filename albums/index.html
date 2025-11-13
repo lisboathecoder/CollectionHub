@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Álbuns - CollectionHub</title>
+    <link rel="stylesheet" href="/assets/styles/global.css">
+    <link rel="stylesheet" href="/albums/styles/albums.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Meus Álbuns</h1>
+            <button class="btn-primary" onclick="mostrarModalCriarAlbum()">+ Novo Álbum</button>
+        </header>
+
+        <div id="albumsList" class="albums-grid">
+            <p class="loading">Carregando álbuns...</p>
+        </div>
+    </div>
+
+    <div id="modalCriarAlbum" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <h2>Criar Novo Álbum</h2>
+            <form id="formCriarAlbum">
+                <div class="form-group">
+                    <label for="albumName">Nome do Álbum</label>
+                    <input type="text" id="albumName" required placeholder="Ex: Minha Coleção A1">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="isPublic">
+                        Tornar álbum público
+                    </label>
+                </div>
+                <button type="submit" class="btn-primary">Criar Álbum</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/albums/js/albums.js"></script>
+</body>
+</html>

@@ -25,12 +25,12 @@ model Pack {
   set     Set    @relation(fields: [setCode], references: [code], onDelete: Cascade)
   cards   Card[]
 
-  @@unique([setCode, name]) // cada pack é único dentro do set
+  @@unique([setCode, name])
 }
 
 model Rarity {
-  code  String @id // ex.: C, U, R, RR, ...
-  name  String // ex.: Common, Uncommon, ...
+  code  String @id
+  name  String
   cards Card[]
 }
 
@@ -43,40 +43,51 @@ model Card {
   nameEn    String?
   slug      String?
   imageName String?
+  imageUrl  String?
 
   rarityCode String?
   rarity     Rarity? @relation(fields: [rarityCode], references: [code])
 
-  packs Pack[]
+  packs      Pack[]
+  albumItems AlbumItem[]
 
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  Collection Collection[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([setCode, number])
 }
 
 model User {
-  id         Int          @id @default(autoincrement())
-  username   String       @unique
-  email      String       @unique
-  password   String
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  Collection Collection[]
-}
-
-model Collection {
   id        Int      @id @default(autoincrement())
-  userId    Int
-  cardId    Int
-  moedaId   Int
-  quantity  Int      @default(1)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  card      Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  username  String   @unique
+  email     String   @unique
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@unique([userId, cardId])
+  albums    Album[]
 }
 
+model Album {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  name      String
+  isPublic  Boolean     @default(false)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     AlbumItem[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model AlbumItem {
+  id          Int      @id @default(autoincrement())
+  albumId     Int
+  album       Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  cardId      Int?
+  card        Card?    @relation(fields: [cardId], references: [id], onDelete: SetNull)
+  customName  String?
+  customImage String?
+  quantity    Int      @default(1)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
