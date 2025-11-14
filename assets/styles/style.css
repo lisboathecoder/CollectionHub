@@ -6,11 +6,10 @@ html, body {
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-/* Reset Básico e Variáveis */
 :root {
     --dark-bg: #111111;
     --text-color: #ffffff;
-    --primary-color: #ff3e6c; /* Cor do '5-Month — Free Access' */
+    --primary-color: #ff3e6c;
     --navbar-bg: rgba(17, 17, 17, 0.8);
 }
 
@@ -29,15 +28,13 @@ body {
         linear-gradient(to bottom, #222 1px, transparent 1px);
     background-size: 50px 50px;
     min-height: 100vh;
-    overflow-x: hidden; /* Evita barra de rolagem horizontal devido a inclinações */
+    overflow-x: hidden;
 }
 
 a {
     color: var(--text-color);
     text-decoration: none;
 }
-
-/* --- Barra de Navegação (Navbar) --- */
 
 .navbar {
     display: flex;
@@ -64,7 +61,6 @@ a {
     font-weight: 700;
 }
 
-/* Itens da Navbar */
 .nav-item {
     display: flex;
     align-items: center;
@@ -82,7 +78,7 @@ a {
 .icone-imagem {
   width: 24px;
   height: 24px;
-  vertical-align: middle; /* Para alinhá-lo ao texto, se estiver em linha */
+  vertical-align: middle;
 }
 
 .search-box {
@@ -130,7 +126,7 @@ a {
 
 .user-icon {
     border-radius: 50%;
-    background-color: #0088ff; /* Simulação da cor do avatar */
+    background-color: #0088ff;
     padding: 5px;
 }
 
@@ -138,15 +134,13 @@ a {
     position: absolute;
     right: -5px;
     top: -5px;
-    background: #00ff00; /* Simulação do ícone '+' */
+    background: #00ff00;
     border-radius: 50%;
     color: var(--dark-bg);
     font-size: 0.7em;
     padding: 2px;
     line-height: 1;
 }
-
-/* --- Seção Principal (Hero) --- */
 
 .hero {
     text-align: center;

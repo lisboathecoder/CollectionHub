@@ -9,7 +9,6 @@
 	--text-color: #111827;
 }
 
-/* Apply sensible defaults */
 *,
 *::before,
 *::after {
@@ -30,12 +29,9 @@ body {
 	color: var(--text-color);
 }
 
-/* Small helpers to keep layout predictable */
 a { color: inherit; text-decoration: none; }
 img, picture, video, canvas, svg { display: block; max-width: 100%; }
 button { font-family: inherit; }
-
-/*COLANDO OQ O ANIME FEZ*/
 
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
 * {
@@ -47,7 +43,6 @@ body {
   margin: 0px;
   height: 100%;
 }
-/* a blue color as a generic focus style */
 button:focus-visible {
   outline: 2px solid #4a90e2 !important;
   outline: -webkit-focus-ring-color auto 5px !important;

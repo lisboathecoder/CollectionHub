@@ -8,9 +8,9 @@ const includeCard = {
   packs: true
 };
 
-export const list = async ({ q, set, number, rarity, page = 1, pageSize = 50, orderBy = 'default' }) => {
+export const list = async ({ q, set, setCode, number, rarity, page = 1, pageSize = 50, orderBy = 'default' }) => {
   const where = {};
-  if (set) where.setCode = set;
+  if (set || setCode) where.setCode = set || setCode;
   if (number) where.number = Number(number);
   if (rarity) where.rarityCode = rarity;
   if (q) {

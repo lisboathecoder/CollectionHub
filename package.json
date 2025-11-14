@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/lisboathecoder/CollectionHub#readme",
   "dependencies": {
+    "@emailjs/nodejs": "^5.0.2",
     "@prisma/client": "^6.18.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
