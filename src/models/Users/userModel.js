@@ -40,12 +40,12 @@ export const atualizar = async (id, data) => {
     });
 };
 
-export const findByUsernameOrEmail = async (identifier) => {
+export const findByUsernameOrEmail = async (username, email) => {
   return await prisma.user.findFirst({
     where: {
       OR: [
-        { username: identifier },
-        { email: identifier }
+        { username: username },
+        { email: email }
       ]
     }
   });
