@@ -17,7 +17,7 @@ app.use(express.static(ROOT, { extensions: ["html"] }));
 
 app.use("/api", routes);
 
-app.get("/", (req, res) => res.sendFile(path.join(ROOT, "index.html")));
+app.get("/", (_req, res) => res.sendFile(path.resolve(ROOT, "index.html")));
 
 app.listen(PORT, () => {
   console.log(`API server running at http://localhost:${PORT}`);

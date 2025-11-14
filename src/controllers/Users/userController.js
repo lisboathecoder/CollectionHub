@@ -9,7 +9,7 @@ export const listarUsuarios = async (req, res) => {
     res.json(users);
   } catch (error) {
     console.error("Error listing users:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
 export const getUsuarioPorId = async (req, res) => {
@@ -18,12 +18,12 @@ export const getUsuarioPorId = async (req, res) => {
   try {
     const user = await userModel.findOne(id);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Usuário não encontrado" });
     }
     res.json(user);
   } catch (error) {
     console.error("Error fetching user by ID:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
 
@@ -31,21 +31,34 @@ export const createUser = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
+    const existingUser = await userModel.findByUsernameOrEmail(username, email);
+    if (existingUser) {
+      return res.status(409).json({ 
+        error: "Usuário já existe com este nome de usuário ou email" 
+      });
+    }
+
     const passwordHash = await bcrypt.hash(password, 10);
 
     const dados = { username, email, password: passwordHash };
     const novoUsuario = await userModel.create(dados);
+
     res.status(201).json({
       mensagem: "Usuário criado com sucesso",
       usuario: {
-        id: novoUsuario.id,
-        username: novoUsuario.username,
-        email: novoUsuario.email,
+      id: novoUsuario.id,
+      username: novoUsuario.username,
+      email: novoUsuario.email,
       },
     });
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(500).json({ error: "Internal server error" });
+    if (error.code === 'P2002') {
+      return res.status(409).json({ 
+        error: "Usuário já existe com este nome de usuário ou email" 
+      });
+    }
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
 
@@ -56,7 +69,7 @@ export const updateUser = async (req, res) => {
   try {
     const usuarioExistente = await userModel.findOne(id);
     if (!usuarioExistente) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Usuário não encontrado" });
     }
 
     const dadosAtualizados = {};
@@ -72,7 +85,7 @@ export const updateUser = async (req, res) => {
     res.json(usuarioAtualizado);
   } catch (error) {
     console.error("Error updating user:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
 
@@ -82,7 +95,7 @@ export const deleteUser = async (req, res) => {
   try {
     const usuarioExistente = await userModel.findOne(id);
     if (!usuarioExistente) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Usuário não encontrado" });
     }
 
     await userModel.deletar(id);
@@ -92,7 +105,7 @@ export const deleteUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting user:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
 
@@ -130,6 +143,6 @@ export const loginUser = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
