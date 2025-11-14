@@ -32,7 +32,7 @@
     justify-content: center; 
     align-items: left;
     padding: 20px;
-    max-width: 500px; 
+    max-width: 320px; 
     margin: auto;
 }
 
@@ -113,4 +113,88 @@
 
 .forgot-password:hover {
     text-decoration: underline;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.primeira {
+    margin-top: 15px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-top: 2px;
+    margin-right: 10px;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #484f58;
+    border-radius: 3px;
+    background-color: #0d1117;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.checkbox-group input[type="checkbox"]:checked {
+    background-color: #58a6ff;
+    border-color: #58a6ff;
+}
+
+.checkbox-group input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #0d1117;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.link-blue {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
+.link-blue:hover {
+    text-decoration: underline;
+}
+
+.text-gray {
+    color: #8b949e;
+}
+
+.signup-text {
+    font-size: 14px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.signup-text .link-blue {
+    font-weight: 600;
+}
+
+.login-button {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #3b82f6;
+    background-image: linear-gradient(to bottom, #4f9cf8, #3b82f6);
+    border: 1px solid #3b82f6;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+.login-button:hover {
+    background-color: #4f9cf8;
+    background-image: linear-gradient(to bottom, #5dacef, #4f9cf8);
 }
