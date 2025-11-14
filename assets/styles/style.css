@@ -7,12 +7,10 @@ body {
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-/* Reset Básico e Variáveis */
 :root {
     --dark-bg: #111111;
     --text-color: #ffffff;
     --primary-color: #ff3e6c;
-    /* Cor do '5-Month — Free Access' */
     --navbar-bg: rgba(17, 17, 17, 0.8);
 }
 
@@ -32,37 +30,11 @@ body {
     background-size: 50px 50px;
     min-height: 100vh;
     overflow-x: hidden;
-    /* Evita barra de rolagem horizontal devido a inclinações */
 }
 
 a {
     color: var(--text-color);
     text-decoration: none;
-}
-
-/* --- Barra de Navegação (Navbar) --- */
-.nav-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    padding: 30px 0;
-}
-
-.tab {
-    background: transparent;
-    border: 2px solid white;
-    color: white;
-    padding: 10px 30px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-
-.tab.active {
-    background: white;
-    color: #1a1f35;
 }
 
 .navbar {
@@ -106,10 +78,9 @@ a {
 }
 
 .icone-imagem {
-    width: 24px;
-    height: 24px;
-    vertical-align: middle;
-    /* Para alinhá-lo ao texto, se estiver em linha */
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
 }
 
 .search-box {
@@ -159,7 +130,6 @@ a {
 .user-icon {
     border-radius: 50%;
     background-color: #0088ff;
-    /* Simulação da cor do avatar */
     padding: 5px;
 }
 
@@ -168,15 +138,12 @@ a {
     right: -5px;
     top: -5px;
     background: #00ff00;
-    /* Simulação do ícone '+' */
     border-radius: 50%;
     color: var(--dark-bg);
     font-size: 0.7em;
     padding: 2px;
     line-height: 1;
 }
-
-/* --- Seção Principal (Hero) --- */
 
 .hero {
     text-align: center;

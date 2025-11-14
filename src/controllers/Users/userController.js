@@ -109,14 +109,12 @@ export const loginUser = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ error: "Credenciais inválidas" });
 
-    // criar JWT
     const token = jwt.sign(
       { sub: user.id, username: user.username },
       JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    // opcional: cookie httpOnly
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

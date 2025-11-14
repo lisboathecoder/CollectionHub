@@ -12,10 +12,10 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         body: JSON.stringify(data)
     });
     if (res.ok) {
-        // leva para o arquivo fornecido:
         window.location.href = '/pages/userLogin/login.html';
     } else {
         const err = await res.json();
         alert(err.message || 'Erro ao registrar');
     }
 });
+
