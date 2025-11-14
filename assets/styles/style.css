@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     padding-top: 70px
@@ -10,7 +11,8 @@ html, body {
 :root {
     --dark-bg: #111111;
     --text-color: #ffffff;
-    --primary-color: #ff3e6c; /* Cor do '5-Month — Free Access' */
+    --primary-color: #ff3e6c;
+    /* Cor do '5-Month — Free Access' */
     --navbar-bg: rgba(17, 17, 17, 0.8);
 }
 
@@ -24,12 +26,13 @@ html, body {
 body {
     background-color: var(--dark-bg);
     color: var(--text-color);
-    background-image: 
+    background-image:
         linear-gradient(to right, #222 1px, transparent 1px),
         linear-gradient(to bottom, #222 1px, transparent 1px);
     background-size: 50px 50px;
     min-height: 100vh;
-    overflow-x: hidden; /* Evita barra de rolagem horizontal devido a inclinações */
+    overflow-x: hidden;
+    /* Evita barra de rolagem horizontal devido a inclinações */
 }
 
 a {
@@ -38,6 +41,29 @@ a {
 }
 
 /* --- Barra de Navegação (Navbar) --- */
+.nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 30px 0;
+}
+
+.tab {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.tab.active {
+    background: white;
+    color: #1a1f35;
+}
 
 .navbar {
     display: flex;
@@ -45,14 +71,15 @@ a {
     justify-content: space-between;
     align-items: center;
     padding: 15px 50px;
-    position:absolute;
+    position: absolute;
     left: 0;
     right: 0;
     top: 0;
     z-index: 100;
 }
 
-.navbar-left, .navbar-right {
+.navbar-left,
+.navbar-right {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -64,7 +91,6 @@ a {
     font-weight: 700;
 }
 
-/* Itens da Navbar */
 .nav-item {
     display: flex;
     align-items: center;
@@ -76,13 +102,14 @@ a {
 .icon {
     font-size: 1.2em;
     gap: 5px;
-    padding-top: 2px    ;
+    padding-top: 2px;
 }
 
 .icone-imagem {
-  width: 24px;
-  height: 24px;
-  vertical-align: middle; /* Para alinhá-lo ao texto, se estiver em linha */
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    /* Para alinhá-lo ao texto, se estiver em linha */
 }
 
 .search-box {
@@ -99,6 +126,7 @@ a {
     padding: 5px 10px;
     outline: none;
 }
+
 .search-input::placeholder {
     color: #999;
 }
@@ -130,7 +158,8 @@ a {
 
 .user-icon {
     border-radius: 50%;
-    background-color: #0088ff; /* Simulação da cor do avatar */
+    background-color: #0088ff;
+    /* Simulação da cor do avatar */
     padding: 5px;
 }
 
@@ -138,7 +167,8 @@ a {
     position: absolute;
     right: -5px;
     top: -5px;
-    background: #00ff00; /* Simulação do ícone '+' */
+    background: #00ff00;
+    /* Simulação do ícone '+' */
     border-radius: 50%;
     color: var(--dark-bg);
     font-size: 0.7em;
@@ -223,6 +253,12 @@ h1 {
     margin-bottom: 40px;
 }
 
+.pack-title {
+            text-align: center;
+            margin-bottom: 10px;
+            height: 350px;
+        }
+
 .card {
     width: 280px;
     height: 380px;
@@ -298,6 +334,7 @@ h1 {
     right: 24px;
     width: calc(100% - 48px);
 }
+
 .card-image-cs {
     width: 100%;
     height: 290px;
@@ -315,7 +352,7 @@ h1 {
     .cards-container {
         flex-wrap: wrap;
     }
-    
+
     .card {
         transform: rotate(0deg) !important;
     }
@@ -325,8 +362,10 @@ h1 {
     h1 {
         font-size: 42px;
     }
-    
-    .weapon-left, .weapon-right, .grenade {
+
+    .weapon-left,
+    .weapon-right,
+    .grenade {
         display: none;
     }
 }
