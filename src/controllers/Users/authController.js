@@ -4,11 +4,8 @@ import { PrismaClient } from "@prisma/client";
 import { send2FACode, generate2FACode, get2FAExpiration } from "../../services/emailService.js";
 
 const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET || "troque_isto_para_producao";
+const JWT_SECRET = process.env.JWT_SECRET;
 
-// ============================================
-// REGISTRO DE USUÁRIO
-// ============================================
 export const register = async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -17,7 +14,7 @@ export const register = async (req, res) => {
     }
 
     try {
-        // Verificar se já existe
+
         const existing = await prisma.user.findFirst({
             where: {
                 OR: [{ username }, { email }]
@@ -27,11 +24,8 @@ export const register = async (req, res) => {
         if (existing) {
             return res.status(400).json({ error: "Usuário ou email já existe" });
         }
-
-        // Hash da senha
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Criar usuário
         const user = await prisma.user.create({
             data: {
                 username,
@@ -54,9 +48,6 @@ export const register = async (req, res) => {
     }
 };
 
-// ============================================
-// LOGIN (ETAPA 1) - ENVIA CÓDIGO 2FA
-// ============================================
 export const login = async (req, res) => {
     const { usernameOrEmail, password } = req.body;
 
@@ -65,7 +56,6 @@ export const login = async (req, res) => {
     }
 
     try {
-        // Buscar usuário
         const user = await prisma.user.findFirst({
             where: {
                 OR: [
@@ -79,17 +69,14 @@ export const login = async (req, res) => {
             return res.status(401).json({ error: "Credenciais inválidas" });
         }
 
-        // Verificar senha
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
             return res.status(401).json({ error: "Credenciais inválidas" });
         }
 
-        // Gerar código 2FA
         const code = generate2FACode();
         const expires = get2FAExpiration();
 
-        // Salvar no banco
         await prisma.user.update({
             where: { id: user.id },
             data: {
@@ -98,7 +85,6 @@ export const login = async (req, res) => {
             }
         });
 
-        // Enviar por email
         const emailResult = await send2FACode(user.email, code, user.username);
 
         if (!emailResult.success) {
@@ -119,9 +105,7 @@ export const login = async (req, res) => {
     }
 };
 
-// ============================================
-// VERIFICAR CÓDIGO 2FA (ETAPA 2) - COMPLETA LOGIN
-// ============================================
+
 export const verify2FA = async (req, res) => {
     const { userId, code } = req.body;
 
@@ -138,12 +122,10 @@ export const verify2FA = async (req, res) => {
             return res.status(404).json({ error: "Usuário não encontrado" });
         }
 
-        // Verificar se tem código pendente
         if (!user.twoFactorCode || !user.twoFactorExpires) {
             return res.status(400).json({ error: "Nenhum código 2FA pendente" });
         }
 
-        // Verificar se expirou
         if (new Date() > new Date(user.twoFactorExpires)) {
             await prisma.user.update({
                 where: { id: user.id },
@@ -152,18 +134,16 @@ export const verify2FA = async (req, res) => {
             return res.status(400).json({ error: "Código expirado. Faça login novamente" });
         }
 
-        // Verificar se o código está correto
         if (user.twoFactorCode !== code) {
             return res.status(401).json({ error: "Código inválido" });
         }
 
-        // Limpar código 2FA
+
         await prisma.user.update({
             where: { id: user.id },
             data: { twoFactorCode: null, twoFactorExpires: null }
         });
 
-        // Gerar token JWT
         const token = jwt.sign(
             { sub: user.id, username: user.username },
             JWT_SECRET,
@@ -185,9 +165,6 @@ export const verify2FA = async (req, res) => {
     }
 };
 
-// ============================================
-// REENVIAR CÓDIGO 2FA
-// ============================================
 export const resend2FA = async (req, res) => {
     const { userId } = req.body;
 
@@ -204,11 +181,9 @@ export const resend2FA = async (req, res) => {
             return res.status(404).json({ error: "Usuário não encontrado" });
         }
 
-        // Gerar novo código
         const code = generate2FACode();
         const expires = get2FAExpiration();
 
-        // Atualizar no banco
         await prisma.user.update({
             where: { id: user.id },
             data: {
@@ -217,7 +192,6 @@ export const resend2FA = async (req, res) => {
             }
         });
 
-        // Enviar email
         const emailResult = await send2FACode(user.email, code, user.username);
 
         if (!emailResult.success) {

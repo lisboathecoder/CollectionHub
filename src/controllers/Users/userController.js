@@ -1,7 +1,4 @@
 import * as userModel from "../../models/Users/userModel.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-const JWT_SECRET = process.env.JWT_SECRET || "troque_isto_para_producao";
 
 export const listarUsuarios = async (req, res) => {
   try {
@@ -23,41 +20,6 @@ export const getUsuarioPorId = async (req, res) => {
     res.json(user);
   } catch (error) {
     console.error("Error fetching user by ID:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
-  }
-};
-
-export const createUser = async (req, res) => {
-  const { username, email, password } = req.body;
-
-  try {
-    const existingUser = await userModel.findByUsernameOrEmail(username, email);
-    if (existingUser) {
-      return res.status(409).json({ 
-        error: "Usuário já existe com este nome de usuário ou email" 
-      });
-    }
-
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    const dados = { username, email, password: passwordHash };
-    const novoUsuario = await userModel.create(dados);
-
-    res.status(201).json({
-      mensagem: "Usuário criado com sucesso",
-      usuario: {
-      id: novoUsuario.id,
-      username: novoUsuario.username,
-      email: novoUsuario.email,
-      },
-    });
-  } catch (error) {
-    console.error("Error creating user:", error);
-    if (error.code === 'P2002') {
-      return res.status(409).json({ 
-        error: "Usuário já existe com este nome de usuário ou email" 
-      });
-    }
     res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
@@ -105,44 +67,6 @@ export const deleteUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting user:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
-  }
-};
-
-export const loginUser = async (req, res) => {
-  const { usernameOrEmail, password } = req.body;
-  if (!usernameOrEmail || !password)
-    return res.status(400).json({ error: "Dados inválidos" });
-
-  try {
-    const user = await userModel.findByUsernameOrEmail(usernameOrEmail);
-
-    if (!user) return res.status(401).json({ error: "Credenciais inválidas" });
-
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(401).json({ error: "Credenciais inválidas" });
-
-    const token = jwt.sign(
-      { sub: user.id, username: user.username },
-      JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    res.json({ 
-      id: user.id, 
-      username: user.username,
-      email: user.email,
-      token: token
-    });
-  } catch (err) {
-    console.error(err);
     res.status(500).json({ error: "Erro interno do servidor" });
   }
 };

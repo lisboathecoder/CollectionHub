@@ -1,7 +1,7 @@
 import express from "express";
 import PokemonRoutes from "./src/routes/Pokemon/pokemonRoutes.js";
 import UsersRoutes from "./src/routes/Users/usersRoutes.js";
-import AuthRoutes from "./src/routes/Users/authRoutes.jstes.js";
+import AuthRoutes from "./src/routes/Users/authRoutes.js";
 import AlbumRoutes from "./src/routes/Albums/albumRoutes.js";
 import UploadRoutes from "./src/routes/Upload/uploadRoutes.js";
 
