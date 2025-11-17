@@ -1,13 +1,36 @@
 * {
-    background-color: #121212;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+* {
+    background-color: #0a0a0a;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+.container-de-conteudo {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    align-items: stretch;
 }
 
 .imagem-direita {
-    float: right; 
     width: 45%; 
-    height: auto; 
-    margin: 0 0 15px 15px;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center 10px;
+    margin: 0;
+    order: 2;
 }
+
 .container-de-conteudo::after {
     content: "";
     display: table;
@@ -25,53 +48,86 @@
 }
 
 .login-container {
-    flex: 1;
-    background-color: #121212; 
+    width: 50%;
+    background-color: #0a0a0a; 
     display: flex;
     flex-direction: column;
     justify-content: center; 
-    align-items: left;
-    padding: 20px;
-    max-width: 320px; 
-    margin: auto;
+    align-items: center;
+    padding: 60px 80px;
+    order: 1;
 }
 
 .login-content {
     width: 100%;
-    max-width: 350px;
+    max-width: 450px;
+}
+
+.login-container > * {
+    width: 100%;
+    max-width: 450px;
 }
 
 .welcome {
     color: white;
+    margin-bottom: 5px;
+}
+
+.welcome h1 {
+    margin: 0 0 5px 0;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
 }
 
 .message {
-    color: rgb(114, 114, 114);
+    color: rgb(140, 140, 140);
+    margin-bottom: 25px;
+}
+
+.message p {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+button:hover {
+    opacity: 0.9;
 }
 
 .facebook {
-    width: 150px;
+    width: 145px;
     height: auto;
+    display: block;
 }
 
 .google {
-    width: 150px;
+    width: 145px;
     height: auto;
-    margin-top: 1px;
+    display: block;
 }
 
 .botoes {
     display: flex;
     flex-direction: row;
-    gap: 15px;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
 .linha-divisoria {
-    background-color: rgb(114, 114, 114);
-    width: 320px;
-    height: 2px;
-    border-radius: 10px;
-    margin-top: 10px;
+    background-color: rgb(60, 60, 60);
+    width: 100%;
+    height: 1px;
+    border-radius: 0;
+    margin: 18px 0 20px 0;
 } 
 
 .login-form {
@@ -80,35 +136,41 @@
 }
 
 .login-form label {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #b0b0b0;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #c8c8c8;
 }
 
 .login-form input {
-    background-color: #2b2b2b;
-    border: 1px solid #444444; 
-    border-radius: 5px;
-    padding: 15px 10px;
-    font-size: 16px;
+    background-color: #1a1a1a;
+    border: 1px solid #2d2d2d; 
+    border-radius: 4px;
+    padding: 11px 12px;
+    font-size: 14px;
     color: #ffffff;
     outline: none;
-    width: 300px;
-    box-sizing: border-box; 
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.login-form input::placeholder {
+    color: #5a5a5a;
 }
 
 .login-form input:focus {
-    border-color: #666666;
+    border-color: #4a90e2;
 }
 
 .forgot-password {
-    margin-top: 15px;
+    margin-top: 8px;
     text-align: left;
-    color: #4a90e2;
+    color: #5694d8;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 12px;
+    display: inline-block;
 }
 
 .forgot-password:hover {
@@ -118,32 +180,39 @@
 .checkbox-group {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 15px;
-    font-size: 14px;
+    margin-bottom: 12px;
+    font-size: 12px;
     line-height: 1.5;
+    color: #a8a8a8;
+}
+
+.checkbox-group label {
+    margin: 0;
+    font-weight: 400;
+    color: #a8a8a8;
 }
 
 .primeira {
-    margin-top: 15px;
+    margin-top: 18px;
 }
 
 .checkbox-group input[type="checkbox"] {
     margin-top: 2px;
-    margin-right: 10px;
+    margin-right: 8px;
     appearance: none;
-    width: 16px;
-    height: 16px;
-    border: 1px solid #484f58;
-    border-radius: 3px;
-    background-color: #0d1117;
+    width: 15px;
+    height: 15px;
+    border: 1.5px solid #3d3d3d;
+    border-radius: 2px;
+    background-color: #1a1a1a;
     cursor: pointer;
     flex-shrink: 0;
     position: relative;
 }
 
 .checkbox-group input[type="checkbox"]:checked {
-    background-color: #58a6ff;
-    border-color: #58a6ff;
+    background-color: #3b82f6;
+    border-color: #3b82f6;
 }
 
 .checkbox-group input[type="checkbox"]:checked::after {
@@ -152,13 +221,13 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #0d1117;
-    font-size: 12px;
+    color: white;
+    font-size: 11px;
     font-weight: bold;
 }
 
 .link-blue {
-    color: #58a6ff;
+    color: #5694d8;
     text-decoration: none;
 }
 
@@ -167,34 +236,35 @@
 }
 
 .text-gray {
-    color: #8b949e;
+    color: #888888;
 }
 
 .signup-text {
-    font-size: 14px;
-    margin-top: 20px;
-    margin-bottom: 15px;
+    font-size: 12px;
+    margin-top: 16px;
+    margin-bottom: 18px;
+    line-height: 1.6;
 }
 
 .signup-text .link-blue {
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .login-button {
     width: 100%;
-    padding: 10px 15px;
+    padding: 11px 15px;
     background-color: #3b82f6;
-    background-image: linear-gradient(to bottom, #4f9cf8, #3b82f6);
-    border: 1px solid #3b82f6;
-    border-radius: 6px;
+    border: none;
+    border-radius: 4px;
     color: #ffffff;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.1s ease;
+    transition: background-color 0.2s ease;
+    margin-top: 8px;
 }
 
 .login-button:hover {
-    background-color: #4f9cf8;
-    background-image: linear-gradient(to bottom, #5dacef, #4f9cf8);
+    background-color: #5094f7;
 }
+

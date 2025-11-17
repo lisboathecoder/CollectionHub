@@ -40,13 +40,33 @@ export const atualizar = async (id, data) => {
     });
 };
 
-export const findByUsernameOrEmail = async (identifier) => {
+export const findByUsernameOrEmail = async (username, email) => {
   return await prisma.user.findFirst({
     where: {
       OR: [
-        { username: identifier },
-        { email: identifier }
+        { username: username },
+        { email: email }
       ]
     }
   });
+};
+
+export const update2FACode = async (id, code, expires) => {
+    return await prisma.user.update({
+        where: { id: Number(id) },
+        data: {
+            twoFactorCode: code,
+            twoFactorExpires: expires
+        }
+    });
+};
+
+export const clear2FACode = async (id) => {
+    return await prisma.user.update({
+        where: { id: Number(id) },
+        data: {
+            twoFactorCode: null,
+            twoFactorExpires: null
+        }
+    });
 };
