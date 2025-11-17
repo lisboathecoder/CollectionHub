@@ -1,146 +1,14 @@
-import * as userModel from "../../models/Users/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { send2FACode, generate2FACode, get2FAExpiration } from "../../services/emailService2FA.js";
+import { PrismaClient } from "@prisma/client";
+import { send2FACode, generate2FACode, get2FAExpiration } from "../../services/emailService.js";
 
+const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || "troque_isto_para_producao";
 
-export const loginRequest2FA = async (req, res) => {
-    const { usernameOrEmail, password } = req.body;
-
-    if (!usernameOrEmail || !password) {
-        return res.status(400).json({ error: "Dados inválidos" });
-    }
-
-    try {
-        const user = await userModel.findByUsernameOrEmail(usernameOrEmail);
-
-        if (!user) {
-            return res.status(401).json({ error: "Credenciais inválidas" });
-        }
-
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-            return res.status(401).json({ error: "Credenciais inválidas" });
-        }
-
-        const code = generate2FACode();
-        const expires = get2FAExpiration();
-
-        await userModel.update2FACode(user.id, code, expires);
-
-        const emailResult = await send2FACode(user.email, code, user.username);
-
-        if (!emailResult.success) {
-            return res.status(500).json({ 
-                error: "Erro ao enviar código de verificação",
-                details: emailResult.error
-            });
-        }
-
-        res.json({
-            mensagem: "Código de verificação enviado para seu e-mail",
-            userId: user.id,
-            requires2FA: true
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Erro interno do servidor" });
-    }
-};
-
-export const verify2FAAndLogin = async (req, res) => {
-    const { userId, code } = req.body;
-
-    if (!userId || !code) {
-        return res.status(400).json({ error: "Dados inválidos" });
-    }
-
-    try {
-        const user = await userModel.findOne(parseInt(userId));
-
-        if (!user) {
-            return res.status(404).json({ error: "Usuário não encontrado" });
-        }
-
-        if (!user.twoFactorCode || !user.twoFactorExpires) {
-            return res.status(400).json({ error: "Nenhum código 2FA pendente" });
-        }
-
-        if (new Date() > new Date(user.twoFactorExpires)) {
-            await userModel.clear2FACode(user.id);
-            return res.status(400).json({ error: "Código expirado. Solicite um novo código." });
-        }
-
-        if (user.twoFactorCode !== code) {
-            return res.status(401).json({ error: "Código inválido" });
-        }
-
-        await userModel.clear2FACode(user.id);
-
-        const token = jwt.sign(
-            { sub: user.id, username: user.username },
-            JWT_SECRET,
-            { expiresIn: "7d" }
-        );
-
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
-
-        res.json({
-            mensagem: "Login realizado com sucesso",
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            token: token
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Erro interno do servidor" });
-    }
-};
-
-export const resend2FACode = async (req, res) => {
-    const { userId } = req.body;
-
-    if (!userId) {
-        return res.status(400).json({ error: "userId não fornecido" });
-    }
-
-    try {
-        const user = await userModel.findOne(parseInt(userId));
-
-        if (!user) {
-            return res.status(404).json({ error: "Usuário não encontrado" });
-        }
-
-        const code = generate2FACode();
-        const expires = get2FAExpiration();
-
-        await userModel.update2FACode(user.id, code, expires);
-
-        const emailResult = await send2FACode(user.email, code, user.username);
-
-        if (!emailResult.success) {
-            return res.status(500).json({ 
-                error: "Erro ao enviar código de verificação",
-                details: emailResult.error
-            });
-        }
-
-        res.json({
-            mensagem: "Novo código enviado para seu e-mail"
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Erro interno do servidor" });
-    }
-};
-
+// ============================================
+// REGISTRO DE USUÁRIO
+// ============================================
 export const register = async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -149,28 +17,219 @@ export const register = async (req, res) => {
     }
 
     try {
-        const passwordHash = await bcrypt.hash(password, 10);
+        // Verificar se já existe
+        const existing = await prisma.user.findFirst({
+            where: {
+                OR: [{ username }, { email }]
+            }
+        });
 
-        const dados = { username, email, password: passwordHash };
-        const novoUsuario = await userModel.create(dados);
+        if (existing) {
+            return res.status(400).json({ error: "Usuário ou email já existe" });
+        }
+
+        // Hash da senha
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Criar usuário
+        const user = await prisma.user.create({
+            data: {
+                username,
+                email,
+                password: hashedPassword
+            }
+        });
 
         res.status(201).json({
-            mensagem: "Usuário criado com sucesso",
-            usuario: {
-                id: novoUsuario.id,
-                username: novoUsuario.username,
-                email: novoUsuario.email,
-            },
+            mensagem: "Usuário criado com sucesso!",
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email
+            }
         });
     } catch (error) {
-        console.error("Erro ao criar usuário:", error);
-        
-        if (error.code === 'P2002') {
-            return res.status(400).json({ 
-                error: "Username ou email já existe" 
+        console.error('❌ Erro ao registrar:', error);
+        res.status(500).json({ error: "Erro ao criar usuário" });
+    }
+};
+
+// ============================================
+// LOGIN (ETAPA 1) - ENVIA CÓDIGO 2FA
+// ============================================
+export const login = async (req, res) => {
+    const { usernameOrEmail, password } = req.body;
+
+    if (!usernameOrEmail || !password) {
+        return res.status(400).json({ error: "Email/usuário e senha são obrigatórios" });
+    }
+
+    try {
+        // Buscar usuário
+        const user = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { username: usernameOrEmail },
+                    { email: usernameOrEmail }
+                ]
+            }
+        });
+
+        if (!user) {
+            return res.status(401).json({ error: "Credenciais inválidas" });
+        }
+
+        // Verificar senha
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+            return res.status(401).json({ error: "Credenciais inválidas" });
+        }
+
+        // Gerar código 2FA
+        const code = generate2FACode();
+        const expires = get2FAExpiration();
+
+        // Salvar no banco
+        await prisma.user.update({
+            where: { id: user.id },
+            data: {
+                twoFactorCode: code,
+                twoFactorExpires: expires
+            }
+        });
+
+        // Enviar por email
+        const emailResult = await send2FACode(user.email, code, user.username);
+
+        if (!emailResult.success) {
+            return res.status(500).json({
+                error: "Erro ao enviar código",
+                details: emailResult.error
             });
         }
-        
-        res.status(500).json({ error: "Erro interno do servidor" });
+
+        res.json({
+            mensagem: "Código enviado para seu email",
+            userId: user.id,
+            requires2FA: true
+        });
+    } catch (error) {
+        console.error('❌ Erro no login:', error);
+        res.status(500).json({ error: "Erro no servidor" });
+    }
+};
+
+// ============================================
+// VERIFICAR CÓDIGO 2FA (ETAPA 2) - COMPLETA LOGIN
+// ============================================
+export const verify2FA = async (req, res) => {
+    const { userId, code } = req.body;
+
+    if (!userId || !code) {
+        return res.status(400).json({ error: "userId e code são obrigatórios" });
+    }
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: parseInt(userId) }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: "Usuário não encontrado" });
+        }
+
+        // Verificar se tem código pendente
+        if (!user.twoFactorCode || !user.twoFactorExpires) {
+            return res.status(400).json({ error: "Nenhum código 2FA pendente" });
+        }
+
+        // Verificar se expirou
+        if (new Date() > new Date(user.twoFactorExpires)) {
+            await prisma.user.update({
+                where: { id: user.id },
+                data: { twoFactorCode: null, twoFactorExpires: null }
+            });
+            return res.status(400).json({ error: "Código expirado. Faça login novamente" });
+        }
+
+        // Verificar se o código está correto
+        if (user.twoFactorCode !== code) {
+            return res.status(401).json({ error: "Código inválido" });
+        }
+
+        // Limpar código 2FA
+        await prisma.user.update({
+            where: { id: user.id },
+            data: { twoFactorCode: null, twoFactorExpires: null }
+        });
+
+        // Gerar token JWT
+        const token = jwt.sign(
+            { sub: user.id, username: user.username },
+            JWT_SECRET,
+            { expiresIn: "7d" }
+        );
+
+        res.json({
+            mensagem: "Login realizado com sucesso!",
+            token,
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email
+            }
+        });
+    } catch (error) {
+        console.error('❌ Erro ao verificar 2FA:', error);
+        res.status(500).json({ error: "Erro no servidor" });
+    }
+};
+
+// ============================================
+// REENVIAR CÓDIGO 2FA
+// ============================================
+export const resend2FA = async (req, res) => {
+    const { userId } = req.body;
+
+    if (!userId) {
+        return res.status(400).json({ error: "userId é obrigatório" });
+    }
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: parseInt(userId) }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: "Usuário não encontrado" });
+        }
+
+        // Gerar novo código
+        const code = generate2FACode();
+        const expires = get2FAExpiration();
+
+        // Atualizar no banco
+        await prisma.user.update({
+            where: { id: user.id },
+            data: {
+                twoFactorCode: code,
+                twoFactorExpires: expires
+            }
+        });
+
+        // Enviar email
+        const emailResult = await send2FACode(user.email, code, user.username);
+
+        if (!emailResult.success) {
+            return res.status(500).json({
+                error: "Erro ao enviar código",
+                details: emailResult.error
+            });
+        }
+
+        res.json({ mensagem: "Novo código enviado para seu email" });
+    } catch (error) {
+        console.error('❌ Erro ao reenviar código:', error);
+        res.status(500).json({ error: "Erro no servidor" });
     }
 };
