@@ -1,4 +1,3 @@
-// Executa com: npx prisma db seed
 import { PrismaClient } from '@prisma/client';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -6,7 +5,7 @@ import path from 'node:path';
 const prisma = new PrismaClient();
 
 const root = process.cwd();
-const file = (p) => path.join(root, '/assets/dist', p);
+const file = (p) => path.join(root, 'dist', p);
 
 async function readJSON(p) {
   const buf = await fs.readFile(file(p), 'utf8');

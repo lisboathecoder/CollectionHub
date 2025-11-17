@@ -1,4 +1,10 @@
 * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+* {
     background-color: #0a0a0a;
 }
 
@@ -6,14 +12,23 @@ body {
     margin: 0;
     padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+.container-de-conteudo {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    align-items: stretch;
 }
 
 .imagem-direita {
-    float: right; 
     width: 45%; 
     height: 100vh;
     object-fit: cover;
+    object-position: center 10px;
     margin: 0;
+    order: 2;
 }
 
 .container-de-conteudo::after {
@@ -33,21 +48,24 @@ body {
 }
 
 .login-container {
-    flex: 1;
+    width: 50%;
     background-color: #0a0a0a; 
     display: flex;
     flex-direction: column;
     justify-content: center; 
-    align-items: left;
+    align-items: center;
     padding: 60px 80px;
-    max-width: 380px; 
-    margin: auto;
-    min-height: 100vh;
+    order: 1;
 }
 
 .login-content {
     width: 100%;
-    max-width: 380px;
+    max-width: 450px;
+}
+
+.login-container > * {
+    width: 100%;
+    max-width: 450px;
 }
 
 .welcome {
@@ -249,3 +267,4 @@ button:hover {
 .login-button:hover {
     background-color: #5094f7;
 }
+

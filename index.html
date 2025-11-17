@@ -10,14 +10,37 @@
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-32x32.png">
     <link rel="manifest" href="./assets/images/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="/assets/js/script.js" defer></script>
 </head>
 <body>
     <header class="navbar">
         <div class="navbar-left">
             <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem">
             <div class="search-box">
-                <input type="text" placeholder="Search Collection..." class="search-input">
+                <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput">
                 <button class="search-btn">...</button>
+                <div class="search-suggestions" id="searchSuggestions">
+                    <div class="suggestion-item">
+                        <span class="suggestion-icon">🔍</span>
+                        <span>Pokemon cards</span>
+                    </div>
+                    <div class="suggestion-item">
+                        <span class="suggestion-icon">🔍</span>
+                        <span>Mega Evolutions</span>
+                    </div>
+                    <div class="suggestion-item">
+                        <span class="suggestion-icon">🔍</span>
+                        <span>Rare cards</span>
+                    </div>
+                    <div class="suggestion-item">
+                        <span class="suggestion-icon">🔍</span>
+                        <span>Mythical Island</span>
+                    </div>
+                    <div class="suggestion-item">
+                        <span class="suggestion-icon">🔍</span>
+                        <span>Imersive Cards</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="logo">
@@ -37,10 +60,6 @@
     </header>
 
     <main class="hero">
-        <div class="badge">
-            <span class="badge-dot"></span>
-            <span>5- Month — Free Access</span>
-        </div>
 
         <h1>A paixão por cartas<br>que une<br>comunidades.</h1>
         
@@ -104,17 +123,36 @@
         </div>
     </main>
     <footer class="footer">
-        <div class="footer-content">
+    <div class="footer-content">
+
+        <div class="footer-section footer-nav">
+            <h4 class="footer-heading">Navegação</h4>
+            <a href="#about" class="footer-link">Sobre</a>
+            <a href="#contact" class="footer-link">Contato</a>
+            <a href="#faq" class="footer-link">FAQ</a>
+        </div>
+
+        <div class="footer-section footer-info">
+            <div class="footer-logo">Collection<span class="text-primary">Hub</span></div>
             <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
-            <div class="footer-social">
-                <a href="https://instagram.com" target="_blank" class="social-link">
-                    <img src="/assets/images/instagram.png" alt="instagram" width="29" height="29">
+
+        </div>
+
+        <div class="footer-section footer-social">
+            <h4 class="footer-heading">Siga-nos</h4>
+            <div class="social-icons">
+                <a href="https://instagram.com" target="_blank" class="social-link" aria-label="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </a>
-                <a href="mailto:contato@bug.com" class="social-link">
-                    <img src="/assets/images/gmail_icon-icons.com_62758.png" alt="Gmail" width="29" height="29">
+                <a href="mailto:contato@bug.com" class="social-link" aria-label="Email">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                 </a>
             </div>
         </div>
-    </footer>
+    </div>
+    <div class="footer-bottom">
+        <p class="small-print">Design inspirado em comunidades de colecionáveis digitais.</p>
+    </div>
+</footer>
 </body>
 </html>
