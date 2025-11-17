@@ -1,5 +1,5 @@
 import express from "express";
-import { register, login, verify2FA, resend2FA } from "../../controllers/authController.js.js";
+import { register, login, verify2FA, resend2FA } from "../../controllers/Users/authController.js";
 
 const router = express.Router();
 router.post("/register", register);
