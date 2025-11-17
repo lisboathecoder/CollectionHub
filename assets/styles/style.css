@@ -336,6 +336,14 @@ h1 {
     cursor: pointer;
 }
 
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    flex-direction: column;
+}
+
 .card:hover {
     transform: translateY(-10px) scale(1.05);
 }
