@@ -1,11 +1,10 @@
 import express from "express";
-import * as authController from "../../controllers/Users/authController.js";
+import { register, login, verify2FA, resend2FA } from "../../controllers/authController.js.js";
 
 const router = express.Router();
-
-router.post("/register", authController.register);
-router.post("/login", authController.loginRequest2FA);
-router.post("/verify-2fa", authController.verify2FAAndLogin);
-router.post("/resend-2fa", authController.resend2FACode);
+router.post("/register", register);
+router.post("/login", login);
+router.post("/verify-2fa", verify2FA);
+router.post("/resend-2fa", resend2FA);
 
 export default router;
