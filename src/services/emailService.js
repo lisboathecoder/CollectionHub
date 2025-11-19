@@ -1,28 +1,28 @@
-import { Resend } from 'resend';
+import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM_EMAIL = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+const FROM_EMAIL = process.env.EMAIL_FROM || "onboarding@resend.dev";
 
 export const generate2FACode = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+  return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
 export const get2FAExpiration = () => {
-    const expiration = new Date();
-    const minutes = parseInt(process.env.TWO_FACTOR_CODE_EXPIRES_IN) || 5;
-    expiration.setMinutes(expiration.getMinutes() + minutes);
-    return expiration;
+  const expiration = new Date();
+  const minutes = parseInt(process.env.TWO_FACTOR_CODE_EXPIRES_IN) || 5;
+  expiration.setMinutes(expiration.getMinutes() + minutes);
+  return expiration;
 };
 
 export const send2FACode = async (email, code, username) => {
-    try {
-        const expiresIn = parseInt(process.env.TWO_FACTOR_CODE_EXPIRES_IN) || 5;
+  try {
+    const expiresIn = parseInt(process.env.TWO_FACTOR_CODE_EXPIRES_IN) || 5;
 
-        const { data, error } = await resend.emails.send({
-            from: FROM_EMAIL,
-            to: email,
-            subject: `Código de Verificação - CollectionHub`,
-            html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    const { data, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: `Código de Verificação - CollectionHub`,
+      html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html dir="ltr" lang="pt-BR">
       <head>
         <meta content="width=device-width" name="viewport" />
@@ -123,18 +123,17 @@ export const send2FACode = async (email, code, username) => {
       </body>
     </html>
             `,
-            text: `Olá ${username}!\n\nSeu código de verificação: ${code}\n\nExpira em ${expiresIn} minutos.\n\nSe você não solicitou este código, ignore este email.\n\n- CollectionHub`
-        });
+      text: `Olá ${username}!\n\nSeu código de verificação: ${code}\n\nExpira em ${expiresIn} minutos.\n\nSe você não solicitou este código, ignore este email.\n\n- CollectionHub`,
+    });
 
-        if (error) {
-            console.error('❌ Erro ao enviar email:', error);
-            return { success: false, error: error.message };
-        }
-
-        console.log('✅ Email enviado:', data?.id);
-        return { success: true, response: data };
-    } catch (error) {
-        console.error('❌ Erro:', error);
-        return { success: false, error: error.message };
+    if (error) {
+      console.error("❌ Erro ao enviar email:", error);
+      return { success: false, error: error.message };
     }
+
+    return { success: true, response: data };
+  } catch (error) {
+    console.error("❌ Erro:", error);
+    return { success: false, error: error.message };
+  }
 };

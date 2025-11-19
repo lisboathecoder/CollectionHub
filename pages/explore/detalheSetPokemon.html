@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="page-title">Set Details - Collection Hub</title>
     <link rel="stylesheet" href="/assets/styles/style.css?v=8" />
-    <link rel="stylesheet" href="/assets/styles/set-details.css?v=13" />
+    <link rel="stylesheet" href="/assets/styles/set-details.css?v=14" />
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -119,6 +119,29 @@
       <div id="cards-grid" class="cards-grid" style="display: none"></div>
     </main>
 
+    <!-- Modal Add to Album -->
+    <div id="albumModal" class="modal" aria-hidden="true">
+      <div class="modal__backdrop"></div>
+      <div class="modal__dialog">
+        <button class="modal__close" onclick="closeAlbumModal()">✕</button>
+        <div class="modal__body">
+          <h2 class="modal__title">Add to Album</h2>
+          <p class="modal__subtitle">Choose an album or create a new one</p>
+
+          <div id="albumsList" class="albums-list">
+            <div class="albums-loading">
+              <div class="spinner"></div>
+              <p>Loading your albums...</p>
+            </div>
+          </div>
+
+          <button class="btn-create-album" onclick="goToCreateAlbum()">
+            <span>+</span> Create New Album
+          </button>
+        </div>
+      </div>
+    </div>
+
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-section footer-nav">
@@ -196,6 +219,7 @@
       </div>
     </footer>
 
-    <script src="/assets/js/set-details.js?v=2"></script>
+    <script src="/assets/js/set-details.js?v=4"></script>
+    <script src="/assets/js/album-modal.js?v=1"></script>
   </body>
 </html>
