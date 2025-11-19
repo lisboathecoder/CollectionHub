@@ -1,122 +1,257 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contato - CollectionHub</title>
-    <link rel="stylesheet" href="/assets/styles/style.css">
-    <link rel="stylesheet" href="/assets/styles/contact.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="/assets/styles/style.css" />
+    <link rel="stylesheet" href="/assets/styles/contact.css" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/images/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/images/favicon-32x32.png"
+    />
+    <link rel="manifest" href="/assets/images/site.webmanifest" />
+    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <header class="navbar">
-        <div class="navbar-left">
-            <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem">
-            <div class="search-box">
-                <input type="text" placeholder="Search Collection..." class="search-input">
-                <button class="search-btn">...</button>
-            </div>
+      <div class="navbar-left">
+        <img
+          src="/assets/images/shop.png"
+          alt="icone da loja"
+          class="icone-imagem"
+        />
+        <div class="search-box">
+          <input
+            type="text"
+            placeholder="Search Collection..."
+            class="search-input"
+          />
+          <button class="search-btn">...</button>
         </div>
-        <div class="logo">
-            <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo"> 
+      </div>
+      <div class="logo">
+        <a href="/index.html">
+          <img
+            src="/assets/images/Collection logo branca.png"
+            alt="Hubb Logo"
+          />
+        </a>
+      </div>
+      <div class="navbar-right">
+        <a href="/index.html">
+            <img
+                src="/assets/images/shop.png"
+                alt="icone da loja"
+                class="icone-imagem"
+            />
+        </a>
+        <img
+          src="/assets/images/sino.png"
+          alt="icone do sino"
+          class="icone-imagem"
+        />
+        <div class="currency-info">
+          <span class="icon">🪙</span>
+          <span>1290.0000</span>
         </div>
-        <div class="navbar-right">
-            <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem">
-            <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem">
-            <div class="currency-info">
-                <span class="icon">🪙</span> 
-                <span>1290.0000</span>
-            </div>
-            <a href="#" class="nav-item user-profile">
-                <img src="/assets/images/icon.png" alt="" class="icone-imagem">
-            </a>
-        </div>
+        <a href="/pages/userLogin/login.html" class="nav-item user-profile">
+          <img src="/assets/images/icon.png" alt="" class="icone-imagem" />
+        </a>
+      </div>
     </header>
 
     <main class="page-content contact-page">
-        <h1>Fale Conosco!</h1>
-        
-        <div class="contact-form-container">
-            <h2>Envie uma Mensagem</h2>
-            <form action="https://formspree.io/f/myzleqvd" method="POST">
-                <div class="form-group">
-                    <label for="name">Seu Nome</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Seu Email</label>
-                    <input type="email" id="email" name="_replyto" required>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Assunto</label>
-                    <input type="text" id="subject" name="subject" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Mensagem</label>
-                    <textarea id="message" name="message" required></textarea>
-                </div>
-                <button type="submit" class="contact-button">Enviar Mensagem</button>
-            </form>
+      <h1>Fale Conosco!</h1>
+
+      <div class="contact-form-container">
+        <h2>Envie uma Mensagem</h2>
+        <form action="https://formspree.io/f/myzleqvd" method="POST">
+          <div class="form-group">
+            <label for="name">Seu Nome</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Seu Email</label>
+            <input type="email" id="email" name="_replyto" required />
+          </div>
+          <div class="form-group">
+            <label for="subject">Assunto</label>
+            <input type="text" id="subject" name="subject" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Mensagem</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+          <button type="submit" class="contact-button">Enviar Mensagem</button>
+        </form>
+      </div>
+
+      <div class="info-card-container">
+        <h3>Informações de Contato</h3>
+
+        <div class="info-item">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-mail"
+          >
+            <path
+              d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+            ></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <div class="info-text">
+            <strong>Email de Suporte</strong>
+            <span>collectionhub2025@gmail.com</span>
+          </div>
         </div>
 
-        <div class="info-card-container">
-            <h3>Informações de Contato</h3>
-            
-            <div class="info-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                <div class="info-text">
-                    <strong>Email de Suporte</strong>
-                    <span>collectionhub2025@gmail.com</span>
-                </div>
-            </div>
-
-            <div class="info-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone-call"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.95M10 15v4a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-4"></path><path d="M5 19H17V5H5V19Z" fill="none"/></svg>
-                <div class="info-text">
-                    <strong>WhatsApp</strong>
-                    <span>+55 (11) 99999-9999</span>
-                </div>
-            </div>
-
-            <div class="info-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                <div class="info-text">
-                    <strong>Endereço Sede</strong>
-                    <span>Valinhos, SP - Brasil</span>
-                </div>
-            </div>
-            
+        <div class="info-item">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-phone-call"
+          >
+            <path
+              d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.95M10 15v4a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-4"
+            ></path>
+            <path d="M5 19H17V5H5V19Z" fill="none" />
+          </svg>
+          <div class="info-text">
+            <strong>WhatsApp</strong>
+            <span>+55 (11) 99999-9999</span>
+          </div>
         </div>
-        
+
+        <div class="info-item">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-map-pin"
+          >
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <div class="info-text">
+            <strong>Endereço Sede</strong>
+            <span>Valinhos, SP - Brasil</span>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section footer-nav">
-                <h4 class="footer-heading">Navegação</h4>
-                <a href="./about.html" class="footer-link">Sobre</a>
-                <a href="./contact.html" class="footer-link">Contato</a>
-                <a href="#faq" class="footer-link">FAQ</a>
-            </div>
-            <div class="footer-section footer-info">
-                <div class="footer-logo">Collection<span class="text-primary">Hub</span></div>
-                <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
-            </div>
-            <div class="footer-section footer-social">
-                <h4 class="footer-heading">Siga-nos</h4>
-                <div class="social-icons">
-                    <a href="https://instagram.com" target="_blank" class="social-link" aria-label="Instagram">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                    </a>
-                    <a href="mailto:contato@bug.com" class="social-link" aria-label="Email">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                    </a>
-                </div>
-            </div>
+      <div class="footer-content">
+        <div class="footer-section footer-nav">
+          <h4 class="footer-heading">Navegação</h4>
+          <a href="/pages/public/about.html" class="footer-link">Sobre</a>
+          <a href="/pages/public/contact.html" class="footer-link">Contato</a>
+          <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
         </div>
-        <div class="footer-bottom">
-            <p class="small-print">Design inspirado em comunidades de colecionáveis digitais.</p>
+        <div class="footer-section footer-info">
+          <div class="footer-logo">
+            Collection<span class="text-primary">Hub</span>
+          </div>
+          <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
         </div>
+        <div class="footer-section footer-social">
+          <h4 class="footer-heading">Siga-nos</h4>
+          <div class="social-icons">
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              class="social-link"
+              aria-label="Instagram"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-instagram"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path
+                  d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                ></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a
+              href="mailto:contato@bug.com"
+              class="social-link"
+              aria-label="Email"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-mail"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                ></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="small-print">
+          Design inspirado em comunidades de colecionáveis digitais.
+        </p>
+      </div>
     </footer>
-</body>
+  </body>
 </html>
