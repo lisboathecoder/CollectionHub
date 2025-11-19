@@ -1,4 +1,4 @@
-import { Resend } from 'resend';
+import { Resend } from "resend";
 
 // Inicializa o cliente de email APENAS se a chave existir.
 // Isso evita que o servidor caia se você ainda não tiver configurado o .env.
@@ -9,15 +9,15 @@ const FROM_EMAIL = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 
 // Gera um código numérico de 6 dígitos aleatório
 export const generate2FACode = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+  return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
 // Define que o código expira em X minutos (padrão 5)
 export const get2FAExpiration = () => {
-    const expiration = new Date();
-    const minutes = parseInt(process.env.TWO_FACTOR_CODE_EXPIRES_IN) || 5;
-    expiration.setMinutes(expiration.getMinutes() + minutes);
-    return expiration;
+  const expiration = new Date();
+  const minutes = parseInt(process.env.TWO_FACTOR_CODE_EXPIRES_IN) || 5;
+  expiration.setMinutes(expiration.getMinutes() + minutes);
+  return expiration;
 };
 
 // Função principal de envio
@@ -143,18 +143,17 @@ export const send2FACode = async (email, code, username) => {
       </body>
     </html>
             `,
-            text: `Olá ${username}!\n\nSeu código de verificação: ${code}\n\nExpira em ${expiresIn} minutos.\n\nSe você não solicitou este código, ignore este email.\n\n- CollectionHub`
-        });
+      text: `Olá ${username}!\n\nSeu código de verificação: ${code}\n\nExpira em ${expiresIn} minutos.\n\nSe você não solicitou este código, ignore este email.\n\n- CollectionHub`,
+    });
 
-        if (error) {
-            console.error('❌ Erro ao enviar email:', error);
-            return { success: false, error: error.message };
-        }
-
-        console.log('✅ Email enviado:', data?.id);
-        return { success: true, response: data };
-    } catch (error) {
-        console.error('❌ Erro:', error);
-        return { success: false, error: error.message };
+    if (error) {
+      console.error("❌ Erro ao enviar email:", error);
+      return { success: false, error: error.message };
     }
+
+    return { success: true, response: data };
+  } catch (error) {
+    console.error("❌ Erro:", error);
+    return { success: false, error: error.message };
+  }
 };

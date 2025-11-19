@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <title>Login</title>
     <link rel="stylesheet" href="../../assets/styles/login.css" />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+    />
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -43,22 +49,14 @@
         </div>
 
         <div class="botoes">
-          <div class="facebook">
-            <button>
-              <img
-                class="facebook"
-                src="./../../assets/images/botons/face.png"
-                alt="Botão de facebook login"
-              />
+          <div class="github">
+            <button class="oauth-button github-button">
+              <i class="devicon-github-original"></i>
             </button>
           </div>
           <div class="google">
-            <button>
-              <img
-                class="google"
-                src="./../../assets/images/botons/google.png"
-                alt="Botão de google login"
-              />
+            <button class="oauth-button google-button">
+              <i class="devicon-google-plain"></i>
             </button>
           </div>
         </div>
@@ -116,5 +114,8 @@
         class="imagem-direita"
       />
     </div>
+
+    <script src="../../assets/js/login.js"></script>
+    <script src="../../assets/js/oauth.js"></script>
   </body>
 </html>
