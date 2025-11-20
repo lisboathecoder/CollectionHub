@@ -10,6 +10,58 @@
   margin: 0 auto;
 }
 
+/* Filter Buttons */
+.collection-filter {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  padding: 20px 0;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 3px solid #ff3e6c;
+  color: #ff3e6c;
+  padding: 12px 40px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "Poppins", sans-serif;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 62, 108, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 62, 108, 0.3);
+}
+
+.filter-btn.active {
+  background: #fff;
+  color: #1a1a1a;
+  border-color: #fff;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+}
+
+.collections-container {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .collection-section {
   margin-bottom: 60px;
 }

@@ -62,6 +62,8 @@ model User {
   password         String
   twoFactorCode    String?
   twoFactorExpires DateTime?
+  resetCode        String?
+  resetCodeExpires DateTime?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   albums           Album[]

@@ -6,8 +6,7 @@
     <title id="page-title">Set Details - Collection Hub</title>
     <link rel="stylesheet" href="/assets/styles/style.css?v=8" />
     <link rel="stylesheet" href="/assets/styles/set-details.css?v=13" />
-    
-    <linkhttps://github.com/lisboathecoder/CollectionHub/pull/44/conflict?name=pages%252FuserLogin%252Flogin.html&ancestor_oid=df6fdba2c97fe79d8580b31c4bbdf89b3defb17e&base_oid=ee68df3948ba93c97ce64edd8d23b49173d7668b&head_oid=cdf7b32f6550430f3acded660b2a8dc21fb3a472
+    <link
       rel="apple-touch-icon"
       sizes="180x180"
       href="/assets/images/apple-touch-icon.png"
@@ -25,21 +24,22 @@
       href="/assets/images/favicon-32x32.png"
     />
     <link rel="manifest" href="/assets/images/site.webmanifest" />
-    
+
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
+
   <body>
     <header class="navbar">
       <div class="navbar-left">
         <a href="/index.html">
-            <img
-                src="/assets/images/shop.png"
-                alt="icone da loja"
-                class="icone-imagem"
-            />
+          <img
+            src="/assets/images/shop.png"
+            alt="icone da loja"
+            class="icone-imagem"
+          />
         </a>
         <div class="search-box">
           <input
@@ -124,26 +124,8 @@
     </main>
 
     <!-- Modal Add to Album -->
-    <div id="albumModal" class="modal" aria-hidden="true">
       <div class="modal__backdrop"></div>
-      <div class="modal__dialog">
-        <button class="modal__close" onclick="closeAlbumModal()">✕</button>
-        <div class="modal__body">
-          <h2 class="modal__title">Add to Album</h2>
-          <p class="modal__subtitle">Choose an album or create a new one</p>
-
-          <div id="albumsList" class="albums-list">
-            <div class="albums-loading">
-              <div class="spinner"></div>
-              <p>Loading your albums...</p>
-            </div>
-          </div>
-
-          <button class="btn-create-album" onclick="goToCreateAlbum()">
-            <span>+</span> Create New Album
-          </button>
-        </div>
-      </div>
+      <div class="modal__dialog"></div>
     </div>
 
     <footer class="footer">
@@ -225,5 +207,6 @@
 
     <script src="/assets/js/set-details.js?v=4"></script>
     <script src="/assets/js/album-modal.js?v=1"></script>
+    <script src="/assets/js/global-search.js?v=2"></script>
   </body>
 </html>

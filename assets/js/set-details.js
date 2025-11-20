@@ -49,12 +49,12 @@ const SET_INFO = {
     logo: "/assets/images/logo-boosters/Mega-Rising_Logo.webp",
   },
   "PROMO-A": {
-    name: "Promo A",
-    logo: "/assets/images/Collection logo branca.png",
+    name: "Promos-A",
+    logo: "https://i.ibb.co/Xx8FWqrk/LOGO-expansion-PROMO-A-en-US.webp",
   },
   "PROMO-B": {
-    name: "Promo B",
-    logo: "/assets/images/Collection logo branca.png",
+    name: "Promos-B",
+    logo: "https://i.ibb.co/sd9sWXZN/LOGO-expansion-PROMO-B-en-US.webp",
   },
 };
 
@@ -311,11 +311,6 @@ function openCardModal(card) {
     <div class="card-detail-modal__content">
       <button class="card-detail-modal__close">✕</button>
       <div class="card-detail-modal__image-wrapper">
-        <button class="card-detail-modal__favorite" title="Add to favorites">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-        </button>
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image">
       </div>
       <button class="card-detail-modal__add-btn" onclick="event.stopPropagation(); openAlbumModal('${card.id}')">

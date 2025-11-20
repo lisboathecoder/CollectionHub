@@ -49,12 +49,12 @@ const SET_INFO = {
     logo: "/assets/images/logo-boosters/Mega-Rising_Logo.webp",
   },
   "PROMO-A": {
-    name: "Promo A",
-    logo: "/assets/images/Collection logo branca.png",
+    name: "Promos-A",
+    logo: "https://i.ibb.co/Xx8FWqrk/LOGO-expansion-PROMO-A-en-US.webp",
   },
   "PROMO-B": {
-    name: "Promo B",
-    logo: "/assets/images/Collection logo branca.png",
+    name: "Promos-B",
+    logo: "https://i.ibb.co/sd9sWXZN/LOGO-expansion-PROMO-B-en-US.webp",
   },
 };
 
@@ -127,10 +127,23 @@ async function loadCards() {
 
     // Filtra apenas as cartas do pack específico
     const decodedPackName = decodeURIComponent(packName);
-    allCards = data.filter(
+
+    // Tenta filtrar por pack
+    let packCards = data.filter(
       (card) =>
         card.packs && card.packs.some((pack) => pack.name === decodedPackName)
     );
+
+    // Se não encontrou nenhuma carta e o set tem poucos packs (provavelmente 1),
+    // mostra todas as cartas do set
+    if (packCards.length === 0) {
+      console.log(
+        `Pack ${decodedPackName} não encontrado, mostrando todas as cartas do set`
+      );
+      packCards = data;
+    }
+
+    allCards = packCards;
     filteredCards = [...allCards];
 
     if (allCards.length === 0) {
@@ -233,11 +246,70 @@ function renderCards() {
       </div>
     `;
 
+    // Add click event to open modal
+    cardEl.addEventListener("click", () => {
+      openCardModal(card);
+    });
+
     cardsGridEl.appendChild(cardEl);
   });
 
   // Renderizar paginação
   renderPagination(totalPages);
+}
+
+// Card Modal Functions
+function openCardModal(card) {
+  const modal = document.createElement("div");
+  modal.className = "card-detail-modal";
+  modal.id = "card-detail-modal";
+
+  const imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
+  const cardName = card.nameEn || "Unknown";
+  const rarityName = card.rarity?.name || "Unknown";
+
+  modal.innerHTML = `
+    <div class="card-detail-modal__overlay"></div>
+    <div class="card-detail-modal__content">
+      <button class="card-detail-modal__close" aria-label="Close">×</button>
+      <div class="card-detail-modal__image-wrapper">
+        <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image" onerror="this.src='/assets/images/placeholder-card.png'">
+      </div>
+      <button class="card-detail-modal__add-btn" onclick="openAlbumModal('${card.id}')">
+        Add to your collection
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Close modal handlers
+  const closeBtn = modal.querySelector(".card-detail-modal__close");
+  const overlay = modal.querySelector(".card-detail-modal__overlay");
+
+  const closeModal = () => {
+    modal.classList.add("closing");
+    setTimeout(() => {
+      document.body.removeChild(modal);
+    }, 300);
+  };
+
+  closeBtn.addEventListener("click", closeModal);
+  overlay.addEventListener("click", closeModal);
+
+  // ESC key to close
+  const escHandler = (e) => {
+    if (e.key === "Escape") {
+      closeModal();
+      document.removeEventListener("keydown", escHandler);
+    }
+  };
+  document.addEventListener("keydown", escHandler);
+
+  // Trigger animation
+  setTimeout(() => {
+    modal.classList.add("active");
+  }, 10);
 }
 
 function renderPagination(totalPages) {
