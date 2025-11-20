@@ -214,3 +214,182 @@ export const resend2FA = async (req, res) => {
     res.status(500).json({ error: "Erro no servidor" });
   }
 };
+
+export const requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Email é obrigatório" });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Email não encontrado em nossa base de dados",
+      });
+    }
+
+    const code = generate2FACode();
+    const expires = get2FAExpiration();
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetCode: code,
+        resetCodeExpires: expires,
+      },
+    });
+
+    const emailResult = await send2FACode(user.email, code, user.username);
+
+    if (!emailResult.success) {
+      return res.status(500).json({
+        success: false,
+        message: "Erro ao enviar código",
+        details: emailResult.error,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Código de verificação enviado para seu email",
+    });
+  } catch (error) {
+    console.error("❌ Erro ao solicitar reset de senha:", error);
+    res.status(500).json({
+      success: false,
+      message: "Erro no servidor",
+    });
+  }
+};
+
+export const verifyResetCode = async (req, res) => {
+  const { email, code } = req.body;
+
+  if (!email || !code) {
+    return res.status(400).json({
+      success: false,
+      message: "Email e código são obrigatórios",
+    });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Usuário não encontrado",
+      });
+    }
+
+    if (!user.resetCode || !user.resetCodeExpires) {
+      return res.status(400).json({
+        success: false,
+        message: "Nenhum código de reset pendente",
+      });
+    }
+
+    if (new Date() > new Date(user.resetCodeExpires)) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { resetCode: null, resetCodeExpires: null },
+      });
+      return res.status(400).json({
+        success: false,
+        message: "Código expirado. Solicite um novo código",
+      });
+    }
+
+    if (user.resetCode !== code) {
+      return res.status(401).json({
+        success: false,
+        message: "Código inválido",
+      });
+    }
+
+    const resetToken = jwt.sign(
+      { sub: user.id, purpose: "reset" },
+      JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.json({
+      success: true,
+      message: "Código verificado com sucesso",
+      resetToken,
+    });
+  } catch (error) {
+    console.error("❌ Erro ao verificar código de reset:", error);
+    res.status(500).json({
+      success: false,
+      message: "Erro no servidor",
+    });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { resetToken, newPassword } = req.body;
+
+  if (!resetToken || !newPassword) {
+    return res.status(400).json({
+      success: false,
+      message: "Token e nova senha são obrigatórios",
+    });
+  }
+
+  if (newPassword.length < 8) {
+    return res.status(400).json({
+      success: false,
+      message: "A senha deve ter pelo menos 8 caracteres",
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(resetToken, JWT_SECRET);
+
+    if (decoded.purpose !== "reset") {
+      return res.status(401).json({
+        success: false,
+        message: "Token inválido",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await prisma.user.update({
+      where: { id: decoded.sub },
+      data: {
+        password: hashedPassword,
+        resetCode: null,
+        resetCodeExpires: null,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "Senha alterada com sucesso",
+    });
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        success: false,
+        expired: true,
+        message: "Token expirado. Solicite um novo código de reset",
+      });
+    }
+
+    console.error("❌ Erro ao resetar senha:", error);
+    res.status(500).json({
+      success: false,
+      message: "Erro no servidor",
+    });
+  }
+};
