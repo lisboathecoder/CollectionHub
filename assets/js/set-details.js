@@ -49,19 +49,19 @@ const SET_INFO = {
     logo: "/assets/images/logo-boosters/Mega-Rising_Logo.webp",
   },
   "PROMO-A": {
-    name: "Promo A",
-    logo: "/assets/images/Collection logo branca.png",
+    name: "Promos-A",
+    logo: "https://i.ibb.co/Xx8FWqrk/LOGO-expansion-PROMO-A-en-US.webp",
   },
   "PROMO-B": {
-    name: "Promo B",
-    logo: "/assets/images/Collection logo branca.png",
+    name: "Promos-B",
+    logo: "https://i.ibb.co/sd9sWXZN/LOGO-expansion-PROMO-B-en-US.webp",
   },
 };
 
 let allCards = [];
 let filteredCards = [];
 let currentPage = 1;
-const cardsPerPage = 50;
+const cardsPerPage = 48;
 
 // Pega o código do set da URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -81,6 +81,9 @@ const searchInputEl = document.getElementById("search-input");
 
 // Carrega as cartas do set
 async function loadCards() {
+  console.log("🚀 Iniciando carregamento de cards...");
+  console.log("📋 Set code:", setCode);
+
   if (!setCode) {
     showError("No set specified");
     return;
@@ -101,6 +104,8 @@ async function loadCards() {
     const data = await response.json();
     allCards = data;
     filteredCards = [...allCards];
+
+    console.log("✅ Cards carregados:", allCards.length);
 
     if (allCards.length === 0) {
       showError("No cards found for this set");
@@ -127,6 +132,7 @@ async function loadCards() {
     cardsGridEl.style.display = "grid";
 
     renderCards();
+    console.log("🎨 Cards renderizados na tela");
   } catch (error) {
     console.error("Error loading cards:", error);
     showError("Failed to load cards. Please try again.");
@@ -153,6 +159,7 @@ function populateRarityFilter() {
 }
 
 function renderCards() {
+  console.log("🎯 Renderizando", filteredCards.length, "cards...");
   cardsGridEl.innerHTML = "";
 
   if (filteredCards.length === 0) {
@@ -165,6 +172,8 @@ function renderCards() {
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = startIndex + cardsPerPage;
   const cardsToShow = filteredCards.slice(startIndex, endIndex);
+
+  console.log("📄 Mostrando cards", startIndex, "a", endIndex);
 
   // Renderizar cards da página atual
   cardsToShow.forEach((card) => {
@@ -187,6 +196,13 @@ function renderCards() {
           .replace(/\s+/g, "-")}">${rarityName}</span>
       </div>
     `;
+
+    cardEl.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("🖱️ Carta clicada:", card.nameEn);
+      openCardModal(card);
+    });
 
     cardsGridEl.appendChild(cardEl);
   });
@@ -278,6 +294,48 @@ function applySorting() {
         return 0;
     }
   });
+}
+
+function openCardModal(card) {
+  console.log("🔵 Abrindo modal para carta:", card);
+
+  const imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
+  const cardName = card.nameEn || "Unknown";
+
+  const modal = document.createElement("div");
+  modal.className = "card-detail-modal";
+  modal.setAttribute("aria-hidden", "false");
+
+  modal.innerHTML = `
+    <div class="card-detail-modal__backdrop"></div>
+    <div class="card-detail-modal__content">
+      <button class="card-detail-modal__close">✕</button>
+      <div class="card-detail-modal__image-wrapper">
+        <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image">
+      </div>
+      <button class="card-detail-modal__add-btn" onclick="event.stopPropagation(); openAlbumModal('${card.id}')">
+        Add to your collection
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  document.body.classList.add("modal-open");
+
+  console.log("✅ Modal adicionado ao DOM");
+
+  const closeBtn = modal.querySelector(".card-detail-modal__close");
+  const backdrop = modal.querySelector(".card-detail-modal__backdrop");
+
+  const closeModal = () => {
+    console.log("🔴 Fechando modal");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+    setTimeout(() => modal.remove(), 200);
+  };
+
+  closeBtn.addEventListener("click", closeModal);
+  backdrop.addEventListener("click", closeModal);
 }
 
 // Event Listeners

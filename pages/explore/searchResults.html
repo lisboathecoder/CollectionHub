@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title id="page-title">Pack Details - Collection Hub</title>
-    <link rel="stylesheet" href="/assets/styles/style.css?v=8" />
-    <link rel="stylesheet" href="/assets/styles/set-details.css?v=13" />
+    <title>Search Results - Collection Hub</title>
+    <link rel="stylesheet" href="/assets/styles/style.css?v=9" />
+    <link rel="stylesheet" href="/assets/styles/set-details.css?v=14" />
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -80,47 +80,69 @@
     </header>
 
     <main class="set-details-container">
+      <!-- Search Header -->
+      <div class="search-header">
+        <a href="javascript:history.back()" class="back-button"> ← Back </a>
+        <h1 id="search-title">Search Results</h1>
+        <p id="search-query"></p>
+      </div>
+
       <!-- Loading State -->
       <div id="loading" class="loading-state">
         <div class="spinner"></div>
-        <p>Loading cards...</p>
+        <p>Searching...</p>
       </div>
 
       <!-- Error State -->
       <div id="error" class="error-state" style="display: none">
-        <p>Failed to load cards. Please try again.</p>
-        <button onclick="location.reload()">Retry</button>
+        <p>No results found. Try a different search term.</p>
+        <button onclick="location.href='/pages/explore/homeSetPokemon.html'">
+          Browse Collections
+        </button>
       </div>
 
-      <!-- Pack Header -->
-      <div id="pack-header" class="set-header" style="display: none">
-        <a href="/pages/explore/homeSetPokemon.html" class="back-button">
-          ← Back to Sets
-        </a>
-        <h1 id="pack-name"></h1>
-        <p id="pack-info"></p>
+      <!-- Collections Results -->
+      <div id="collections-section" style="display: none">
+        <h2 class="results-section-title">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path
+              d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+            ></path>
+          </svg>
+          Collections
+        </h2>
+        <div id="collections-grid" class="collections-results-grid"></div>
       </div>
 
-      <!-- Filters -->
-      <div id="filters" class="filters" style="display: none">
-        <div class="filter-group">
-          <label for="rarity-filter">Rarity:</label>
-          <select id="rarity-filter">
-            <option value="">All</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="sort-filter">Sort by:</label>
-          <select id="sort-filter">
-            <option value="number">Number</option>
-            <option value="rarity">Rarity</option>
-            <option value="name">Name</option>
-          </select>
-        </div>
+      <!-- Cards Results -->
+      <div id="cards-section" style="display: none">
+        <h2 class="results-section-title">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+            <line x1="2" y1="9" x2="22" y2="9"></line>
+          </svg>
+          Cards (<span id="cards-count">0</span>)
+        </h2>
+        <div id="cards-grid" class="cards-grid"></div>
+        <div id="pagination" class="pagination" style="display: none"></div>
       </div>
-
-      <!-- Cards Grid -->
-      <div id="cards-grid" class="cards-grid" style="display: none"></div>
     </main>
 
     <footer class="footer">
@@ -131,6 +153,7 @@
           <a href="/pages/public/contact.html" class="footer-link">Contato</a>
           <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
         </div>
+
         <div class="footer-section footer-info">
           <div class="footer-logo">
             Collection<span class="text-primary">Hub</span>
@@ -199,7 +222,7 @@
       </div>
     </footer>
 
-    <script src="/assets/js/pack-details.js?v=2"></script>
+    <script src="/assets/js/search-results.js?v=1"></script>
     <script src="/assets/js/global-search.js?v=2"></script>
   </body>
 </html>

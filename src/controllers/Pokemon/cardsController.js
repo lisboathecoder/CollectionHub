@@ -1,8 +1,46 @@
 import * as CardModel from "../../models/Pokemon/cardModel.js";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export const listarCards = async (req, res) => {
   try {
     const result = await CardModel.list(req.query);
+
+    // Se não encontrou cards no banco e tem um set especificado, tenta buscar da API TCGDex
+    if (
+      (!result || !result.items || result.items.length === 0) &&
+      req.query.set
+    ) {
+      const setCode = req.query.set;
+
+      try {
+        const response = await fetch(
+          `https://api.tcgdex.net/v2/en/cards?set=${setCode}`
+        );
+
+        if (response.ok) {
+          const externalCards = await response.json();
+
+          // Formata os dados para o formato esperado pelo frontend
+          const formattedCards = externalCards.map((card) => ({
+            id: card.id,
+            nameEn: card.name,
+            nameJp: card.localId || card.name,
+            number: parseInt(card.localId?.split("-")[1]) || 0,
+            setCode: setCode,
+            imageUrl: card.image,
+            rarity: {
+              name: card.rarity || "Common",
+            },
+          }));
+
+          return res.status(200).json(formattedCards);
+        }
+      } catch (apiError) {
+        console.error("Error fetching from TCGDex:", apiError);
+      }
+    }
 
     if (!result || !result.items || result.items.length === 0) {
       return res.status(404).json({
@@ -165,6 +203,85 @@ export const deletarCard = async (req, res) => {
     res.status(500).json({
       erro: "Erro ao apagar card (carta)",
       detalhes: e.message,
+    });
+  }
+};
+
+// Global search endpoint - cards and collections
+export const searchGlobal = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q || q.trim().length === 0) {
+      return res.status(400).json({
+        error: "Query parameter 'q' is required",
+      });
+    }
+
+    const searchTerm = q.trim().toLowerCase();
+
+    // Search cards by name (using ILIKE for case-insensitive)
+    const cards = await prisma.card.findMany({
+      where: {
+        nameEn: {
+          contains: searchTerm,
+          mode: "insensitive",
+        },
+      },
+      include: {
+        set: true,
+        rarity: true,
+      },
+      take: 10,
+    });
+
+    // Search collections/sets by name
+    const collections = await prisma.set.findMany({
+      where: {
+        OR: [
+          {
+            nameEn: {
+              contains: searchTerm,
+              mode: "insensitive",
+            },
+          },
+          {
+            code: {
+              contains: searchTerm.toUpperCase(),
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+      take: 5,
+    });
+
+    // Format results for frontend
+    const formattedCards = cards.map((card) => ({
+      id: card.id,
+      nameEn: card.nameEn,
+      number: card.number,
+      setCode: card.setCode,
+      imageUrl: card.imageUrl,
+      rarity: card.rarity?.name,
+    }));
+
+    const formattedCollections = collections.map((set) => ({
+      id: set.id,
+      name: set.nameEn,
+      code: set.code,
+    }));
+
+    res.status(200).json({
+      cards: formattedCards,
+      collections: formattedCollections,
+      total: formattedCards.length + formattedCollections.length,
+    });
+  } catch (e) {
+    console.error("Search error:", e);
+    res.status(500).json({
+      error: "Internal server error",
+      details: e.message,
     });
   }
 };

@@ -2,6 +2,7 @@ import express from "express";
 import * as cards from "../../controllers/Pokemon/cardsController.js";
 const router = express.Router();
 
+router.get("/search", cards.searchGlobal);
 router.get("/", cards.listarCards);
 router.get("/id/:id", cards.listarPorId);
 router.get("/:set/:number", cards.listarPorSetENumero);

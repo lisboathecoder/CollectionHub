@@ -6,7 +6,6 @@
     <title id="page-title">Set Details - Collection Hub</title>
     <link rel="stylesheet" href="/assets/styles/style.css?v=8" />
     <link rel="stylesheet" href="/assets/styles/set-details.css?v=13" />
-    
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -25,21 +24,22 @@
       href="/assets/images/favicon-32x32.png"
     />
     <link rel="manifest" href="/assets/images/site.webmanifest" />
-    
+
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
+
   <body>
     <header class="navbar">
       <div class="navbar-left">
         <a href="/index.html">
-            <img
-                src="/assets/images/shop.png"
-                alt="icone da loja"
-                class="icone-imagem"
-            />
+          <img
+            src="/assets/images/shop.png"
+            alt="icone da loja"
+            class="icone-imagem"
+          />
         </a>
         <div class="search-box">
           <input
@@ -123,6 +123,11 @@
       <div id="cards-grid" class="cards-grid" style="display: none"></div>
     </main>
 
+    <!-- Modal Add to Album -->
+      <div class="modal__backdrop"></div>
+      <div class="modal__dialog"></div>
+    </div>
+
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-section footer-nav">
@@ -200,6 +205,8 @@
       </div>
     </footer>
 
-    <script src="/assets/js/set-details.js?v=2"></script>
+    <script src="/assets/js/set-details.js?v=4"></script>
+    <script src="/assets/js/album-modal.js?v=1"></script>
+    <script src="/assets/js/global-search.js?v=2"></script>
   </body>
 </html>
