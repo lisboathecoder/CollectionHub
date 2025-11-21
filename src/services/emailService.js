@@ -5,6 +5,11 @@ import { Resend } from "resend";
 const apiKey = process.env.RESEND_API_KEY;
 const resend = apiKey ? new Resend(apiKey) : null;
 
+// Inicializa o cliente de email APENAS se a chave existir.
+// Isso evita que o servidor caia se você ainda não tiver configurado o .env.
+const apiKey = process.env.RESEND_API_KEY;
+const resend = apiKey ? new Resend(apiKey) : null;
+
 const FROM_EMAIL = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 
 // Gera um código numérico de 6 dígitos aleatório
@@ -150,6 +155,7 @@ export const send2FACode = async (email, code, username) => {
       console.error("❌ Erro ao enviar email:", error);
       return { success: false, error: error.message };
     }
+};
 
     return { success: true, response: data };
   } catch (error) {
