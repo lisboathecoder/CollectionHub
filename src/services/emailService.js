@@ -5,10 +5,6 @@ import { Resend } from "resend";
 const apiKey = process.env.RESEND_API_KEY;
 const resend = apiKey ? new Resend(apiKey) : null;
 
-// Inicializa o cliente de email APENAS se a chave existir.
-// Isso evita que o servidor caia se você ainda não tiver configurado o .env.
-const apiKey = process.env.RESEND_API_KEY;
-const resend = apiKey ? new Resend(apiKey) : null;
 
 const FROM_EMAIL = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 
@@ -155,11 +151,8 @@ export const send2FACode = async (email, code, username) => {
       console.error("❌ Erro ao enviar email:", error);
       return { success: false, error: error.message };
     }
-};
-
-    return { success: true, response: data };
-  } catch (error) {
-    console.error("❌ Erro:", error);
-    return { success: false, error: error.message };
+  } catch (err) {
+    console.error("❌ Exceção ao enviar email:", err);
+    return { success: false, error: 'Erro interno ao enviar email.' };
   }
 };
