@@ -5,6 +5,10 @@
 
 > Plataforma digital dedicada a entusiastas e colecionadores. Uma solução centralizada, intuitiva e encantadora para organizar, exibir e gerenciar suas coleções de Cartas Pokémon TCG Pocket.
 
+## 📸 Preview
+
+![Screenshot do CollectionHub](./path/to/screenshot.png)
+
 ## 🛠️ Tecnologias Utilizadas
 
 ### Backend & Dados
@@ -124,4 +128,3 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
 ---
 
 [⬆ Voltar ao topo](#collectionhub)
-
