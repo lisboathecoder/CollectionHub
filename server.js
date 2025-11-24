@@ -29,9 +29,11 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(ROOT, { extensions: ["html"] }));
-
+// API ROUTES FIRST - must come before static files
 app.use("/api", routes);
+
+// Static files AFTER API routes
+app.use(express.static(ROOT, { extensions: ["html"] }));
 
 app.get("/", (_req, res) => res.sendFile(path.resolve(ROOT, "index.html")));
 

@@ -1,6 +1,7 @@
 async function fazerLogin(usernameOrEmail, password) {
     try {
-        const res = await fetch('/api/users/login', {
+        const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+        const res = await fetch(`${apiUrl}/api/users/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ usernameOrEmail, password })

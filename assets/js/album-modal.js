@@ -29,7 +29,8 @@ async function loadUserAlbums() {
   }
 
   try {
-    const response = await fetch("/api/albums", {
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    const response = await fetch(`${apiUrl}/api/albums`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

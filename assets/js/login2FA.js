@@ -66,7 +66,8 @@ form.addEventListener("submit", async (e) => {
       return;
     }
 
-    const response = await fetch("/api/auth/verify-2fa", {
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    const response = await fetch(`${apiUrl}/api/auth/verify-2fa`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
