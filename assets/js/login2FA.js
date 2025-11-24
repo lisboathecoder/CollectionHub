@@ -22,9 +22,9 @@ codeBoxes.forEach((box, index) => {
     errorMessage.textContent = "";
   });
   
-  box.addEventListener("paste", (e) => {
-    e.preventDefault();
-    const pasteData = e.clipboardData.getData("text").trim();
+    input.addEventListener("paste", (e) => {
+      e.preventDefault();
+      const pasteData = e.clipboardData.getData("text").trim();
 
     if (/^\d{6}$/.test(pasteData)) {
       pasteData.split("").forEach((char, i) => {
