@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - CollectionHub</title>
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-32x32.png" />
+    <link rel="manifest" href="/assets/images/site.webmanifest" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="../../assets/styles/style.css">
+    <link rel="stylesheet" href="../../assets/styles/dashboard.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="/index.html">
+                <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
+            </a>
+            <div class="search-box">
+                <input type="text" placeholder="Search Collection..." class="search-input" />
+                <button class="search-btn">...</button>
+            </div>
+        </div>
+        <div class="logo">
+            <a href="/index.html">
+                <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
+            </a>
+        </div>
+        <div class="navbar-right">
+            <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
+            <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
+            <a href="/pages/userLogin/login.html" class="nav-item user-profile">
+                <img src="/assets/images/icon.png" alt="" class="icone-imagem" />
+            </a>
+        </div>
+    </header>
+
+    <main class="profile-main">
+        
+        <div class="profile-header-image" id="profile-cover">
+            </div>
+
+        <div class="profile-container">
+            
+            <div class="profile-info-header">
+                <div class="profile-pic-container">
+                    <img src="../assets/images/icon.png" alt="Foto de Perfil" class="profile-pic-large" id="profile-pic-large">
+                    <div class="edit-profile-pic-overlay">
+                        <i class="fa-solid fa-pencil"></i>
+                    </div>
+                </div>
+
+                <button class="btn-edit-profile" id="btn-edit-profile">
+                    <i class="fa-solid fa-pen"></i> Editar Perfil
+                </button>
+            </div>
+
+            <div class="profile-details">
+                <h1 class="profile-name" id="profile-name">
+                    Carregando... 
+                    <span id="verified-badge"></span> </h1>
+                
+                <p class="profile-email" id="profile-email">...</p>
+                
+                <p class="profile-bio" id="profile-bio">
+                    ...
+                </p>
+                
+                <div class="profile-stats">
+                    <span class="stat-item"><strong id="stat-items-count">0</strong> Itens</span>
+                    <span class="stat-item"><strong id="stat-collections-count">0</strong> Sets</span>
+                    <span class="stat-item"><strong>BR</strong> País</span>
+                </div>
+            </div>
+
+            <div class="profile-nav">
+                <a href="#" class="profile-nav-link active">Atividades</a>
+                <a href="collection.html" class="profile-nav-link">Minha Coleção</a>
+                <a href="#" class="profile-nav-link">Curtidas</a>
+            </div>
+
+            <div class="profile-content">
+                <div class="activity-feed" id="activity-feed">
+                    <div style="text-align: center; color: var(--text-muted); padding: 20px;">
+                        <i class="fa-solid fa-ghost" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>Nenhuma atividade recente para mostrar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="modal-overlay" id="edit-profile-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Perfil</h2>
+                <button class="btn-close-modal" id="btn-close-modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="edit-profile-form">
+                    
+                    <div class="image-upload-area" id="image-upload-area">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <p>Arraste uma imagem ou <span>clique para enviar</span></p>
+                        <input type="file" id="image-upload-input" accept="image/*" hidden>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="input-full-name">Nome Completo</label>
+                            <input type="text" id="input-full-name" name="full-name" class="form-input" placeholder="Seu nome">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="input-nick-name">Apelido (Nick)</label>
+                            <input type="text" id="input-nick-name" name="nick-name" class="form-input" placeholder="Ex: MestrePokemon">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-gender">Gênero</label>
+                            <select id="input-gender" name="gender" class="form-input">
+                                <option value="">Selecione</option>
+                                <option value="male">Masculino</option>
+                                <option value="female">Feminino</option>
+                                <option value="other">Outro</option>
+                                <option value="pref-not-say">Prefiro não dizer</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-country">País</label>
+                            <input type="text" id="input-country" name="country" class="form-input" placeholder="Ex: Brasil">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-language">Idioma</label>
+                            <select id="input-language" name="language" class="form-input">
+                                <option value="pt-br">Português (Brasil)</option>
+                                <option value="en">English</option>
+                                <option value="es">Español</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-timezone">Fuso Horário</label>
+                            <select id="input-timezone" name="timezone" class="form-input">
+                                <option value="utc-3">UTC-03:00 (Brasília)</option>
+                                <option value="utc">UTC</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="input-bio">Biografia</label>
+                            <textarea id="input-bio" name="bio" class="form-input" rows="3" placeholder="Conte um pouco sobre sua coleção..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="email-section">
+                        <div class="email-header" id="email-header-toggle">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fa-solid fa-envelope" style="color: var(--primary-color);"></i>
+                                <span>Endereços de Email</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down toggle-icon"></i>
+                        </div>
+                        
+                        <div class="email-content" id="email-content">
+                            <button type="button" class="btn-add-email">
+                                <i class="fa-solid fa-plus"></i> Adicionar Email
+                            </button>
+                            <div class="email-list" id="email-list-container">
+                                </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="btn-cancel-edit">Cancelar</button>
+                <button type="submit" form="edit-profile-form" class="btn-save">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+          <div class="footer-section footer-nav">
+            <h4 class="footer-heading">Navegação</h4>
+            <a href="/pages/public/about.html" class="footer-link">Sobre</a>
+            <a href="/pages/public/contact.html" class="footer-link">Contato</a>
+            <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
+          </div>
+          <div class="footer-section footer-info">
+            <div class="footer-logo">
+              Collection<span class="text-primary">Hub</span>
+            </div>
+            <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
+          </div>
+          <div class="footer-section footer-social">
+            <h4 class="footer-heading">Siga-nos</h4>
+            <div class="social-icons">
+              <a href="https://instagram.com" target="_blank" class="social-link" aria-label="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-instagram">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+              <a href="mailto:contato@bug.com" class="social-link" aria-label="Email">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-mail">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p class="small-print">
+            Design inspirado em comunidades de colecionáveis digitais.
+          </p>
+        </div>
+      </footer>
+
+    <script src="../../assets/js/dashboard.js"></script>
+
+</body>
+</html>
