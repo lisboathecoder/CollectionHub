@@ -22,19 +22,18 @@ codeBoxes.forEach((box, index) => {
     errorMessage.textContent = "";
   });
   
-    input.addEventListener("paste", (e) => {
-      e.preventDefault();
-      const pasteData = e.clipboardData.getData("text").trim();
+  box.addEventListener("paste", (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData("text").trim();
 
-      if (/^\d{6}$/.test(pasteData)) {
-        pasteData.split("").forEach((char, i) => {
-          if (codeInputs[i]) {
-            codeInputs[i].value = char;
-          }
-        });
-        codeInputs[5].focus();
-      }
-    });
+    if (/^\d{6}$/.test(pasteData)) {
+      pasteData.split("").forEach((char, i) => {
+        if (codeBoxes[i]) {
+          codeBoxes[i].value = char;
+        }
+      });
+      codeBoxes[5].focus();
+    }
   });
 
   box.addEventListener("keydown", (e) => {
