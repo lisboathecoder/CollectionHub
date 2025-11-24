@@ -106,7 +106,6 @@
 
 .info-card-container {
     flex: 1;
-    min-width: 250px;
     background: var(--card-bg);
     padding: 30px;
     border-radius: 12px;
