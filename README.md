@@ -7,7 +7,7 @@
 
 ## 📸 Preview
 
-![Screenshot do CollectionHub](./path/to/screenshot.png)
+![Screenshot do CollectionHub](./assets/images/Captura%20de%20Tela%202025-11-24%20às%2011.06.03.png)
 
 ## 🛠️ Tecnologias Utilizadas
 
