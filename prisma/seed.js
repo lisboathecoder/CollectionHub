@@ -58,6 +58,7 @@ async function main() {
       nameEn: c.label?.eng ?? null,
       slug: c.label?.slug ?? null,
       imageName: c.imageName ?? null,
+      imageUrl: c.imageUrl ?? null,
       rarityCode: c.rarityCode ?? null,
     };
 
