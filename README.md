@@ -5,92 +5,16 @@
 
 > Plataforma digital dedicada a entusiastas e colecionadores. Uma solução centralizada, intuitiva e encantadora para organizar, exibir e gerenciar suas coleções de Cartas Pokémon TCG Pocket.
 
-## 💻 Pré-requisitos
-
-Antes de começar, verifique se você atendeu aos seguintes requisitos:
-
-- Você instalou a versão mais recente de `Node.js (v18+)` e `PostgreSQL (v14+)`
-- Você tem uma máquina `Windows / Linux / Mac`
-- Você leu a documentação do [Prisma ORM](https://www.prisma.io/docs/)
-
-## 🚀 Instalando CollectionHub
-
-Para instalar o CollectionHub, siga estas etapas:
-
-**Clone o repositório:**
-
-```bash
-git clone https://github.com/lisboathecoder/CollectionHub.git
-cd CollectionHub
-```
-
-**Instale as dependências:**
-
-```bash
-npm install
-```
-
-**Configure o banco de dados:**
-
-Crie um arquivo `.env` na raiz do projeto:
-
-```env
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/collectionhub"
-JWT_SECRET="seu_secret_muito_seguro_aqui"
-PORT=3000
-```
-
-**Execute as migrações do Prisma:**
-
-```bash
-npx prisma migrate dev
-```
-
-**Popule o banco com dados iniciais (seed):**
-
-```bash
-npx prisma db seed
-```
-
-## ☕ Usando CollectionHub
-
-Para usar o CollectionHub, siga estas etapas:
-
-**Inicie o servidor:**
-
-```bash
-npm start
-```
-
-**Acesse a aplicação:**
-
-```
-http://localhost:3000
-```
-
-**Exemplos de uso da API:**
-
-```bash
-# Listar todos os cards
-GET http://localhost:3000/api/pokemon/cards
-
-# Filtrar cards por set
-GET http://localhost:3000/api/pokemon/cards?set=A1
-
-# Filtrar por set com ordenação por raridade
-GET http://localhost:3000/api/pokemon/cards?set=A1&orderBy=rarity
-
-# Buscar card específico por set e número
-GET http://localhost:3000/api/pokemon/cards/A1/1
-
-# Login de usuário
-POST http://localhost:3000/api/users/login
-Body: { "usernameOrEmail": "usuario", "password": "senha123" }
-```
-
 ## 🛠️ Tecnologias Utilizadas
 
 ### Backend & Dados
+
+<p align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express.js" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg" alt="Prisma" width="40" height="40"/>
+</p>
 
 - Node.js
 - Express.js 5.1.0
@@ -101,10 +25,23 @@ Body: { "usernameOrEmail": "usuario", "password": "senha123" }
 
 ### Frontend & Design
 
+<p align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma" width="40" height="40"/>
+</p>
+
 - HTML5, CSS3, JavaScript (ES6+)
 - Figma
 
 ### Ferramentas
+
+<p align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg" alt="Postman" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/trello/trello-plain.svg" alt="Trello" width="40" height="40"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/notion/notion-original.svg" alt="Notion" width="40" height="40"/>
+</p>
 
 - Postman (testes de API)
 - Trello, Notion (gerenciamento)
@@ -124,18 +61,6 @@ CollectionHub/
 │   └── routes/         # Rotas da API
 └── server.js           # Ponto de entrada
 ```
-
-## 📫 Contribuindo para CollectionHub
-
-Para contribuir com CollectionHub, siga estas etapas:
-
-1. Bifurque este repositório
-2. Crie um branch: `git checkout -b feature/nova-funcionalidade`
-3. Faça suas alterações e confirme-as: `git commit -m 'Adiciona nova funcionalidade X'`
-4. Envie para o branch original: `git push origin feature/nova-funcionalidade`
-5. Crie a solicitação de pull
-
-Como alternativa, consulte a documentação do GitHub em [como criar uma solicitação pull](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
 ## 🤝 Colaboradores
 
@@ -199,3 +124,4 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
 ---
 
 [⬆ Voltar ao topo](#collectionhub)
+
