@@ -15,6 +15,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
+    "build": "npm install && npx prisma generate",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:seed": "prisma db seed"
@@ -48,7 +49,8 @@
     "jsonwebtoken": "^9.0.2",
     "next-auth": "^5.0.0-beta.30",
     "nodemon": "^3.1.10",
-    "resend": "^6.4.2"
+    "resend": "^6.4.2",
+    "serverless-http": "^3.2.0"
   },
   "devDependencies": {
     "prisma": "^6.19.0"

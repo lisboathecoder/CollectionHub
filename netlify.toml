@@ -1,13 +1,18 @@
-# Configuração para Netlify (Frontend)
+# Configuração para Netlify (Frontend + Backend Serverless)
 [build]
   publish = "."
-  command = "echo 'Frontend build complete'"
+  command = "npm install && npx prisma generate"
+  functions = "netlify/functions"
 
+# Redireciona todas as chamadas /api/* para a function
 [[redirects]]
   from = "/api/*"
-  to = "https://SEU-BACKEND-URL.onrender.com/api/:splat"
+  to = "/.netlify/functions/api/:splat"
   status = 200
-  force = true
+
+# Configuração de timeout para functions (max 10s no free tier)
+[functions]
+  node_bundler = "esbuild"
 
 [[headers]]
   for = "/*"
