@@ -35,46 +35,35 @@
     <header class="navbar">
       <div class="navbar-left">
         <a href="/index.html">
-          <img
-            src="/assets/images/shop.png"
-            alt="icone da loja"
-            class="icone-imagem"
-          />
+          <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
         </a>
         <div class="search-box">
-          <input
-            type="text"
-            placeholder="Search Collection..."
-            class="search-input"
-            id="search-input"
-          />
+          <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
           <button class="search-btn">...</button>
+          
+          <div class="search-suggestions" id="searchSuggestions" style="display: none;">
+            <div class="suggestion-item">
+              <span class="suggestion-icon">🔍</span><span>Pokemon cards</span>
+            </div>
+            </div>
         </div>
       </div>
+
       <div class="logo">
         <a href="/index.html">
-          <img
-            src="/assets/images/Collection logo branca.png"
-            alt="Hubb Logo"
-          />
+          <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
         </a>
       </div>
+
       <div class="navbar-right">
-        <img
-          src="/assets/images/shopbag.png"
-          alt="icone do shopbag"
-          class="icone-imagem"
-        />
-        <img
-          src="/assets/images/sino.png"
-          alt="icone do sino"
-          class="icone-imagem"
-        />
-        <a href="/pages/userLogin/login.html" class="nav-item user-profile">
-          <img src="/assets/images/icon.png" alt="" class="icone-imagem" />
+        <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
+        <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
+        
+        <a href="/pages/userLogin/login.html" class="nav-item user-profile" id="profileLink">
+          <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
         </a>
       </div>
-    </header>
+  </header>
     <main class="set-details-container">
       <!-- Loading State -->
       <div id="loading" class="loading-state">
@@ -204,5 +193,7 @@
     <script src="/assets/js/set-details.js?v=4"></script>
     <script src="/assets/js/album-modal.js?v=1"></script>
     <script src="/assets/js/global-search.js?v=2"></script>
+    <script src="/assets/js/header.js"></script>
+    
   </body>
 </html>
