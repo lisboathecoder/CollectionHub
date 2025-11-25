@@ -3,6 +3,12 @@ import * as AlbumModel from "../../models/Albums/albumModel.js";
 export const listarAlbums = async (req, res) => {
   try {
     const userId = req.params.userId;
+    const authenticatedUserId = req.user.id;
+
+    // Verify user can only access their own albums
+    if (parseInt(userId) !== authenticatedUserId) {
+      return res.status(403).json({ erro: "Acesso negado" });
+    }
 
     const albums = await AlbumModel.list(userId);
 
@@ -33,6 +39,11 @@ export const getAlbum = async (req, res) => {
       return res.status(404).json({ erro: "Álbum não encontrado" });
     }
 
+    // Verify user owns the album or album is public
+    if (album.userId !== req.user.id && !album.isPublic) {
+      return res.status(403).json({ erro: "Acesso negado" });
+    }
+
     res.status(200).json({
       mensagem: "Álbum encontrado",
       album: album
@@ -47,10 +58,11 @@ export const getAlbum = async (req, res) => {
 
 export const criarAlbum = async (req, res) => {
   try {
-    const { userId, name, isPublic } = req.body;
+    const { name, isPublic } = req.body;
+    const userId = req.user.id;
 
-    if (!userId || !name) {
-      return res.status(400).json({ erro: "userId e name são obrigatórios" });
+    if (!name) {
+      return res.status(400).json({ erro: "name é obrigatório" });
     }
 
     const novoAlbum = await AlbumModel.create({ userId, name, isPublic });
@@ -80,6 +92,11 @@ export const atualizarAlbum = async (req, res) => {
       return res.status(404).json({ erro: "Álbum não encontrado" });
     }
 
+    // Verify user owns the album
+    if (albumExiste.userId !== req.user.id) {
+      return res.status(403).json({ erro: "Acesso negado" });
+    }
+
     const albumAtualizado = await AlbumModel.update(id, req.body);
 
     res.status(200).json({
@@ -107,6 +124,11 @@ export const deletarAlbum = async (req, res) => {
       return res.status(404).json({ erro: "Álbum não encontrado" });
     }
 
+    // Verify user owns the album
+    if (albumExiste.userId !== req.user.id) {
+      return res.status(403).json({ erro: "Acesso negado" });
+    }
+
     await AlbumModel.remove(id);
 
     res.status(200).json({
@@ -132,6 +154,11 @@ export const adicionarItem = async (req, res) => {
     const albumExiste = await AlbumModel.get(albumId);
     if (!albumExiste) {
       return res.status(404).json({ erro: "Álbum não encontrado" });
+    }
+
+    // Verify user owns the album
+    if (albumExiste.userId !== req.user.id) {
+      return res.status(403).json({ erro: "Acesso negado" });
     }
 
     const novoItem = await AlbumModel.addItem(albumId, req.body);
