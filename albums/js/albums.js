@@ -63,7 +63,8 @@ document.getElementById('formCriarAlbum').addEventListener('submit', async (e) =
     console.log('Enviando dados:', data);
     
     try {
-        const res = await fetch('/api/albums', {
+        const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+        const res = await fetch(`${apiUrl}/api/albums`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'

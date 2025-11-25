@@ -19,7 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch("/api/auth/request-password-reset", {
+      const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/api/auth/request-password-reset`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
