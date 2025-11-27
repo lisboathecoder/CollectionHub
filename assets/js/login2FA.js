@@ -22,6 +22,20 @@ codeBoxes.forEach((box, index) => {
     errorMessage.textContent = "";
   });
 
+  box.addEventListener("paste", (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData("text").trim();
+
+    if (/^\d{6}$/.test(pasteData)) {
+      pasteData.split("").forEach((char, i) => {
+        if (codeBoxes[i]) {
+          codeBoxes[i].value = char;
+        }
+      });
+      codeBoxes[5].focus();
+    }
+  });
+
   box.addEventListener("keydown", (e) => {
     if (e.key === "Backspace" && !e.target.value && index > 0) {
       codeBoxes[index - 1].focus();
@@ -52,7 +66,8 @@ form.addEventListener("submit", async (e) => {
       return;
     }
 
-    const response = await fetch("/api/auth/verify-2fa", {
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    const response = await fetch(`${apiUrl}/api/auth/verify-2fa`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +80,7 @@ form.addEventListener("submit", async (e) => {
     if (response.ok) {
       localStorage.setItem("token", data.token);
       sessionStorage.removeItem("verificationEmail");
-      window.location.href = "/index.html";
+      window.location.href = "/pages/app/dashboard.html";
     } else {
       errorMessage.textContent = data.message || "Código inválido";
       codeBoxes.forEach((box) => (box.value = ""));

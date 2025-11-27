@@ -93,11 +93,19 @@ async function loadCards() {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    console.log('🔍 Buscando cartas do set:', setCode);
+    console.log('🌐 API URL:', `${apiUrl}/api/pokemon/cards?set=${setCode}`);
+    
     const response = await fetch(
-      `/api/pokemon/cards?set=${setCode}&orderBy=rarity&pageSize=500`
+      `${apiUrl}/api/pokemon/cards?set=${setCode}&orderBy=rarity&pageSize=500`
     );
 
+    console.log('📡 Status da resposta:', response.status);
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Erro na resposta:', errorText);
       throw new Error("Failed to fetch cards");
     }
 
@@ -313,7 +321,7 @@ function openCardModal(card) {
       <div class="card-detail-modal__image-wrapper">
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image">
       </div>
-      <button class="card-detail-modal__add-btn" onclick="event.stopPropagation(); openAlbumModal('${card.id}')">
+      <button class="card-detail-modal__add-btn" onclick="event.stopPropagation(); typeof openAlbumModal === 'function' && openAlbumModal('${card.id}')">
         Add to your collection
       </button>
     </div>

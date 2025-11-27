@@ -1,0 +1,251 @@
+:root {
+    --primary-color: #ff3e6c;
+    --text-color: #ffffff;
+    --text-muted: #b3b3b3;
+    --card-bg: #1e1e1e;
+    --dark-bg: #111111;
+    --input-bg: #2a2a2a;
+    --border-color: #333;
+    --modal-overlay-bg: rgba(0, 0, 0, 0.85);
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* === MAIN (CORREÇÃO DE POSIÇÃO) === */
+.profile-main {
+    max-width: 900px;
+    margin: 0 auto;
+    
+    /* IMPORTANTE: Empurra o conteúdo para baixo da Header fixa */
+    margin-top: 100px; 
+    
+    min-height: 80vh;
+    background-color: var(--card-bg);
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    position: relative;
+    z-index: 1;
+}
+
+.profile-header-image {
+    height: 220px;
+    background-color: #444;
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-container {
+    padding: 0 25px;
+    position: relative;
+}
+
+.profile-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: -70px;
+    margin-bottom: 15px;
+    position: relative;
+    z-index: 2;
+}
+
+/* === FOTO DE PERFIL PRINCIPAL (COM HOVER) === */
+.profile-pic-container {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 4px solid var(--card-bg);
+    background-color: var(--card-bg);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.profile-pic-large {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Overlay Escuro + Lápis */
+.profile-pic-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.profile-pic-container:hover .profile-pic-overlay {
+    opacity: 1;
+}
+
+/* === BOTÕES E TEXTOS === */
+.btn-edit-profile {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-bottom: 10px;
+}
+
+.btn-edit-profile:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+.profile-details { margin-bottom: 30px; }
+.name-badge-row { display: flex; align-items: center; gap: 8px; }
+.profile-name { font-size: 1.8rem; font-weight: 700; margin: 0; }
+.verified-icon { color: #FFD700; font-size: 1.1rem; }
+.profile-handle { color: var(--text-muted); font-size: 0.95rem; margin: 2px 0 15px 0; }
+.profile-bio { margin: 0 0 15px 0; line-height: 1.5; max-width: 600px; }
+.profile-metadata { display: flex; gap: 15px; margin-bottom: 15px; font-size: 0.9rem; color: var(--text-muted); }
+.meta-item i { margin-right: 5px; }
+.profile-stats { display: flex; margin-bottom: 20px; }
+.stat-link { color: var(--text-muted); text-decoration: none; margin-right: 15px; font-size: 0.95rem; }
+.stat-link strong { color: var(--text-color); font-weight: 700; }
+
+.profile-nav { display: flex; border-bottom: 1px solid var(--border-color); }
+.profile-nav-link { flex: 1; text-align: center; padding: 15px 0; color: var(--text-muted); text-decoration: none; font-weight: 600; transition: 0.2s; position: relative; }
+.profile-nav-link:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--text-color); }
+.profile-nav-link.active { color: var(--primary-color); }
+.profile-nav-link.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: var(--primary-color); border-radius: 2px 2px 0 0; }
+
+.profile-content { padding: 20px 0; min-height: 200px; }
+.empty-state { text-align: center; color: var(--text-muted); padding: 40px 0; opacity: 0.6; }
+.empty-state i { font-size: 3rem; margin-bottom: 10px; display: block; }
+
+
+/* === MODAL (ESTILO TWITTER) === */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--modal-overlay-bg);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal-content {
+    background-color: var(--dark-bg);
+    border: 1px solid var(--border-color);
+    max-width: 600px;
+    width: 90%;
+    border-radius: 16px;
+    overflow: hidden;
+    transform: translateY(-20px);
+    transition: transform 0.3s;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-overlay.active .modal-content { transform: translateY(0); }
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header-left { display: flex; align-items: center; gap: 20px; }
+.modal-header h2 { font-size: 1.2rem; font-weight: 700; margin: 0; }
+.btn-close-modal { background: transparent; border: none; color: var(--text-color); font-size: 1.2rem; cursor: pointer; padding: 5px; border-radius: 50%; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+.btn-close-modal:hover { background-color: rgba(255, 255, 255, 0.1); }
+.btn-save-mini { background-color: var(--text-color); color: #000; border: none; padding: 6px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+.btn-save-mini:hover { background-color: #ddd; }
+
+/* Área Visual Modal */
+.edit-visual-area { position: relative; margin-bottom: 60px; }
+
+/* Edição Capa */
+.edit-cover-wrapper {
+    height: 180px;
+    background-color: #333;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Edição Avatar */
+.edit-avatar-wrapper {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid var(--dark-bg);
+    position: absolute;
+    bottom: -50px;
+    left: 20px;
+    background-color: var(--dark-bg);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.edit-avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Overlay de Edição (Câmera) */
+.edit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.edit-cover-wrapper:hover .edit-overlay, 
+.edit-avatar-wrapper:hover .edit-overlay {
+    opacity: 1;
+}
+
+/* Formulário */
+.form-section { padding: 0 20px 20px 20px; }
+.form-group { margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: 4px; padding: 8px 12px; background-color: transparent; transition: border-color 0.2s; }
+.form-group:focus-within { border-color: var(--primary-color); }
+.form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2px; }
+.form-input { width: 100%; background: transparent; border: none; color: var(--text-color); font-size: 1rem; padding: 0; outline: none; font-family: inherit; }
+textarea.form-input { resize: none; }

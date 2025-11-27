@@ -16,32 +16,37 @@
 </head>
 
 <body>
-  <header class="navbar">
-    <div class="navbar-left">
-      <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
-      <div class="search-box">
-        <input type="text" placeholder="Search Collection..." class="search-input" />
-        <button class="search-btn">...</button>
+    <header class="navbar">
+      <div class="navbar-left">
+        <a href="/index.html">
+          <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
+        </a>
+        <div class="search-box">
+          <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
+          <button class="search-btn">...</button>
+          
+          <div class="search-suggestions" id="searchSuggestions" style="display: none;">
+            <div class="suggestion-item">
+              <span class="suggestion-icon">🔍</span><span>Pokemon cards</span>
+            </div>
+            </div>
+        </div>
       </div>
-    </div>
-    <div class="logo">
-      <a href="/index.html">
-        <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
-      </a>
-    </div>
-    <div class="navbar-right">
-      <a href="/index.html">
-        <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
-      </a>
-      <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
-      <div class="currency-info">
-        <span class="icon">🪙</span>
-        <span>1290.0000</span>
+
+      <div class="logo">
+        <a href="/index.html">
+          <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
+        </a>
       </div>
-      <a href="/pages/userLogin/login.html" class="nav-item user-profile">
-        <img src="/assets/images/icon.png" alt="" class="icone-imagem" />
-      </a>
-    </div>
+
+      <div class="navbar-right">
+        <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
+        <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
+        
+        <a href="/pages/userLogin/login.html" class="nav-item user-profile" id="profileLink">
+          <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
+        </a>
+      </div>
   </header>
 
   <main class="page-content contact-page">
@@ -158,6 +163,9 @@
       </p>
     </div>
   </footer>
+  
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/header.js"></script>
+    
 </body>
-
 </html>

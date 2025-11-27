@@ -15,7 +15,12 @@ export const verificarToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
+    // Map sub to id for consistency
+    req.user = {
+      id: decoded.sub,
+      username: decoded.username,
+      ...decoded
+    };
     next();
   } catch (error) {
     return res.status(401).json({ 
@@ -38,3 +43,6 @@ export const verificarProprietario = async (req, res, next) => {
 
   next();
 };
+
+// Alias for compatibility
+export const authenticateToken = verificarToken;

@@ -18,32 +18,37 @@
 
 <body>
     <header class="navbar">
-        <div class="navbar-left">
-            <a href="/index.html">
-                <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
-            </a>
-            <div class="search-box">
-                <input type="text" placeholder="Search Collection..." class="search-input" />
-                <button class="search-btn">...</button>
+      <div class="navbar-left">
+        <a href="/index.html">
+          <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
+        </a>
+        <div class="search-box">
+          <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
+          <button class="search-btn">...</button>
+          
+          <div class="search-suggestions" id="searchSuggestions" style="display: none;">
+            <div class="suggestion-item">
+              <span class="suggestion-icon">🔍</span><span>Pokemon cards</span>
+            </div>
             </div>
         </div>
-        <div class="logo">
-            <a href="/index.html">
-                <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
-            </a>
-        </div>
-        <div class="navbar-right">
-            <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
-            <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
-            <div class="currency-info">
-                <span class="icon">🪙</span>
-                <span>1290.0000</span>
-            </div>
-            <a href="/pages/userLogin/login.html" class="nav-item user-profile">
-                <img src="/assets/images/icon.png" alt="" class="icone-imagem" />
-            </a>
-        </div>
-    </header>
+      </div>
+
+      <div class="logo">
+        <a href="/index.html">
+          <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
+        </a>
+      </div>
+
+      <div class="navbar-right">
+        <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
+        <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
+        
+        <a href="/pages/userLogin/login.html" class="nav-item user-profile" id="profileLink">
+          <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
+        </a>
+      </div>
+  </header>
 
     <main class="page-content faq-page">
         <h1>Perguntas Frequentes</h1>
@@ -69,15 +74,12 @@
 
             <div class="faq-item">
                 <button class="faq-question">
-                    O que são as moedas (🪙) exibidas no topo?
+                    De onde vêm as cartas virtuais?
                     <span class="icon-toggle">+</span>
                 </button>
                 <div class="faq-answer">
                     <p>
-                        As moedas são a divisa virtual do CollectionHub. Você as ganha
-                        interagindo com a comunidade, completando coleções diárias ou
-                        trocando itens repetidos. Elas podem ser usadas para desbloquear
-                        novos packs exclusivos.
+                        Todas as cartas são geradas e controladas pela nossa plataforma, garantindo 100% de autenticidade digital.
                     </p>
                 </div>
             </div>
@@ -89,10 +91,7 @@
                 </button>
                 <div class="faq-answer">
                     <p>
-                        Sim! A essência do CollectionHub é a comunidade. Vá até o perfil
-                        do usuário com quem deseja trocar, selecione o item e envie uma
-                        proposta de troca. Você será notificado no ícone de sino quando
-                        houver resposta.
+                        Atualmente, a funcionalidade de trocas de itens entre usuários não está implementada no CollectionHub. A essência principal da plataforma, em sua versão atual, concentra-se unicamente na organização e no gerenciamento da coleção individual de cada usuário.
                     </p>
                 </div>
             </div>
@@ -122,6 +121,17 @@
                         da página inicial, oferecemos períodos de acesso livre e planos
                         premium opcionais para colecionadores hardcore que desejam
                         estatísticas avançadas.
+                    </p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    A plataforma possui algum recurso para organizar ou catalogar minha coleção?
+                    <span class="icon-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>
+                        Atualmente, você pode visualizar todas as suas cartas em uma lista simples. Em breve, lançaremos ferramentas avançadas de catalogação e filtragem por raridade, edição e idioma.
                     </p>
                 </div>
             </div>
@@ -173,7 +183,9 @@
         </div>
     </footer>
 
-    <script src="./js/faq.js"></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="../../assets/js/faq.js"></script>
+    <script src="/assets/js/header.js"></script>
+    
 </body>
-
 </html>

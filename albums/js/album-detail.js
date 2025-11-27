@@ -207,7 +207,8 @@ async function uploadImagem(file) {
             reader.onloadend = async () => {
                 const base64 = reader.result.split(',')[1];
                 
-                const res = await fetch('/api/upload', {
+                const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+                const res = await fetch(`${apiUrl}/api/upload`, {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json'

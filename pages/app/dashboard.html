@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - CollectionHub</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-32x32.png" />
+    <link rel="manifest" href="/assets/images/site.webmanifest" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../../assets/styles/style.css">
+    <link rel="stylesheet" href="../../assets/styles/dashboard.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="/index.html">
+                <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
+            </a>
+            <div class="search-box">
+                <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
+                <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+        <div class="logo">
+            <a href="/index.html">
+                <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
+            </a>
+        </div>
+        <div class="navbar-right">
+            <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
+            <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
+            <a href="/pages/userLogin/login.html" class="nav-item user-profile" id="profileLink">
+                <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
+            </a>
+        </div>
+    </header>
+
+    <main class="profile-main">
+
+        <div class="profile-header-image" id="profile-cover"></div>
+
+        <div class="profile-container">
+            
+            <div class="profile-info-header">
+                <div class="profile-pic-container">
+                    <img src="/assets/images/icon.png" alt="Foto de Perfil" class="profile-pic-large" id="profile-pic-large">
+                    <div class="profile-pic-overlay" onclick="document.getElementById('btn-edit-profile').click()">
+                        <i class="fa-solid fa-pencil"></i>
+                    </div>
+                </div>
+
+                <button class="btn-edit-profile" id="btn-edit-profile">
+                    Editar Perfil
+                </button>
+            </div>
+
+            <div class="profile-details">
+                <div class="name-badge-row">
+                    <h1 class="profile-name" id="profile-name">Carregando...</h1>
+                    <span id="verified-badge"></span>
+                </div>
+                
+                <p class="profile-handle" id="profile-nickname">@usuario</p>
+                
+                <p class="profile-bio" id="profile-bio">...</p>
+                
+                <div class="profile-metadata">
+                    <span class="meta-item" id="meta-location">
+                        <i class="fa-solid fa-location-dot"></i> <span>Brasil</span>
+                    </span>
+                </div>
+
+                <div class="profile-stats">
+                    <a href="#" class="stat-link"><strong id="stat-items-count">0</strong> Itens</a>
+                    <a href="#" class="stat-link"><strong id="stat-collections-count">0</strong> Sets</a>
+                </div>
+            </div>
+
+            <div class="profile-nav">
+                <a href="#" class="profile-nav-link active">Atividades</a>
+                <a href="collection.html" class="profile-nav-link">Minha Coleção</a>
+                <a href="#" class="profile-nav-link">Favoritos</a>
+            </div>
+
+            <div class="profile-content">
+                <div class="activity-feed" id="activity-feed">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-ghost"></i>
+                        <p>Nenhuma atividade recente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="edit-profile-modal">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <button class="btn-close-modal" id="btn-close-modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <h2>Editar Perfil</h2>
+                </div>
+                <button type="submit" form="edit-profile-form" class="btn-save-mini">Salvar</button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="edit-profile-form">
+                    
+                    <div class="edit-visual-area">
+                        <div class="edit-cover-wrapper" id="edit-cover-preview">
+                            <div class="edit-overlay cover-overlay" onclick="document.getElementById('cover-upload').click()">
+                                <i class="fa-solid fa-camera"></i>
+                            </div>
+                            <input type="file" id="cover-upload" accept="image/*" hidden>
+                        </div>
+
+                        <div class="edit-avatar-wrapper">
+                            <img src="../assets/images/icon.png" id="edit-avatar-img" alt="Avatar">
+                            <div class="edit-overlay avatar-overlay" onclick="document.getElementById('avatar-upload').click()">
+                                <i class="fa-solid fa-camera"></i>
+                            </div>
+                            <input type="file" id="avatar-upload" accept="image/*" hidden>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label for="input-full-name">Nome</label>
+                            <input type="text" id="input-full-name" class="form-input" placeholder="Seu nome">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-nick-name">Apelido</label>
+                            <input type="text" id="input-nick-name" class="form-input" placeholder="@seunick">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-bio">Bio</label>
+                            <textarea id="input-bio" class="form-input" rows="3" placeholder="Sobre você..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-location">Localização</label>
+                            <input type="text" id="input-location" class="form-input" placeholder="Ex: Brasil">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section footer-nav">
+                <h4 class="footer-heading">Navegação</h4>
+                <a href="/pages/public/about.html" class="footer-link">Sobre</a>
+                <a href="/pages/public/contact.html" class="footer-link">Contato</a>
+                <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
+            </div>
+            <div class="footer-section footer-info">
+                <div class="footer-logo">
+                    Collection<span class="text-primary">Hub</span>
+                </div>
+                <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
+            </div>
+            <div class="footer-section footer-social">
+                <h4 class="footer-heading">Siga-nos</h4>
+                <div class="social-icons"></div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="small-print">Design inspirado em comunidades de colecionáveis digitais.</p>
+        </div>
+    </footer>
+
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/dashboard.js"></script>
+
+</body>
+</html>

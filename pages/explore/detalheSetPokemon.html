@@ -29,56 +29,42 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
 
   <body>
     <header class="navbar">
       <div class="navbar-left">
         <a href="/index.html">
-          <img
-            src="/assets/images/shop.png"
-            alt="icone da loja"
-            class="icone-imagem"
-          />
+          <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
         </a>
         <div class="search-box">
-          <input
-            type="text"
-            placeholder="Search Collection..."
-            class="search-input"
-            id="search-input"
-          />
+          <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
           <button class="search-btn">...</button>
+          
+          <div class="search-suggestions" id="searchSuggestions" style="display: none;">
+            <div class="suggestion-item">
+              <span class="suggestion-icon">🔍</span><span>Pokemon cards</span>
+            </div>
+            </div>
         </div>
       </div>
+
       <div class="logo">
         <a href="/index.html">
-          <img
-            src="/assets/images/Collection logo branca.png"
-            alt="Hubb Logo"
-          />
+          <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
         </a>
       </div>
+
       <div class="navbar-right">
-        <img
-          src="/assets/images/shopbag.png"
-          alt="icone do shopbag"
-          class="icone-imagem"
-        />
-        <img
-          src="/assets/images/sino.png"
-          alt="icone do sino"
-          class="icone-imagem"
-        />
-        <div class="currency-info">
-          <span class="icon">🪙</span>
-          <span>1290.0000</span>
-        </div>
-        <a href="/pages/userLogin/login.html" class="nav-item user-profile">
-          <img src="/assets/images/icon.png" alt="" class="icone-imagem" />
+        <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
+        <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
+        
+        <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
+          <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
         </a>
       </div>
-    </header>
+  </header>
     <main class="set-details-container">
       <!-- Loading State -->
       <div id="loading" class="loading-state">
@@ -104,6 +90,14 @@
       <!-- Filters -->
       <div id="filters" class="filters" style="display: none">
         <div class="filter-group">
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Search cards..." 
+            class="search-input-filter"
+          />
+        </div>
+        <div class="filter-group">
           <label for="rarity-filter">Rarity:</label>
           <select id="rarity-filter">
             <option value="">All</option>
@@ -121,6 +115,13 @@
 
       <!-- Cards Grid -->
       <div id="cards-grid" class="cards-grid" style="display: none"></div>
+
+      <!-- Pagination -->
+      <div id="pagination" class="pagination" style="display: none">
+        <button id="prev-page" disabled>← Previous</button>
+        <span id="page-info">Page 1</span>
+        <button id="next-page">Next →</button>
+      </div>
     </main>
 
     <!-- Modal Add to Album -->
@@ -205,8 +206,11 @@
       </div>
     </footer>
 
-    <script src="/assets/js/set-details.js?v=4"></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/set-details.js?v=5"></script>
     <script src="/assets/js/album-modal.js?v=1"></script>
     <script src="/assets/js/global-search.js?v=2"></script>
+    <script src="/assets/js/header.js?v=2"></script>
+    
   </body>
 </html>

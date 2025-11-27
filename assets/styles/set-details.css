@@ -118,7 +118,29 @@
 .filter-group select:focus {
   outline: none;
   border-color: #ff3e6c;
-  box-shadow: 0 0 15px rgba(255, 62, 108, 0.5);
+  box-shadow: 0 0 20px rgba(255, 62, 108, 0.5);
+}
+
+/* Search Input in Filters */
+.search-input-filter {
+  padding: 8px 15px;
+  background: #000000;
+  border: 1px solid #ff3e6c;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  min-width: 200px;
+  transition: all 0.3s ease;
+}
+
+.search-input-filter:focus {
+  outline: none;
+  border-color: #ff3e6c;
+  box-shadow: 0 0 20px rgba(255, 62, 108, 0.5);
+}
+
+.search-input-filter::placeholder {
+  color: #666;
 }
 
 /* Cards Grid */
@@ -210,6 +232,31 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Card Meta (Rarity + Set Logo) */
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-set-link {
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.card-set-link:hover {
+  transform: scale(1.1);
+}
+
+.card-set-logo {
+  height: 20px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
 /* Rarity Colors */

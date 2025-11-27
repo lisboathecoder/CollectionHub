@@ -51,24 +51,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.getElementById('registerForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const data = {
-        username: form.username.value.trim(),
-        email: form.email.value.trim(),
-        password: form.password.value
-    };
-    const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+// Register form handler (only if form exists)
+const registerForm = document.getElementById('registerForm');
+if (registerForm) {
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const data = {
+            username: form.username.value.trim(),
+            email: form.email.value.trim(),
+            password: form.password.value
+        };
+        const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+        const res = await fetch(`${apiUrl}/api/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        if (res.ok) {
+            window.location.href = '/pages/userLogin/login.html';
+        } else {
+            const err = await res.json();
+            alert(err.message || 'Erro ao registrar');
+        }
     });
-    if (res.ok) {
-        window.location.href = '/pages/userLogin/login.html';
-    } else {
-        const err = await res.json();
-        alert(err.message || 'Erro ao registrar');
-    }
-});
+}
 

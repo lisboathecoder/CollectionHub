@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Set {
@@ -59,6 +60,11 @@ model User {
   username         String    @unique
   email            String    @unique
   password         String
+  nickname         String?
+  bio              String?
+  avatarUrl        String?
+  coverUrl         String?
+  location         String?
   twoFactorCode    String?
   twoFactorExpires DateTime?
   resetCode        String?

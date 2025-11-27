@@ -5,6 +5,7 @@ import { Resend } from "resend";
 const apiKey = process.env.RESEND_API_KEY;
 const resend = apiKey ? new Resend(apiKey) : null;
 
+
 const FROM_EMAIL = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 
 // Gera um código numérico de 6 dígitos aleatório
@@ -151,9 +152,10 @@ export const send2FACode = async (email, code, username) => {
       return { success: false, error: error.message };
     }
 
-    return { success: true, response: data };
-  } catch (error) {
-    console.error("❌ Erro:", error);
-    return { success: false, error: error.message };
+    console.log('✅ Email enviado com sucesso:', data);
+    return { success: true, data };
+  } catch (err) {
+    console.error("❌ Exceção ao enviar email:", err);
+    return { success: false, error: 'Erro interno ao enviar email.' };
   }
 };
