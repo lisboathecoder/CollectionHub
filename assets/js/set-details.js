@@ -321,8 +321,8 @@ function openCardModal(card) {
       <div class="card-detail-modal__image-wrapper">
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image">
       </div>
-      <button class="card-detail-modal__add-btn" onclick="event.stopPropagation(); typeof openAlbumModal === 'function' && openAlbumModal('${card.id}')">
-        Add to your collection
+      <button class="card-detail-modal__add-btn" onclick="event.stopPropagation(); openAddToAlbumModalWithCard(${JSON.stringify(card).replace(/"/g, '&quot;')})">
+        <i class="fa-solid fa-plus"></i> Add to Album
       </button>
     </div>
   `;
@@ -344,6 +344,15 @@ function openCardModal(card) {
 
   closeBtn.addEventListener("click", closeModal);
   backdrop.addEventListener("click", closeModal);
+}
+
+// Helper function to open Add to Album modal
+function openAddToAlbumModalWithCard(card) {
+  if (typeof openAddToAlbumModal === 'function') {
+    openAddToAlbumModal(card);
+  } else {
+    console.error('openAddToAlbumModal function not found');
+  }
 }
 
 // Event Listeners
