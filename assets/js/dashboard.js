@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('profile-nickname').innerText = user.nickname || `@${user.username}`;
         document.getElementById('profile-bio').innerText = user.bio || "Sem biografia.";
         
-        const locationSpan = document.getElementById('meta-location').querySelector('span');
+        const locationSpan = document.getElementById('meta-location')?.querySelector('span');
         if (locationSpan) locationSpan.innerText = user.location || "Brasil";
         
         document.getElementById('stat-items-count').innerText = user.stats.items;
@@ -76,8 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadUserData();
 
-    // Image resize function (Twitter profile standards)
-    // Avatar: 400x400px | Banner: 1500x500px
     async function resizeImage(file, maxWidth, maxHeight) {
         return new Promise((resolve) => {
             const reader = new FileReader();
@@ -88,14 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     let width = img.width;
                     let height = img.height;
 
-                    // Calculate aspect ratio
                     const aspectRatio = width / height;
                     const targetRatio = maxWidth / maxHeight;
 
-                    // For banner (1500x500), cover and crop
-                    // For avatar (400x400), fit with black bars
                     if (maxWidth === 1500) {
-                        // Banner: cover mode (crop to fit)
                         if (aspectRatio > targetRatio) {
                             width = height * targetRatio;
                         } else {
@@ -113,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
                     } else {
-                        // Avatar: contain mode (fit with bars)
                         if (aspectRatio > targetRatio) {
                             width = maxWidth;
                             height = maxWidth / aspectRatio;
@@ -185,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
                 
-                // Upload avatar if changed (400x400)
                 let avatarUrl = null;
                 const avatarInput = document.getElementById('avatar-upload');
                 if (avatarInput.files && avatarInput.files[0]) {
@@ -214,7 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                // Upload cover if changed (1500x500)
                 let coverUrl = null;
                 const coverInput = document.getElementById('cover-upload');
                 if (coverInput.files && coverInput.files[0]) {
@@ -243,7 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                // Update profile
                 const profileData = {
                     nickname: document.getElementById('input-nick-name').value,
                     bio: document.getElementById('input-bio').value,
@@ -271,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('✅ Resposta do servidor:', data);
                     alert('Perfil atualizado com sucesso!');
                     closeModal();
-                    loadUserData(); // Reload profile
+                    loadUserData();
                 } else {
                     const error = await response.json();
                     console.error('❌ Erro do servidor:', error);

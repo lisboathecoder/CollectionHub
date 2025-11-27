@@ -3,8 +3,7 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "troque_isto_para_producao";
 
 export const verificarToken = (req, res, next) => {
-  const token = req.headers.authorization?.replace('Bearer ', '') || 
-                req.cookies?.token;
+  const token = req.headers.authorization?.replace('Bearer ', '') || req.cookies?.token;
 
   if (!token) {
     return res.status(401).json({ 
@@ -15,7 +14,6 @@ export const verificarToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    // Map sub to id for consistency
     req.user = {
       id: decoded.sub,
       username: decoded.username,
@@ -31,7 +29,7 @@ export const verificarToken = (req, res, next) => {
 };
 
 export const verificarProprietario = async (req, res, next) => {
-  const userId = req.user.sub;
+  const userId = req.user.id;
   const resourceUserId = parseInt(req.params.userId || req.body.userId);
 
   if (userId !== resourceUserId) {
@@ -44,5 +42,4 @@ export const verificarProprietario = async (req, res, next) => {
   next();
 };
 
-// Alias for compatibility
 export const authenticateToken = verificarToken;

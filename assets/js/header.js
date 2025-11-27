@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const user = await response.json();
                     
                     if (profileImage) {
-                        // Smooth fade transition when changing image
                         profileImage.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
                         profileImage.style.opacity = '0';
                         
@@ -33,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         }, 300);
                     }
 
-                    // Create dropdown menu
                     if (profileLink) {
                         profileLink.removeAttribute('href');
                         profileLink.classList.remove('nav-item');
@@ -41,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         profileLink.style.cursor = 'pointer';
                         profileLink.style.position = 'relative';
                         
-                        // Create dropdown
                         const dropdown = document.createElement('div');
                         dropdown.className = 'profile-dropdown';
                         dropdown.style.cssText = `
@@ -72,21 +69,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         profileLink.appendChild(dropdown);
 
-                        // Toggle dropdown (only on image click, not on links)
                         profileImage.addEventListener('click', (e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
                         });
 
-                        // Close dropdown when clicking outside
                         document.addEventListener('click', (e) => {
                             if (!profileLink.contains(e.target)) {
                                 dropdown.style.display = 'none';
                             }
                         });
 
-                        // Logout handler
                         const logoutBtn = dropdown.querySelector('#logout-btn');
                         logoutBtn.addEventListener('click', (e) => {
                             e.preventDefault();
@@ -102,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Not logged in
         if (profileLink) {
             profileLink.href = loginPath;
             profileLink.classList.add('nav-item');
