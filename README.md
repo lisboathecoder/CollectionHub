@@ -1,4 +1,4 @@
-# 🎴 CollectionHub
+# CollectionHub
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/lisboathecoder/CollectionHub?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/lisboathecoder/CollectionHub?style=for-the-badge)
@@ -8,31 +8,6 @@
 ## 📸 Preview
 
 ![Screenshot do CollectionHub](./assets/images/Captura%20de%20Tela%202025-11-24%20às%2011.06.03.png)
-
-## ✨ Funcionalidades
-
-### Autenticação & Perfil
-✅ Sistema completo de registro e login  
-✅ Autenticação 2FA via email (Resend API)  
-✅ OAuth com GitHub e Google  
-✅ Perfil personalizável (avatar + banner)  
-✅ Upload de imagens via ImgBB  
-✅ Reset de senha por email  
-
-### Coleções & Cards
-✅ Busca avançada de cards com filtros  
-✅ Visualização de sets e packs  
-✅ Criação de álbuns personalizados  
-✅ Adicionar/remover cards aos álbuns  
-✅ Álbuns públicos e privados  
-✅ Sistema de raridades com badges coloridos  
-
-### Segurança
-✅ JWT com expiração de 7 dias  
-✅ Hash de senhas com bcrypt  
-✅ Proteção de rotas com middleware  
-✅ Validação de ownership (403 Forbidden)  
-✅ CORS configurado  
 
 ## 🛠️ Tecnologias Utilizadas
 
