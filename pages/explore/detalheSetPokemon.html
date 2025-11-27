@@ -29,6 +29,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
 
   <body>
@@ -59,7 +60,7 @@
         <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
         <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
         
-        <a href="/pages/userLogin/login.html" class="nav-item user-profile" id="profileLink">
+        <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
           <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
         </a>
       </div>
@@ -89,6 +90,14 @@
       <!-- Filters -->
       <div id="filters" class="filters" style="display: none">
         <div class="filter-group">
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Search cards..." 
+            class="search-input-filter"
+          />
+        </div>
+        <div class="filter-group">
           <label for="rarity-filter">Rarity:</label>
           <select id="rarity-filter">
             <option value="">All</option>
@@ -106,6 +115,13 @@
 
       <!-- Cards Grid -->
       <div id="cards-grid" class="cards-grid" style="display: none"></div>
+
+      <!-- Pagination -->
+      <div id="pagination" class="pagination" style="display: none">
+        <button id="prev-page" disabled>← Previous</button>
+        <span id="page-info">Page 1</span>
+        <button id="next-page">Next →</button>
+      </div>
     </main>
 
     <!-- Modal Add to Album -->
@@ -190,10 +206,11 @@
       </div>
     </footer>
 
-    <script src="/assets/js/set-details.js?v=4"></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/set-details.js?v=5"></script>
     <script src="/assets/js/album-modal.js?v=1"></script>
     <script src="/assets/js/global-search.js?v=2"></script>
-    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/header.js?v=2"></script>
     
   </body>
 </html>

@@ -40,7 +40,7 @@
     "@auth/core": "^0.41.1",
     "@auth/express": "^0.12.1",
     "@emailjs/nodejs": "^5.0.2",
-    "@prisma/client": "^6.18.0",
+    "@prisma/client": "^6.19.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -49,10 +49,8 @@
     "jsonwebtoken": "^9.0.2",
     "next-auth": "^5.0.0-beta.30",
     "nodemon": "^3.1.10",
+    "prisma": "^6.19.0",
     "resend": "^6.4.2",
     "serverless-http": "^3.2.0"
-  },
-  "devDependencies": {
-    "prisma": "^6.19.0"
   }
 }

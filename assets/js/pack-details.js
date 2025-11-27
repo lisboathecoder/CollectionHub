@@ -115,11 +115,19 @@ async function loadCards() {
     errorEl.style.display = "none";
 
     // Busca as cartas do set inteiro e filtra pelo pack
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    console.log('🔍 Buscando cartas do pack:', packName, 'no set:', setCode);
+    console.log('🌐 API URL:', `${apiUrl}/api/pokemon/cards?set=${setCode}`);
+    
     const response = await fetch(
-      `/api/pokemon/cards?set=${setCode}&orderBy=rarity&pageSize=500`
+      `${apiUrl}/api/pokemon/cards?set=${setCode}&orderBy=rarity&pageSize=500`
     );
 
+    console.log('📡 Status da resposta:', response.status);
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Erro na resposta:', errorText);
       throw new Error("Failed to fetch cards");
     }
 

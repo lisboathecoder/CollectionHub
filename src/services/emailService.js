@@ -151,6 +151,9 @@ export const send2FACode = async (email, code, username) => {
       console.error("❌ Erro ao enviar email:", error);
       return { success: false, error: error.message };
     }
+
+    console.log('✅ Email enviado com sucesso:', data);
+    return { success: true, data };
   } catch (err) {
     console.error("❌ Exceção ao enviar email:", err);
     return { success: false, error: 'Erro interno ao enviar email.' };

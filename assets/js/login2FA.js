@@ -21,10 +21,10 @@ codeBoxes.forEach((box, index) => {
 
     errorMessage.textContent = "";
   });
-  
-    input.addEventListener("paste", (e) => {
-      e.preventDefault();
-      const pasteData = e.clipboardData.getData("text").trim();
+
+  box.addEventListener("paste", (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData("text").trim();
 
     if (/^\d{6}$/.test(pasteData)) {
       pasteData.split("").forEach((char, i) => {
@@ -80,7 +80,7 @@ form.addEventListener("submit", async (e) => {
     if (response.ok) {
       localStorage.setItem("token", data.token);
       sessionStorage.removeItem("verificationEmail");
-      window.location.href = "/index.html";
+      window.location.href = "/pages/app/dashboard.html";
     } else {
       errorMessage.textContent = data.message || "Código inválido";
       codeBoxes.forEach((box) => (box.value = ""));

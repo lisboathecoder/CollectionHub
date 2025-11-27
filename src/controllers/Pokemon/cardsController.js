@@ -1,7 +1,5 @@
 import * as CardModel from "../../models/Pokemon/cardModel.js";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../../lib/prisma.js";
 
 export const listarCards = async (req, res) => {
   try {

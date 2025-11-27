@@ -2,34 +2,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadUserData() {
         try {
-            setTimeout(() => {
-                const mockUser = {
-                    name: "Carregando...",
-                    nickname: "@usuario",
-                    email: "usuario@email.com",
-                    bio: "Aguardando biografia...",
-                    avatar: "../assets/images/icon.png",
-                    coverImage: null,
-                    stats: {
-                        items: 0,
-                        sets: 0
-                    },
-                    isVerified: false,
-                    location: "Brasil",
-                    website: ""
-                };
-                renderProfile(mockUser);
-            }, 500);
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                window.location.href = '/pages/userLogin/login.html';
+                return;
+            }
+
+            const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+            const response = await fetch(`${apiUrl}/api/profile/me`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/pages/userLogin/login.html';
+                    return;
+                }
+                throw new Error('Erro ao carregar perfil');
+            }
+
+            const user = await response.json();
+            renderProfile(user);
 
         } catch (error) {
-            console.error(error);
+            console.error('❌ Erro ao carregar perfil:', error);
             document.getElementById('profile-name').innerText = "Erro ao carregar.";
         }
     }
 
     function renderProfile(user) {
-        document.getElementById('profile-name').innerText = user.name;
-        document.getElementById('profile-nickname').innerText = user.nickname;
+        document.getElementById('profile-name').innerText = user.username;
+        document.getElementById('profile-nickname').innerText = user.nickname || `@${user.username}`;
         document.getElementById('profile-bio').innerText = user.bio || "Sem biografia.";
         
         const locationSpan = document.getElementById('meta-location').querySelector('span');
@@ -38,17 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('stat-items-count').innerText = user.stats.items;
         document.getElementById('stat-collections-count').innerText = user.stats.sets;
 
-        if (user.avatar) {
-            document.getElementById('profile-pic-large').src = user.avatar;
+        if (user.avatarUrl) {
+            document.getElementById('profile-pic-large').src = user.avatarUrl;
             const editAvatar = document.getElementById('edit-avatar-img');
-            if (editAvatar) editAvatar.src = user.avatar;
+            if (editAvatar) editAvatar.src = user.avatarUrl;
         }
         
         const coverEl = document.getElementById('profile-cover');
         const editCoverEl = document.getElementById('edit-cover-preview');
         
-        if (user.coverImage) {
-            const url = `url('${user.coverImage}')`;
+        if (user.coverUrl) {
+            const url = `url('${user.coverUrl}')`;
             coverEl.style.backgroundImage = url;
             if (editCoverEl) editCoverEl.style.backgroundImage = url;
         } else {
@@ -56,25 +63,83 @@ document.addEventListener('DOMContentLoaded', () => {
             if (editCoverEl) editCoverEl.style.backgroundColor = '#333';
         }
 
-        if (user.isVerified) {
-            const badge = document.getElementById('verified-badge');
-            badge.innerHTML = '<i class="fa-solid fa-star verified-icon"></i>';
-        }
-
         const inputName = document.getElementById('input-full-name');
         const inputNick = document.getElementById('input-nick-name');
         const inputBio = document.getElementById('input-bio');
         const inputLoc = document.getElementById('input-location');
-        const inputSite = document.getElementById('input-website');
 
-        if (inputName) inputName.value = user.name || "";
+        if (inputName) inputName.value = user.username || "";
         if (inputNick) inputNick.value = user.nickname || "";
         if (inputBio) inputBio.value = user.bio || "";
         if (inputLoc) inputLoc.value = user.location || "";
-        if (inputSite) inputSite.value = user.website || "";
     }
 
     loadUserData();
+
+    // Image resize function (Twitter profile standards)
+    // Avatar: 400x400px | Banner: 1500x500px
+    async function resizeImage(file, maxWidth, maxHeight) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Calculate aspect ratio
+                    const aspectRatio = width / height;
+                    const targetRatio = maxWidth / maxHeight;
+
+                    // For banner (1500x500), cover and crop
+                    // For avatar (400x400), fit with black bars
+                    if (maxWidth === 1500) {
+                        // Banner: cover mode (crop to fit)
+                        if (aspectRatio > targetRatio) {
+                            width = height * targetRatio;
+                        } else {
+                            height = width / targetRatio;
+                        }
+                        canvas.width = maxWidth;
+                        canvas.height = maxHeight;
+                        
+                        const ctx = canvas.getContext('2d');
+                        const scale = Math.max(maxWidth / width, maxHeight / height);
+                        const scaledWidth = width * scale;
+                        const scaledHeight = height * scale;
+                        const x = (maxWidth - scaledWidth) / 2;
+                        const y = (maxHeight - scaledHeight) / 2;
+                        
+                        ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
+                    } else {
+                        // Avatar: contain mode (fit with bars)
+                        if (aspectRatio > targetRatio) {
+                            width = maxWidth;
+                            height = maxWidth / aspectRatio;
+                        } else {
+                            height = maxHeight;
+                            width = maxHeight * aspectRatio;
+                        }
+                        
+                        canvas.width = maxWidth;
+                        canvas.height = maxHeight;
+                        
+                        const ctx = canvas.getContext('2d');
+                        const x = (maxWidth - width) / 2;
+                        const y = (maxHeight - height) / 2;
+                        ctx.fillStyle = '#000';
+                        ctx.fillRect(0, 0, maxWidth, maxHeight);
+                        ctx.drawImage(img, x, y, width, height);
+                    }
+
+                    resolve(canvas.toDataURL('image/jpeg', 0.9));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
 
     const editProfileBtn = document.getElementById('btn-edit-profile');
     const editProfileModal = document.getElementById('edit-profile-modal');
@@ -104,22 +169,124 @@ document.addEventListener('DOMContentLoaded', () => {
         editProfileForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const newData = {
-                name: document.getElementById('input-full-name').value,
-                nickname: document.getElementById('input-nick-name').value,
-                bio: document.getElementById('input-bio').value,
-                location: document.getElementById('input-location').value
-            };
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Sessão expirada. Faça login novamente.');
+                window.location.href = '/pages/userLogin/login.html';
+                return;
+            }
 
-            alert('Perfil atualizado com sucesso!');
-            closeModal();
-            
-            document.getElementById('profile-name').innerText = newData.name;
-            document.getElementById('profile-nickname').innerText = newData.nickname;
-            document.getElementById('profile-bio').innerText = newData.bio;
-            
-            const locationSpan = document.getElementById('meta-location').querySelector('span');
-            if (locationSpan) locationSpan.innerText = newData.location;
+            const submitBtn = document.querySelector('.btn-save-mini');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Salvando...';
+            }
+
+            try {
+                const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+                
+                // Upload avatar if changed (400x400)
+                let avatarUrl = null;
+                const avatarInput = document.getElementById('avatar-upload');
+                if (avatarInput.files && avatarInput.files[0]) {
+                    console.log('🖼️ Avatar detectado:', avatarInput.files[0].name);
+                    const resizedAvatar = await resizeImage(avatarInput.files[0], 400, 400);
+                    console.log('✂️ Avatar redimensionado, tamanho:', resizedAvatar.length, 'chars');
+
+                    const uploadResponse = await fetch(`${apiUrl}/api/profile/upload-image`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ image: resizedAvatar, type: 'avatar' })
+                    });
+
+                    console.log('📡 Upload avatar status:', uploadResponse.status);
+
+                    if (uploadResponse.ok) {
+                        const uploadData = await uploadResponse.json();
+                        avatarUrl = uploadData.url;
+                        console.log('✅ Avatar URL:', avatarUrl);
+                    } else {
+                        const error = await uploadResponse.json();
+                        console.error('❌ Erro upload avatar:', error);
+                    }
+                }
+
+                // Upload cover if changed (1500x500)
+                let coverUrl = null;
+                const coverInput = document.getElementById('cover-upload');
+                if (coverInput.files && coverInput.files[0]) {
+                    console.log('🖼️ Cover detectado:', coverInput.files[0].name);
+                    const resizedCover = await resizeImage(coverInput.files[0], 1500, 500);
+                    console.log('✂️ Cover redimensionado, tamanho:', resizedCover.length, 'chars');
+
+                    const uploadResponse = await fetch(`${apiUrl}/api/profile/upload-image`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ image: resizedCover, type: 'cover' })
+                    });
+
+                    console.log('📡 Upload cover status:', uploadResponse.status);
+
+                    if (uploadResponse.ok) {
+                        const uploadData = await uploadResponse.json();
+                        coverUrl = uploadData.url;
+                        console.log('✅ Cover URL:', coverUrl);
+                    } else {
+                        const error = await uploadResponse.json();
+                        console.error('❌ Erro upload cover:', error);
+                    }
+                }
+
+                // Update profile
+                const profileData = {
+                    nickname: document.getElementById('input-nick-name').value,
+                    bio: document.getElementById('input-bio').value,
+                    location: document.getElementById('input-location').value
+                };
+
+                if (avatarUrl) profileData.avatarUrl = avatarUrl;
+                if (coverUrl) profileData.coverUrl = coverUrl;
+
+                console.log('📤 Enviando dados do perfil:', profileData);
+
+                const response = await fetch(`${apiUrl}/api/profile/me`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(profileData)
+                });
+
+                console.log('📥 Status da resposta:', response.status);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ Resposta do servidor:', data);
+                    alert('Perfil atualizado com sucesso!');
+                    closeModal();
+                    loadUserData(); // Reload profile
+                } else {
+                    const error = await response.json();
+                    console.error('❌ Erro do servidor:', error);
+                    alert(error.error || 'Erro ao atualizar perfil');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao salvar:', error);
+                alert('Erro ao salvar perfil. Tente novamente.');
+            } finally {
+                const submitBtn = document.querySelector('.btn-save-mini');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Salvar';
+                }
+            }
         });
     }
 

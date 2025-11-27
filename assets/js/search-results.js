@@ -128,7 +128,29 @@ function renderCards() {
 
     const imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
     const cardName = card.nameEn || "Unknown";
-    const rarityName = card.rarity || "Unknown";
+    const rarityName = card.rarity?.name || card.rarity || "Unknown";
+    const setCode = card.setCode || card.set?.code || "";
+    const setName = card.set?.nameEn || "";
+
+    // Set logos mapping
+    const setLogos = {
+      "A1": "/assets/images/logo-boosters/Genetic-Apex-Logo.webp",
+      "A1A": "/assets/images/logo-boosters/Mythical-island-logo.webp",
+      "A2": "/assets/images/logo-boosters/Space-Time-Smackdown_Logo.webp",
+      "A2A": "/assets/images/logo-boosters/Triumphant-Ligth_Logo.webp",
+      "A2B": "/assets/images/logo-boosters/Shining-Revelry_Logo.webp",
+      "A3": "/assets/images/logo-boosters/Celestial-Guardians_Logo.webp",
+      "A3A": "/assets/images/logo-boosters/Extradimensional-Crisis_Logo.webp",
+      "A3B": "/assets/images/logo-boosters/Eevee-Grove_Logo.webp",
+      "A4": "/assets/images/logo-boosters/Wisdom-Of-Sea-And-Sky_Logo.webp",
+      "A4A": "/assets/images/logo-boosters/Secluded-Springs_Logo.webp",
+      "A4B": "/assets/images/logo-boosters/Deluxe-Pack-Ex_Logo.webp",
+      "B1": "/assets/images/logo-boosters/Mega-Rising_Logo.webp",
+      "PROMO-A": "https://i.ibb.co/Xx8FWqrk/LOGO-expansion-PROMO-A-en-US.webp",
+      "PROMO-B": "https://i.ibb.co/sd9sWXZN/LOGO-expansion-PROMO-B-en-US.webp",
+    };
+
+    const setLogo = setLogos[setCode] || "";
 
     cardEl.innerHTML = `
       <div class="card-image-container">
@@ -137,9 +159,19 @@ function renderCards() {
       <div class="card-info">
         <h3 class="card-name">${cardName}</h3>
         <p class="card-number">#${card.number}</p>
-        <span class="card-rarity rarity-${rarityName
-          .toLowerCase()
-          .replace(/\s+/g, "-")}">${rarityName}</span>
+        <div class="card-meta">
+          <span class="card-rarity rarity-${rarityName
+            .toLowerCase()
+            .replace(/\s+/g, "-")}">${rarityName}</span>
+          ${setLogo ? `
+            <a href="/pages/explore/detalheSetPokemon.html?set=${setCode}" 
+               class="card-set-link" 
+               title="${setName}"
+               onclick="event.stopPropagation()">
+              <img src="${setLogo}" alt="${setName}" class="card-set-logo">
+            </a>
+          ` : ''}
+        </div>
       </div>
     `;
 
