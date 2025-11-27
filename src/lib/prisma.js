@@ -1,16 +1,19 @@
 import { PrismaClient } from '@prisma/client';
 
-// Singleton instance
 let prisma;
 
 if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient();
+  prisma = new PrismaClient({
+    log: ['error'],
+  });
 } else {
-  // In development, use a global variable to preserve the instance across hot reloads
   if (!global.prisma) {
-    global.prisma = new PrismaClient();
+    global.prisma = new PrismaClient({
+      log: ['query', 'error', 'warn'],
+    });
   }
   prisma = global.prisma;
 }
 
 export { prisma };
+

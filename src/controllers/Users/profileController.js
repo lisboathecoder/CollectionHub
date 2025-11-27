@@ -1,6 +1,5 @@
 import { prisma } from "../../lib/prisma.js";
 
-// Get user profile
 export const getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -29,14 +28,10 @@ export const getProfile = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ error: "Usuário não encontrado" });
+      return res.status(404).json({ error: "USER_NOT_FOUND", message: "Usuário não encontrado" });
     }
 
-    // Calculate stats
-    const totalItems = user.albums.reduce(
-      (sum, album) => sum + album.items.length,
-      0
-    );
+    const totalItems = user.albums.reduce((sum, album) => sum + album.items.length, 0);
     const totalAlbums = user.albums.length;
 
     res.json({
@@ -56,11 +51,10 @@ export const getProfile = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Erro ao buscar perfil:", error);
-    res.status(500).json({ error: "Erro ao buscar perfil" });
+    res.status(500).json({ error: "INTERNAL_ERROR", message: "Erro ao buscar perfil" });
   }
 };
 
-// Update user profile
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -68,7 +62,6 @@ export const updateProfile = async (req, res) => {
 
     console.log('📝 Atualizando perfil:', { userId, nickname, bio, location, avatarUrl, coverUrl });
 
-    // Build update data object with only defined values
     const updateData = {};
     if (nickname !== undefined) updateData.nickname = nickname;
     if (bio !== undefined) updateData.bio = bio;
@@ -98,27 +91,30 @@ export const updateProfile = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Erro ao atualizar perfil:", error);
-    res.status(500).json({ error: "Erro ao atualizar perfil", details: error.message });
+    res.status(500).json({ 
+      error: "UPDATE_FAILED",
+      message: "Erro ao atualizar perfil",
+      details: error.message 
+    });
   }
 };
 
-// Upload image to ImgBB
 export const uploadImage = async (req, res) => {
   try {
-    const { image, type } = req.body; // type: 'avatar' or 'cover'
+    const { image, type } = req.body;
 
     if (!image) {
-      return res.status(400).json({ error: "Imagem não fornecida" });
+      return res.status(400).json({ error: "IMAGE_MISSING", message: "Imagem não fornecida" });
     }
 
     const IMGBB_API_KEY = process.env.IMGBB_API_KEY;
 
     if (!IMGBB_API_KEY) {
-      return res.status(500).json({ error: "API Key do ImgBB não configurada" });
+      return res.status(500).json({ error: "CONFIG_ERROR", message: "Serviço de upload não configurado" });
     }
 
-    // Client handles resizing before sending (400x400 for avatar, 1500x500 for cover)
-    // Remove data URI prefix if present
+    console.log(`📤 Iniciando upload de ${type || 'imagem'}...`);
+
     const base64Image = image.replace(/^data:image\/\w+;base64,/, "");
 
     const formData = new URLSearchParams();
@@ -133,16 +129,23 @@ export const uploadImage = async (req, res) => {
     const data = await response.json();
 
     if (data.success) {
+      console.log(`✅ Upload de ${type || 'imagem'} bem-sucedido:`, data.data.url);
+      
       res.json({
         success: true,
         url: data.data.url,
         deleteUrl: data.data.delete_url,
       });
     } else {
-      res.status(500).json({ error: "Erro ao fazer upload da imagem" });
+      console.error('❌ Falha no upload para ImgBB:', data);
+      res.status(500).json({ error: "UPLOAD_FAILED", message: "Erro ao fazer upload da imagem" });
     }
   } catch (error) {
     console.error("❌ Erro ao fazer upload:", error);
-    res.status(500).json({ error: "Erro ao fazer upload da imagem" });
+    res.status(500).json({ 
+      error: "INTERNAL_ERROR",
+      message: "Erro ao fazer upload da imagem",
+      details: error.message 
+    });
   }
 };
