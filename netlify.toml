@@ -1,22 +1,28 @@
-# Configuração para Netlify (Frontend + Backend Serverless)
+
 [build]
   publish = "."
-  command = "npm install && npx prisma generate"
-  functions = "netlify/functions"
 
-# Redireciona todas as chamadas /api/* para a function
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
+  to = "https://collectionhub-production.up.railway.app/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
   status = 200
 
-# Configuração de timeout para functions (max 10s no free tier)
-[functions]
-  node_bundler = "esbuild"
+  
 
 [[headers]]
+
   for = "/*"
+
   [headers.values]
+
     Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type, Authorization"
+
+    X-Frame-Options = "DENY"
+
+    X-Content-Type-Options = "nosniff"
