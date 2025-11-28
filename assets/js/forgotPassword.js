@@ -14,13 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = emailInput.value.trim();
 
     if (!email) {
-      alert("Please enter your email address");
+      alert("Por favor, insira seu endereço de email");
       return;
     }
 
     try {
       const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-      const response = await fetch(`${apiUrl}/api/auth/request-password-reset`, {
+      const response = await fetch(`${apiUrl}api/auth/request-password-reset`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,18 +33,18 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok && data.success) {
         localStorage.setItem("reset_email", email);
 
-        alert("Verification code sent to your email!");
+        alert("Código de verificação enviado para seu email!");
 
         setTimeout(() => {
           window.location.href = "/pages/userLogin/forgot2FA.html";
         }, 1500);
       } else {
         alert(
-          data.message || "Error sending verification code. Please try again."
+          data.message || "Erro ao enviar o código de verificação. Por favor, tente novamente."
         );
       }
     } catch (error) {
-      alert("An error occurred. Please check your connection and try again.");
+      alert("Ocorreu um erro. Por favor, verifique sua conexão e tente novamente.");
     }
   });
 });

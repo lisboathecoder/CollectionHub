@@ -1,6 +1,4 @@
 import { prisma } from "../../lib/prisma.js";
-
-// Get all albums for authenticated user
 export const getUserAlbums = async (req, res) => {
   try {
     const userId = req.user.sub;
@@ -22,7 +20,6 @@ export const getUserAlbums = async (req, res) => {
   }
 };
 
-// Get single album by ID
 export const getAlbumById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -57,7 +54,6 @@ export const getAlbumById = async (req, res) => {
       return res.status(404).json({ message: 'Álbum não encontrado' });
     }
 
-    // Check if album is private and user is not the owner
     if (!album.isPublic && (!userId || parseInt(userId) !== album.userId)) {
       return res.status(403).json({ message: 'Álbum privado' });
     }
@@ -69,7 +65,6 @@ export const getAlbumById = async (req, res) => {
   }
 };
 
-// Create new album
 export const createAlbum = async (req, res) => {
   try {
     const userId = req.user.sub;
@@ -88,9 +83,6 @@ export const createAlbum = async (req, res) => {
       }
     });
 
-    // Create notification for friends
-    await createAlbumNotificationForFriends(parseInt(userId), album);
-
     res.status(201).json(album);
   } catch (error) {
     console.error('Error creating album:', error);
@@ -98,7 +90,6 @@ export const createAlbum = async (req, res) => {
   }
 };
 
-// Update album
 export const updateAlbum = async (req, res) => {
   try {
     const { id } = req.params;
@@ -125,9 +116,6 @@ export const updateAlbum = async (req, res) => {
       }
     });
 
-    // Create notification for friends about update
-    await createAlbumUpdateNotificationForFriends(parseInt(userId), updatedAlbum);
-
     res.json(updatedAlbum);
   } catch (error) {
     console.error('Error updating album:', error);
@@ -135,7 +123,6 @@ export const updateAlbum = async (req, res) => {
   }
 };
 
-// Delete album
 export const deleteAlbum = async (req, res) => {
   try {
     const { id } = req.params;
@@ -164,7 +151,6 @@ export const deleteAlbum = async (req, res) => {
   }
 };
 
-// Add card to album
 export const addCardToAlbum = async (req, res) => {
   try {
     const { id } = req.params;
@@ -209,7 +195,6 @@ export const addCardToAlbum = async (req, res) => {
   }
 };
 
-// Remove card from album
 export const removeCardFromAlbum = async (req, res) => {
   try {
     const { id, itemId } = req.params;
@@ -237,79 +222,3 @@ export const removeCardFromAlbum = async (req, res) => {
     res.status(500).json({ message: 'Erro ao remover carta do álbum' });
   }
 };
-
-// Helper functions for notifications
-async function createAlbumNotificationForFriends(userId, album) {
-  try {
-    // Get accepted friends
-    const friendships = await prisma.friendship.findMany({
-      where: {
-        OR: [
-          { requesterId: userId, status: 'accepted' },
-          { receiverId: userId, status: 'accepted' }
-        ]
-      }
-    });
-
-    const friendIds = friendships.map(f => 
-      f.requesterId === userId ? f.receiverId : f.requesterId
-    );
-
-    if (friendIds.length === 0) return;
-
-    // Get user info
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { username: true, nickname: true }
-    });
-
-    // Create notifications for all friends
-    await prisma.notification.createMany({
-      data: friendIds.map(friendId => ({
-        userId: friendId,
-        type: 'album_created',
-        title: 'Novo álbum criado',
-        message: `${user.username} criou um novo álbum: ${album.name}`,
-        metadata: JSON.stringify({ albumId: album.id, userId })
-      }))
-    });
-  } catch (error) {
-    console.error('Error creating album notifications:', error);
-  }
-}
-
-async function createAlbumUpdateNotificationForFriends(userId, album) {
-  try {
-    const friendships = await prisma.friendship.findMany({
-      where: {
-        OR: [
-          { requesterId: userId, status: 'accepted' },
-          { receiverId: userId, status: 'accepted' }
-        ]
-      }
-    });
-
-    const friendIds = friendships.map(f => 
-      f.requesterId === userId ? f.receiverId : f.requesterId
-    );
-
-    if (friendIds.length === 0) return;
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { username: true, nickname: true }
-    });
-
-    await prisma.notification.createMany({
-      data: friendIds.map(friendId => ({
-        userId: friendId,
-        type: 'album_updated',
-        title: 'Álbum atualizado',
-        message: `${user.username} atualizou o álbum: ${album.name}`,
-        metadata: JSON.stringify({ albumId: album.id, userId })
-      }))
-    });
-  } catch (error) {
-    console.error('Error creating album update notifications:', error);
-  }
-}

@@ -62,8 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <a href="/pages/albums/albums-list.html" style="display: block; padding: 12px 16px; color: #fff; text-decoration: none; border-bottom: 1px solid #333;">
                                 <i class="fa-solid fa-book"></i> Meus Álbuns
                             </a>
-                            <a href="/pages/app/friends.html" style="display: block; padding: 12px 16px; color: #fff; text-decoration: none; border-bottom: 1px solid #333;">
-                                <i class="fa-solid fa-users"></i> Amigos
                             <a href="#" id="logout-btn" style="display: block; padding: 12px 16px; color: #FF3E6C; text-decoration: none;">
                                 <i class="fa-solid fa-right-from-bracket"></i> Sair
                             </a>

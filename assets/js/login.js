@@ -19,8 +19,8 @@ form.addEventListener("submit", async (e) => {
   }
 
   try {
-    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${apiUrl}/api/auth/login`, {
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000' || '';
+    const response = await fetch(`${apiUrl}api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -85,12 +85,9 @@ let filteredCards = [];
 let currentPage = 1;
 const cardsPerPage = 48;
 
-// Pega o código do set e nome do pack da URL
 const urlParams = new URLSearchParams(window.location.search);
 const setCode = urlParams.get("set");
 const packName = urlParams.get("pack");
-
-// Elementos DOM
 const loadingEl = document.getElementById("loading");
 const errorEl = document.getElementById("error");
 const packHeaderEl = document.getElementById("pack-header");
@@ -102,7 +99,6 @@ const rarityFilterEl = document.getElementById("rarity-filter");
 const sortFilterEl = document.getElementById("sort-filter");
 const searchInputEl = document.getElementById("search-input");
 
-// Carrega as cartas do pack
 async function loadCards() {
   if (!setCode || !packName) {
     showError("No set or pack specified");
@@ -113,7 +109,6 @@ async function loadCards() {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
-    // Busca as cartas do set inteiro e filtra pelo pack
     const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
     console.log('🔍 Buscando cartas do pack:', packName, 'no set:', setCode);
     console.log('🌐 API URL:', `${apiUrl}api/pokemon/cards?set=${setCode}`);
@@ -132,17 +127,13 @@ async function loadCards() {
 
     const data = await response.json();
 
-    // Filtra apenas as cartas do pack específico
     const decodedPackName = decodeURIComponent(packName);
 
-    // Tenta filtrar por pack
     let packCards = data.filter(
       (card) =>
         card.packs && card.packs.some((pack) => pack.name === decodedPackName)
     );
 
-    // Se não encontrou nenhuma carta e o set tem poucos packs (provavelmente 1),
-    // mostra todas as cartas do set
     if (packCards.length === 0) {
       console.log(
         `Pack ${decodedPackName} não encontrado, mostrando todas as cartas do set`
@@ -158,10 +149,8 @@ async function loadCards() {
       return;
     }
 
-    // Popula filtros
     populateRarityFilter();
 
-    // Atualiza header com logo do set e imagem do pack
     const setInfo = SET_INFO[setCode] || { name: setCode, logo: null };
     const packImage = PACK_IMAGES[decodedPackName];
 
@@ -185,7 +174,6 @@ async function loadCards() {
       "page-title"
     ).textContent = `${decodedPackName} Pack - Collection Hub`;
 
-    // Mostra conteúdo
     loadingEl.style.display = "none";
     packHeaderEl.style.display = "block";
     filtersEl.style.display = "flex";
@@ -225,13 +213,11 @@ function renderCards() {
     return;
   }
 
-  // Calcular paginação
   const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = startIndex + cardsPerPage;
   const cardsToShow = filteredCards.slice(startIndex, endIndex);
 
-  // Renderizar cards da página atual
   cardsToShow.forEach((card) => {
     const cardEl = document.createElement("div");
     cardEl.className = "card-item";
@@ -252,8 +238,6 @@ function renderCards() {
           .replace(/\s+/g, "-")}">${rarityName}</span>
       </div>
     `;
-
-    // Add click event to open modal
     cardEl.addEventListener("click", () => {
       openCardModal(card);
     });
@@ -261,11 +245,9 @@ function renderCards() {
     cardsGridEl.appendChild(cardEl);
   });
 
-  // Renderizar paginação
   renderPagination(totalPages);
 }
 
-// Card Modal Functions
 function openCardModal(card) {
   const modal = document.createElement("div");
   modal.className = "card-detail-modal";
@@ -290,7 +272,6 @@ function openCardModal(card) {
 
   document.body.appendChild(modal);
 
-  // Close modal handlers
   const closeBtn = modal.querySelector(".card-detail-modal__close");
   const overlay = modal.querySelector(".card-detail-modal__overlay");
 
@@ -304,7 +285,6 @@ function openCardModal(card) {
   closeBtn.addEventListener("click", closeModal);
   overlay.addEventListener("click", closeModal);
 
-  // ESC key to close
   const escHandler = (e) => {
     if (e.key === "Escape") {
       closeModal();
@@ -313,7 +293,6 @@ function openCardModal(card) {
   };
   document.addEventListener("keydown", escHandler);
 
-  // Trigger animation
   setTimeout(() => {
     modal.classList.add("active");
   }, 10);

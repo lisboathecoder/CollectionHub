@@ -1,7 +1,4 @@
-// Global Search System with Suggestions and Animated Placeholder
-
-// Sample card names and collections for suggestions
-const sampleSuggestions = [
+ const sampleSuggestions = [
   "Charizard ex",
   "Pikachu ex",
   "Mewtwo ex",
@@ -18,7 +15,7 @@ const sampleSuggestions = [
   "Blastoise ex",
 ];
 
-// Placeholder animation texts
+
 const placeholderTexts = [
   "Search collection... ",
   "Charizard ex ",
@@ -28,6 +25,7 @@ const placeholderTexts = [
   "Mythical Island ",
   "Mew ex ",
   "Articuno ex ",
+  "@thiagoferreira ",
 ];
 
 
@@ -38,30 +36,25 @@ let isDeleting = false;
 let charIndex = 0;
 let searchDebounceTimer = null;
 
-// Initialize search for all pages
 function initGlobalSearch() {
   const searchInput = document.querySelector(".search-input");
   const searchBtn = document.querySelector(".search-btn");
 
   if (!searchInput) return;
 
-  // Create suggestions dropdown
   const suggestionsDropdown = document.createElement("div");
   suggestionsDropdown.className = "search-suggestions";
   suggestionsDropdown.id = "search-suggestions";
   searchInput.parentElement.appendChild(suggestionsDropdown);
 
-  // Start placeholder animation
   startPlaceholderAnimation(searchInput);
 
-  // Input event for suggestions
   searchInput.addEventListener("input", (e) => {
     const value = e.target.value.trim();
 
     if (value.length > 0) {
       stopPlaceholderAnimation();
-      
-      // Debounce search requests
+      suggestionsDropdown.innerHTML = ""; 
       if (searchDebounceTimer) {
         clearTimeout(searchDebounceTimer);
       }
@@ -75,14 +68,12 @@ function initGlobalSearch() {
     }
   });
 
-  // Focus event - stop animation
   searchInput.addEventListener("focus", () => {
     if (searchInput.value.trim().length === 0) {
       searchInput.placeholder = "Search collection...";
     }
   });
-
-  // Blur event - restart animation if empty
+y
   searchInput.addEventListener("blur", () => {
     setTimeout(() => {
       if (searchInput.value.trim().length === 0) {
@@ -92,19 +83,16 @@ function initGlobalSearch() {
     }, 200);
   });
 
-  // Search button click
   searchBtn.addEventListener("click", () => {
     performSearch(searchInput.value);
   });
 
-  // Enter key to search
   searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       performSearch(searchInput.value);
     }
   });
 
-  // Click outside to close suggestions
   document.addEventListener("click", (e) => {
     if (!searchInput.parentElement.contains(e.target)) {
       hideSuggestions(suggestionsDropdown);
@@ -112,25 +100,22 @@ function initGlobalSearch() {
   });
 }
 
-// Animated placeholder typing effect
 function startPlaceholderAnimation(input) {
-  if (typingInterval) return; // Already running
+  if (typingInterval) return; 
 
-  const typeSpeed = 100; // ms per character
+  const typeSpeed = 100; 
   const deleteSpeed = 50;
-  const pauseTime = 2000; // pause before deleting
+  const pauseTime = 2000; 
 
   typingInterval = setInterval(
     () => {
       const targetText = placeholderTexts[currentPlaceholderIndex];
 
       if (!isDeleting) {
-        // Typing
         currentText = targetText.substring(0, charIndex + 1);
         charIndex++;
 
         if (charIndex === targetText.length) {
-          // Finished typing, pause then start deleting
           isDeleting = true;
           clearInterval(typingInterval);
           typingInterval = null;
@@ -140,12 +125,10 @@ function startPlaceholderAnimation(input) {
           return;
         }
       } else {
-        // Deleting
         currentText = targetText.substring(0, charIndex - 1);
         charIndex--;
 
         if (charIndex === 0) {
-          // Finished deleting, move to next placeholder
           isDeleting = false;
           currentPlaceholderIndex =
             (currentPlaceholderIndex + 1) % placeholderTexts.length;
@@ -157,20 +140,17 @@ function startPlaceholderAnimation(input) {
           return;
         }
       }
-
-      input.placeholder = currentText + (isDeleting ? "" : "|");
+      input.placeholder = currentText + (isDeleting ? "" : "//" || "\\");
     },
     isDeleting ? deleteSpeed : typeSpeed
   );
 }
-// Show suggestions based on input
+
 async function showSuggestions(query, dropdown) {
-  // Get static card suggestions
   const staticMatches = sampleSuggestions.filter((item) =>
     item.toLowerCase().includes(query.toLowerCase())
   );
 
-  // Fetch user suggestions from API
   let userMatches = [];
   try {
     const response = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`);
@@ -181,10 +161,8 @@ async function showSuggestions(query, dropdown) {
     console.error("Error fetching user suggestions:", error);
   }
 
-  // Combine all matches
   const allMatches = [];
   
-  // Add users first
   userMatches.slice(0, 3).forEach(user => {
     allMatches.push({
       type: 'user',
@@ -194,7 +172,6 @@ async function showSuggestions(query, dropdown) {
     });
   });
 
-  // Add static card/collection suggestions
   const collections = [
     "Genetic Apex",
     "Mythical Island",
@@ -240,7 +217,6 @@ async function showSuggestions(query, dropdown) {
 
   dropdown.classList.add("active");
 
-  // Add click handlers to suggestions
   dropdown.querySelectorAll(".suggestion-item").forEach((item) => {
     item.addEventListener("click", () => {
       const type = item.getAttribute("data-type");
@@ -248,10 +224,8 @@ async function showSuggestions(query, dropdown) {
       const id = item.getAttribute("data-id");
       
       if (type === 'user') {
-        // Redirect to user profile
         window.location.href = `/pages/app/profile.html?id=${id}`;
-      } else {
-        // Perform regular search for cards/collections
+      } else {s
         document.querySelector(".search-input").value = value;
         performSearch(value);
       }
@@ -270,19 +244,16 @@ function highlightMatch(text, query) {
   return text.replace(regex, '<strong class="highlight">$1</strong>');
 }
 
-// Perform the actual search
 async function performSearch(query) {
   if (!query || query.trim().length === 0) return;
 
   console.log("Searching for:", query);
 
-  // Redirect to search results page
   window.location.href = `/pages/explore/searchResults.html?q=${encodeURIComponent(
     query
   )}`;
 }
 
-// Search users via API
 async function searchUsersAPI(query, dropdown) {
   if (query.length < 2) {
     hideSuggestions(dropdown);
@@ -326,7 +297,6 @@ async function searchUsersAPI(query, dropdown) {
 
       dropdown.classList.add("active");
 
-      // Add click handlers
       dropdown.querySelectorAll(".user-suggestion").forEach((item) => {
         item.addEventListener("click", () => {
           const userId = item.getAttribute("data-user-id");
@@ -340,5 +310,4 @@ async function searchUsersAPI(query, dropdown) {
   }
 }
 
-// Initialize on page load
 document.addEventListener("DOMContentLoaded", initGlobalSearch);

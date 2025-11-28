@@ -73,8 +73,6 @@ model User {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
   albums           Album[]
-  friendsInitiated Friendship[]   @relation("FriendshipInitiator")
-  friendsReceived  Friendship[]   @relation("FriendshipReceiver")
   notifications    Notification[]
 }
 
@@ -83,7 +81,7 @@ model Album {
   userId      Int
   name        String
   description String?
-  gameType    String      @default("pokemon") // "pokemon" or "custom"
+  gameType    String      @default("pokemon") 
   isPublic    Boolean     @default(false)
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   items       AlbumItem[]
@@ -103,26 +101,14 @@ model AlbumItem {
   updatedAt   DateTime @updatedAt
 }
 
-model Friendship {
-  id          Int      @id @default(autoincrement())
-  initiatorId Int
-  receiverId  Int
-  status      String   @default("pending") // "pending", "accepted", "rejected"
-  initiator   User     @relation("FriendshipInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
-  receiver    User     @relation("FriendshipReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@unique([initiatorId, receiverId])
-}
 
 model Notification {
   id        Int      @id @default(autoincrement())
   userId    Int
-  type      String   // "friend_request", "friend_accepted", "album_created", "album_updated"
+  type      String 
   title     String
   message   String
-  metadata  String?  // JSON string with extra data
+  metadata  String?
   isRead    Boolean  @default(false)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
