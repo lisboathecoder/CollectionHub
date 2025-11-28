@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <a href="${dashboardPath}" style="display: block; padding: 12px 16px; color: #fff; text-decoration: none; border-bottom: 1px solid #333;">
                                 <i class="fa-solid fa-user"></i> Perfil
                             </a>
-                            <a href="/pages/app/albums-list.html" style="display: block; padding: 12px 16px; color: #fff; text-decoration: none; border-bottom: 1px solid #333;">
+                            <a href="/pages/albums/albums-list.html" style="display: block; padding: 12px 16px; color: #fff; text-decoration: none; border-bottom: 1px solid #333;">
                                 <i class="fa-solid fa-book"></i> Meus Álbuns
                             </a>
                             <a href="/pages/app/friends.html" style="display: block; padding: 12px 16px; color: #fff; text-decoration: none; border-bottom: 1px solid #333;">
