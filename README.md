@@ -1,4 +1,4 @@
-# 🎴 CollectionHub
+# CollectionHub
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/lisboathecoder/CollectionHub?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/lisboathecoder/CollectionHub?style=for-the-badge)
@@ -128,12 +128,6 @@ node server.js
 ```
 http://localhost:3000
 ```
-
-## 📚 Documentação
-
-- **[BACKEND_PRESENTATION.md](./BACKEND_PRESENTATION.md)** - Apresentação técnica do backend
-- **[PROFILE_IMPLEMENTATION.md](./PROFILE_IMPLEMENTATION.md)** - Guia completo do sistema de perfil
-- **[NETLIFY_DEPLOY.md](./NETLIFY_DEPLOY.md)** - Deploy em produção (Netlify + Railway)
 
 ## 🔑 Variáveis de Ambiente
 

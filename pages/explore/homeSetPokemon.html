@@ -41,12 +41,13 @@
           <button class="search-btn">...</button>
         </div>
       </div>
+    </div>
 
-      <div class="logo">
-        <a href="/index.html">
-          <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
-        </a>
-      </div>
+    <div class="logo">
+      <a href="/index.html">
+        <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
+      </a>
+    </div>
 
       <div class="navbar-right">
         <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
@@ -57,12 +58,12 @@
         </a>
       </div>
   </header>
-    <main class="boosters-poke">
-      <!-- Filter Buttons -->
-      <div class="collection-filter">
-        <button class="filter-btn active" data-filter="pokemon">Pokemon</button>
-        <button class="filter-btn" data-filter="promos">Promos</button>
-      </div>
+  <main class="boosters-poke">
+    <!-- Filter Buttons -->
+    <div class="collection-filter">
+      <button class="filter-btn active" data-filter="pokemon">Pokemon</button>
+      <button class="filter-btn" data-filter="promos">Promos</button>
+    </div>
 
       <!-- Pokemon Collections Container -->
       <div id="pokemon-collections" class="collections-container">
@@ -113,6 +114,7 @@
         </a>
           </div>
         </div>
+      </div>
 
         <!-- Mythical Island -->
         <div class="collection-section">
@@ -141,6 +143,12 @@
         </a>
           </div>
         </div>
+        <div class="packs-row">
+          <a href="/pages/explore/detalhePackPokemon.html?set=A1A&pack=Mew" class="pack-link">
+            <img src="/assets/images/packs/Mythical Island.jpg" alt="Mythical Island Pack" class="pack-image" />
+          </a>
+        </div>
+      </div>
 
         <!-- Space-Time Smackdown -->
         <div class="collection-section">
@@ -179,6 +187,15 @@
         </a>
           </div>
         </div>
+        <div class="packs-row">
+          <a href="/pages/explore/detalhePackPokemon.html?set=A2&pack=Dialga" class="pack-link">
+            <img src="/assets/images/packs/Space-Time Smackdown - Dialga.jpg" alt="Dialga Pack" class="pack-image" />
+          </a>
+          <a href="/pages/explore/detalhePackPokemon.html?set=A2&pack=Palkia" class="pack-link">
+            <img src="/assets/images/packs/Space-Time Smackdown - Palkia.jpg" alt="Palkia Pack" class="pack-image" />
+          </a>
+        </div>
+      </div>
 
         <!-- Triumphant Light -->
         <div class="collection-section">
@@ -207,6 +224,7 @@
         </a>
           </div>
         </div>
+      </div>
 
         <!-- Shining Revelry -->
         <div class="collection-section">
@@ -235,6 +253,7 @@
         </a>
           </div>
         </div>
+      </div>
 
         <!-- Celestial Guardians -->
         <div class="collection-section">
@@ -273,6 +292,15 @@
         </a>
           </div>
         </div>
+        <div class="packs-row">
+          <a href="/pages/explore/detalhePackPokemon.html?set=A3&pack=Lunala" class="pack-link">
+            <img src="/assets/images/packs/Celestial Guardians - Lunala.jpg" alt="Lunala Pack" class="pack-image" />
+          </a>
+          <a href="/pages/explore/detalhePackPokemon.html?set=A3&pack=Solgaleo" class="pack-link">
+            <img src="/assets/images/packs/Celestial Guardians - Solgaleo.jpg" alt="Solgaleo Pack" class="pack-image" />
+          </a>
+        </div>
+      </div>
 
         <!-- Extradimensional Crisis -->
         <div class="collection-section">
@@ -301,6 +329,13 @@
         </a>
           </div>
         </div>
+        <div class="packs-row">
+          <a href="/pages/explore/detalhePackPokemon.html?set=A3A&pack=Extradimensional%20Crisis" class="pack-link">
+            <img src="/assets/images/packs/Extradimensional Crisis.jpg" alt="Extradimensional Crisis Pack"
+              class="pack-image" />
+          </a>
+        </div>
+      </div>
 
         <!-- Eevee Grove -->
         <div class="collection-section">
@@ -329,6 +364,7 @@
         </a>
           </div>
         </div>
+      </div>
 
         <!-- Wisdom of Sea and Sky -->
         <div class="collection-section">
@@ -367,6 +403,7 @@
         </a>
           </div>
         </div>
+      </div>
 
         <!-- Secluded Springs -->
         <div class="collection-section">
@@ -395,6 +432,12 @@
         </a>
           </div>
         </div>
+        <div class="packs-row">
+          <a href="/pages/explore/detalhePackPokemon.html?set=A4A&pack=Secluded%20Springs" class="pack-link">
+            <img src="/assets/images/packs/Secluded Springs.jpg" alt="Secluded Springs Pack" class="pack-image" />
+          </a>
+        </div>
+      </div>
 
         <!-- Deluxe Pack EX -->
         <div class="collection-section">
@@ -423,6 +466,7 @@
         </a>
           </div>
         </div>
+      </div>
 
         <!-- Mega Rising -->
         <div class="collection-section">
@@ -495,6 +539,7 @@
         </a>
           </div>
         </div>
+      </div>
 
         <!-- Promo-B -->
         <div class="collection-section">
@@ -512,124 +557,89 @@
           </div>
         </div>
       </div>
-      <!-- End Promos Collections -->
+    </div>
+    <!-- End Promos Collections -->
 
-      <script>
-        // Filter buttons functionality
-        const filterBtns = document.querySelectorAll(".filter-btn");
-        const pokemonContainer = document.getElementById("pokemon-collections");
-        const promosContainer = document.getElementById("promos-collections");
+    <script>
+      // Filter buttons functionality
+      const filterBtns = document.querySelectorAll(".filter-btn");
+      const pokemonContainer = document.getElementById("pokemon-collections");
+      const promosContainer = document.getElementById("promos-collections");
 
-        filterBtns.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            // Remove active from all buttons
-            filterBtns.forEach((b) => b.classList.remove("active"));
-            // Add active to clicked button
-            btn.classList.add("active");
+      filterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          // Remove active from all buttons
+          filterBtns.forEach((b) => b.classList.remove("active"));
+          // Add active to clicked button
+          btn.classList.add("active");
 
-            const filter = btn.getAttribute("data-filter");
+          const filter = btn.getAttribute("data-filter");
 
-            if (filter === "pokemon") {
-              pokemonContainer.style.display = "block";
-              promosContainer.style.display = "none";
-            } else if (filter === "promos") {
-              pokemonContainer.style.display = "none";
-              promosContainer.style.display = "block";
-            }
-          });
+          if (filter === "pokemon") {
+            pokemonContainer.style.display = "block";
+            promosContainer.style.display = "none";
+          } else if (filter === "promos") {
+            pokemonContainer.style.display = "none";
+            promosContainer.style.display = "block";
+          }
         });
+      });
 
-        const tabs = document.querySelectorAll(".tab");
-        tabs.forEach((tab) => {
-          tab.addEventListener("click", () => {
-            tabs.forEach((t) => t.classList.remove("active"));
-            tab.classList.add("active");
-          });
+      const tabs = document.querySelectorAll(".tab");
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
         });
+      });
 
-        const packImages = document.querySelectorAll(".pack-image");
-        packImages.forEach((img) => {
-          img.addEventListener("click", () => {
-            console.log("Pack clicado:", img.alt);
-          });
+      const packImages = document.querySelectorAll(".pack-image");
+      packImages.forEach((img) => {
+        img.addEventListener("click", () => {
+          console.log("Pack clicado:", img.alt);
         });
-      </script>
-    </main>
+      });
+    </script>
+  </main>
 
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-section footer-nav">
-          <h4 class="footer-heading">Navegação</h4>
-          <a href="/pages/public/about.html" class="footer-link">Sobre</a>
-          <a href="/pages/public/contact.html" class="footer-link">Contato</a>
-          <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
-        </div>
-
-        <div class="footer-section footer-info">
-          <div class="footer-logo">
-            Collection<span class="text-primary">Hub</span>
-          </div>
-          <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
-        </div>
-
-        <div class="footer-section footer-social">
-          <h4 class="footer-heading">Siga-nos</h4>
-          <div class="social-icons">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              class="social-link"
-              aria-label="Instagram"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="feather feather-instagram"
-              >
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path
-                  d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
-                ></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
-            </a>
-            <a
-              href="mailto:contato@bug.com"
-              class="social-link"
-              aria-label="Email"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="feather feather-mail"
-              >
-                <path
-                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                ></path>
-                <polyline points="22,6 12,13 2,6"></polyline>
-              </svg>
-            </a>
-          </div>
-        </div>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section footer-nav">
+        <h4 class="footer-heading">Navegação</h4>
+        <a href="/pages/public/about.html" class="footer-link">Sobre</a>
+        <a href="/pages/public/contact.html" class="footer-link">Contato</a>
+        <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
       </div>
-      <div class="footer-bottom">
-        <p class="small-print">
-          Design inspirado em comunidades de colecionáveis digitais.
-        </p>
+
+      <div class="footer-section footer-info">
+        <div class="footer-logo">
+          Collection<span class="text-primary">Hub</span>
+        </div>
+        <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
+      </div>
+
+      <div class="footer-section footer-social">
+        <h4 class="footer-heading">Siga-nos</h4>
+        <div class="social-icons">
+          <a href="https://www.instagram.com/collectionhub.co/" target="_blank" class="social-link"
+            aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="feather feather-instagram">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="mailto:collectionhub2025@gmail.com" class="social-link" aria-label="Email">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="feather feather-mail">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </a>
+        </div>
       </div>
     </footer>
     
