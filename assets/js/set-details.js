@@ -93,7 +93,7 @@ async function loadCards() {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
-    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000' || 'https://collectionhub-production.up.railway.app/';
     console.log('🔍 Buscando cartas do set:', setCode);
     console.log('🌐 API URL:', `${apiUrl}/api/pokemon/cards?set=${setCode}`);
     
