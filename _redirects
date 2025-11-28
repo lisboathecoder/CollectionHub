@@ -1,5 +1,5 @@
 # Redirect API calls to Railway backend
-/api/*  https://collectionhub-production.up.railway.app/api/:splat  200
+/api/*  https://collectionhub.up.railway.app/api/:splat  200
 
 # SPA routing - todas as outras rotas servem index.html
 /*      /index.html                                                   200

@@ -30,6 +30,7 @@ const placeholderTexts = [
   "Articuno ex ",
 ];
 
+
 let currentPlaceholderIndex = 0;
 let typingInterval;
 let currentText = "";
@@ -216,35 +217,24 @@ async function showSuggestions(query, dropdown) {
 
   dropdown.innerHTML = allMatches
     .map((match) => {
-      let icon, typeLabel;
-      
+      let icon = "", typeLabel = "";
       if (match.type === 'user') {
-        icon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                 <circle cx="12" cy="7" r="4"></circle>
-               </svg>`;
-        typeLabel = '<span class="suggestion-type suggestion-type--user">Usuário</span>';
+        icon = '<i class="fa-solid fa-user"></i>';
+        typeLabel = '<span class="suggestion-type">Usuário</span>';
       } else if (match.type === 'collection') {
-        icon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-               </svg>`;
-        typeLabel = '<span class="suggestion-type">Collection</span>';
+        icon = '<i class="fa-solid fa-folder"></i>';
+        typeLabel = '<span class="suggestion-type">Coleção</span>';
       } else {
-        icon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                 <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-                 <line x1="2" y1="9" x2="22" y2="9"></line>
-               </svg>`;
-        typeLabel = '<span class="suggestion-type">Card</span>';
+        icon = '<i class="fa-solid fa-clone"></i>';
+        typeLabel = '<span class="suggestion-type">Carta</span>';
       }
-
       return `
-      <div class="suggestion-item" data-type="${match.type}" data-value="${match.value}" data-id="${match.id || ''}">
-        ${icon}
-        <span class="suggestion-text">${highlightMatch(match.displayName, query)}</span>
-        ${typeLabel}
-      </div>
-    `;
+        <div class="suggestion-item" data-type="${match.type}" data-value="${match.value}" data-id="${match.id || ''}">
+          ${icon}
+          <span class="suggestion-text">${highlightMatch(match.displayName, query)}</span>
+          ${typeLabel}
+        </div>
+      `;
     })
     .join("");
 
@@ -269,14 +259,7 @@ async function showSuggestions(query, dropdown) {
       hideSuggestions(dropdown);
     });
   });
-} dropdown.querySelectorAll(".suggestion-item").forEach((item) => {
-    item.addEventListener("click", () => {
-      const value = item.getAttribute("data-value");
-      document.querySelector(".search-input").value = value;
-      performSearch(value);
-      hideSuggestions(dropdown);
-    });
-  });
+} 
 
 function hideSuggestions(dropdown) {
   dropdown.classList.remove("active");
