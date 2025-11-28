@@ -283,8 +283,8 @@ function openCardModal(card) {
       <div class="card-detail-modal__image-wrapper">
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image" onerror="this.src='/assets/images/placeholder-card.png'">
       </div>
-      <button class="card-detail-modal__add-btn" onclick="openAlbumModal('${card.id}')">
-        Add to your collection
+      <button class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(card).replace(/"/g, '&quot;')})">
+        <i class="fa-solid fa-plus"></i> Add to Album
       </button>
     </div>
   `;
@@ -318,6 +318,15 @@ function openCardModal(card) {
   setTimeout(() => {
     modal.classList.add("active");
   }, 10);
+}
+
+// Helper function to open Add to Album modal
+function openAddToAlbumModalWithCard(card) {
+  if (typeof openAddToAlbumModal === 'function') {
+    openAddToAlbumModal(card);
+  } else {
+    console.error('openAddToAlbumModal function not found');
+  }
 }
 
 function renderPagination(totalPages) {

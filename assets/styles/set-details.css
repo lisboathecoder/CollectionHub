@@ -589,30 +589,6 @@
   filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
 }
 
-.card-detail-modal__favorite {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  background: rgba(0, 0, 0, 0.7);
-  border: 2px solid #ffd700;
-  color: #ffd700;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  z-index: 5;
-}
-
-.card-detail-modal__favorite:hover {
-  background: #ffd700;
-  color: #000;
-  transform: scale(1.1);
-}
-
 .card-detail-modal__favorite svg {
   transition: fill 0.2s ease;
 }
@@ -622,7 +598,7 @@
 }
 
 .card-detail-modal__add-btn {
-  background: transparent;
+  background: #00000096;
   color: #ff3e6c;
   border: 3px solid #ff3e6c;
   border-radius: 50px;
@@ -707,7 +683,6 @@
   }
 }
 
-/* Notification Animations */
 @keyframes slideIn {
   from {
     transform: translateX(400px);

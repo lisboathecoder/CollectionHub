@@ -299,5 +299,63 @@ async function performSearch(query) {
   )}`;
 }
 
+// Search users via API
+async function searchUsersAPI(query, dropdown) {
+  if (query.length < 2) {
+    hideSuggestions(dropdown);
+    return;
+  }
+
+  try {
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    const token = localStorage.getItem('token');
+    
+    const response = await fetch(`${apiUrl}/api/users/search?q=${encodeURIComponent(query)}`, {
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : ''
+      }
+    });
+
+    if (response.ok) {
+      const users = await response.json();
+      
+      if (users.length === 0) {
+        dropdown.innerHTML = `
+          <div class="suggestion-item no-results">
+            <i class="fa-solid fa-user-slash"></i>
+            <span class="suggestion-text">Nenhum usuário encontrado</span>
+          </div>
+        `;
+        dropdown.classList.add("active");
+        return;
+      }
+
+      dropdown.innerHTML = users.slice(0, 5).map(user => `
+        <div class="suggestion-item user-suggestion" data-user-id="${user.id}">
+          <img src="${user.avatarUrl || '/assets/images/icon.png'}" alt="${user.username}" class="user-avatar-small" />
+          <div class="user-info">
+            <span class="suggestion-text">${user.username}</span>
+            ${user.nickname ? `<span class="user-nickname">@${user.nickname}</span>` : ''}
+          </div>
+          <span class="suggestion-type">User</span>
+        </div>
+      `).join('');
+
+      dropdown.classList.add("active");
+
+      // Add click handlers
+      dropdown.querySelectorAll(".user-suggestion").forEach((item) => {
+        item.addEventListener("click", () => {
+          const userId = item.getAttribute("data-user-id");
+          window.location.href = `/pages/app/profile.html?id=${userId}`;
+          hideSuggestions(dropdown);
+        });
+      });
+    }
+  } catch (error) {
+    console.error('Error searching users:', error);
+  }
+}
+
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", initGlobalSearch);
