@@ -60,7 +60,7 @@ const SET_INFO = {
 let allCards = [];
 let filteredCards = [];
 let currentPage = 1;
-const cardsPerPage = 48;
+const cardsPerPage = 50;
 
 // Pega o código do set da URL
 const urlParams = new URLSearchParams(window.location.search);
