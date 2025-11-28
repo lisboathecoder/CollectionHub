@@ -16,7 +16,7 @@ async function loadCurrentUser() {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/users/me`, {
+        const response = await fetch(`${API_BASE_URL}users/me`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -46,7 +46,7 @@ async function loadProfile() {
     }
 
     try {
-        const userResponse = await fetch(`${API_BASE_URL}/users/${userId}`, {
+        const userResponse = await fetch(`${API_BASE_URL}users/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -91,7 +91,7 @@ async function loadProfile() {
     const noAlbums = document.getElementById('noAlbums');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/albums/user/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}albums/user/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

@@ -147,7 +147,7 @@
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 200px));
-  gap: 16px;
+  gap: 30px;
   padding: 0 0 60px 0;
   max-width: 1400px;
   margin: 10px auto;
@@ -177,7 +177,7 @@
 .card-image-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 57/ 88;
+  aspect-ratio: 57/ 80;
   overflow: hidden;
   background: transparent;
   padding: 0;
@@ -186,13 +186,14 @@
 
 .card-image {
   position: absolute;
-  top: 16.5rem;
-  left: 0;
-  width: 100%;
+  top: 16.9rem;
+  left: 10px;
+  width: 90%;
   height: 90%;
   object-fit: contain;
   object-position: center center;
   display: block;
+  justify-content: center;
 }
 
 .card-item {

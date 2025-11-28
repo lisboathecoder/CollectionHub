@@ -1,47 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title id="page-title">Set Details - Collection Hub</title>
-    <link rel="stylesheet" href="/assets/styles/style.css?v=8" />
-    <link rel="stylesheet" href="/assets/styles/set-details.css?v=13" />
-    <link rel="stylesheet" href="/assets/styles/albums.css" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/assets/images/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/assets/images/favicon-16x16.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/assets/images/favicon-32x32.png"
-    />
-    <link rel="manifest" href="/assets/images/site.webmanifest" />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Set Details - Collection Hub</title>
+  <link rel="stylesheet" href="/assets/styles/style.css?v=8" />
+  <link rel="stylesheet" href="/assets/styles/set-details.css?v=13" />
+  <link rel="stylesheet" href="/assets/styles/albums.css" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-32x32.png" />
+  <link rel="manifest" href="/assets/images/site.webmanifest" />
 
-  <body>
-    <header class="navbar">
-      <div class="navbar-left">
-        <a href="/index.html">
-          <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
-        </a>
-        <div class="search-box">
-          <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
-          <button class="search-btn">...</button>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="navbar-left">
+      <a href="/index.html">
+        <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
+      </a>
+      <div class="search-box">
+        <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
+        <button class="search-btn">...</button>
         <div class="search-suggestions" id="searchSuggestions" style="display: none;">
           <div class="suggestion-item">
             <span class="suggestion-icon">🔍</span><span>Pokemon cards</span>
@@ -56,29 +40,26 @@
       </a>
     </div>
 
-      <div class="navbar-right">
-        <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
-        <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" id="notificationBell" />
-        
-        <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
-          <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
-        </a>
-      </div>
+    <div class="navbar-right">
+      <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
+      <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" id="notificationBell" />
+
+      <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
+        <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
+      </a>
+    </div>
   </header>
   <main class="set-details-container">
-    <!-- Loading State -->
+
     <div id="loading" class="loading-state">
       <div class="spinner"></div>
       <p>Loading cards...</p>
     </div>
-
-    <!-- Error State -->
     <div id="error" class="error-state" style="display: none">
       <p>Failed to load cards. Please try again.</p>
       <button onclick="location.reload()">Retry</button>
     </div>
 
-    <!-- Set Header -->
     <div id="set-header" class="set-header" style="display: none">
       <a href="/pages/explore/homeSetPokemon.html" class="back-button">
         ← Back to Sets
@@ -87,7 +68,6 @@
       <p id="set-info"></p>
     </div>
 
-    <!-- Filters -->
     <div id="filters" class="filters" style="display: none">
       <div class="filter-group">
         <input type="text" id="search-input" placeholder="Search cards..." class="search-input-filter" />
@@ -108,10 +88,8 @@
       </div>
     </div>
 
-    <!-- Cards Grid -->
     <div id="cards-grid" class="cards-grid" style="display: none"></div>
 
-    <!-- Pagination -->
     <div id="pagination" class="pagination" style="display: none">
       <button id="prev-page" disabled>← Previous</button>
       <span id="page-info">Page 1</span>
@@ -119,7 +97,6 @@
     </div>
   </main>
 
-  <!-- Modal Add to Album -->
   <div class="modal__backdrop"></div>
   <div class="modal__dialog"></div>
   </div>
@@ -171,12 +148,11 @@
     </div>
   </footer>
 
-    <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/set-details.js?v=5"></script>
-    <script src="/assets/js/add-to-album.js"></script>
-    <script src="/assets/js/global-search.js?v=2"></script>
-    <script src="/assets/js/notifications.js"></script>
-    <script src="/assets/js/header.js?v=2"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/set-details.js?v=5"></script>
+  <script src="/assets/js/global-search.js?v=2"></script>
+  <script src="/assets/js/notifications.js"></script>
+  <script src="/assets/js/header.js?v=2"></script>
 
 </body>
 

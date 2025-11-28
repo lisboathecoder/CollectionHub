@@ -60,7 +60,7 @@ const SET_INFO = {
 let allCards = [];
 let filteredCards = [];
 let currentPage = 1;
-const cardsPerPage = 50;
+const cardsPerPage = 52;
 
 const urlParams = new URLSearchParams(window.location.search);
 const setCode = urlParams.get("set");
@@ -90,12 +90,12 @@ async function loadCards() {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
-    const apiUrl = window.API_BASE_URL || 'http://localhost:3000' || 'https://collectionhub-production.up.railway.app';
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000/' || 'https://collectionhub.up.railway.app';
     console.log('🔍 Buscando cartas do set:', setCode);
-    console.log('🌐 API URL:', `${apiUrl}/api/pokemon/cards?set=${setCode}`);
+    console.log('🌐 API URL:', `${apiUrl}api/pokemon/cards?set=${setCode}`);
     
     const response = await fetch(
-      `${apiUrl}/api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`
+      `${apiUrl}api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`
     );
 
     console.log('📡 Status da resposta:', response.status);
@@ -148,6 +148,9 @@ function showError(message) {
 }
 
 function populateRarityFilter() {
+
+  rarityFilterEl.innerHTML = '<option value="">All rarities</option>';
+
   const rarities = [
     ...new Set(allCards.map((card) => card.rarity?.name).filter(Boolean)),
   ];
@@ -207,7 +210,6 @@ function renderCards() {
     cardsGridEl.appendChild(cardEl);
   });
 
-  // Renderizar paginação
   renderPagination(totalPages);
 }
 

@@ -1222,7 +1222,7 @@
     color: #ff3e6c;
 }
 
-.search-section {
+.search-section-albums {
     background: linear-gradient(145deg, #1e1e1e 0%, #2a2a2a 100%);
     border: 2px solid #333;
     border-radius: 16px;
@@ -1230,7 +1230,7 @@
     margin-bottom: 30px;
 }
 
-.search-section h2 {
+.search-section-albums h2 {
     color: #fff;
     font-size: 1.5em;
     margin-bottom: 20px;
@@ -1239,12 +1239,12 @@
     gap: 10px;
 }
 
-.search-box {
+.search-box-albums {
     display: flex;
     gap: 15px;
 }
 
-.search-box input {
+.search-box-albums input {
     flex: 1;
     padding: 15px 20px;
     background: #1a1a1a;
@@ -1254,12 +1254,12 @@
     font-size: 1em;
 }
 
-.search-box input:focus {
+.search-box-albums input:focus {
     outline: none;
     border-color: #ff3e6c;
 }
 
-.search-box button {
+.search-box-albums button {
     padding: 15px 30px;
     background: linear-gradient(135deg, #ff3e6c 0%, #ff1744 100%);
     border: none;
@@ -1270,7 +1270,7 @@
     transition: all 0.3s ease;
 }
 
-.search-box button:hover {
+.search-box-albums button:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(255, 62, 108, 0.4);
 }
@@ -1282,14 +1282,14 @@
     padding: 30px;
 }
 
-.section-header {
+.section-header-albums {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
 }
 
-.section-header h2 {
+.section-header-albums h2 {
     color: #fff;
     font-size: 1.5em;
 }

@@ -83,7 +83,7 @@ const PACK_IMAGES = {
 let allCards = [];
 let filteredCards = [];
 let currentPage = 1;
-const cardsPerPage = 48;
+const cardsPerPage = 52;
 
 const urlParams = new URLSearchParams(window.location.search);
 const setCode = urlParams.get("set");
@@ -109,7 +109,7 @@ async function loadCards() {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
-    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000/';
     console.log('🔍 Buscando cartas do pack:', packName, 'no set:', setCode);
     console.log('🌐 API URL:', `${apiUrl}api/pokemon/cards?set=${setCode}`);
     
@@ -193,6 +193,12 @@ function showError(message) {
 }
 
 function populateRarityFilter() {
+  rarityFilterEl.innerHTML = "";
+  const allOption = document.createElement("option");
+  allOption.value = "";
+  allOption.textContent = "All";
+  rarityFilterEl.appendChild(allOption);
+
   const rarities = [
     ...new Set(allCards.map((card) => card.rarity?.name).filter(Boolean)),
   ];
@@ -298,7 +304,6 @@ function openCardModal(card) {
   }, 10);
 }
 
-// Helper function to open Add to Album modal
 function openAddToAlbumModalWithCard(card) {
   if (typeof openAddToAlbumModal === 'function') {
     openAddToAlbumModal(card);
@@ -370,7 +375,7 @@ function applyFilters() {
     return matchesRarity && matchesSearch;
   });
 
-  currentPage = 1; // Reset para primeira página ao filtrar
+  currentPage = 1; 
   applySorting();
   renderCards();
 }
@@ -386,13 +391,11 @@ function applySorting() {
         return (a.nameEn || "").localeCompare(b.nameEn || "");
       case "rarity":
       default:
-        // Mantém a ordem de raridade da API
         return 0;
     }
   });
 }
 
-// Event Listeners
 rarityFilterEl.addEventListener("change", applyFilters);
 sortFilterEl.addEventListener("change", () => {
   applySorting();
@@ -400,5 +403,4 @@ sortFilterEl.addEventListener("change", () => {
 });
 searchInputEl.addEventListener("input", applyFilters);
 
-// Inicializa
 loadCards();

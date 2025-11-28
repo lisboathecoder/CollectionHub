@@ -67,7 +67,7 @@ async function loadUnreadCount() {
     
     try {
         const apiUrl = process.env.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/notifications/unread-count`, {
+        const response = await fetch(`${apiUrl}api/notifications/unread-count`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -120,7 +120,7 @@ async function showNotifications() {
     
     try {
         const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/notifications?limit=10`, {
+        const response = await fetch(`${apiUrl}api/notifications?limit=10`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -235,7 +235,7 @@ async function markAsRead(notificationId) {
     
     try {
         const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/notifications/${notificationId}/read`, {
+        const response = await fetch(`${apiUrl}api/notifications/${notificationId}/read`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -265,7 +265,7 @@ async function markAllAsRead() {
     
     try {
         const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/notifications/read-all`, {
+        const response = await fetch(`${apiUrl}api/notifications/read-all`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`

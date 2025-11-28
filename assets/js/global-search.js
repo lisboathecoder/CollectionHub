@@ -73,7 +73,6 @@ function initGlobalSearch() {
       searchInput.placeholder = "Search collection...";
     }
   });
-y
   searchInput.addEventListener("blur", () => {
     setTimeout(() => {
       if (searchInput.value.trim().length === 0) {
@@ -87,11 +86,12 @@ y
     performSearch(searchInput.value);
   });
 
-  searchInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      performSearch(searchInput.value);
-    }
-  });
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    performSearch(searchInput.value);
+  }
+});
+
 
   document.addEventListener("click", (e) => {
     if (!searchInput.parentElement.contains(e.target)) {
@@ -140,7 +140,7 @@ function startPlaceholderAnimation(input) {
           return;
         }
       }
-      input.placeholder = currentText + (isDeleting ? "" : "//" || "\\");
+      input.placeholder = currentText + (isDeleting ? "" : "");
     },
     isDeleting ? deleteSpeed : typeSpeed
   );
