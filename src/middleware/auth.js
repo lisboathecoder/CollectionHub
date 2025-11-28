@@ -43,3 +43,4 @@ export const verificarProprietario = async (req, res, next) => {
 };
 
 export const authenticateToken = verificarToken;
+export const authenticate = verificarToken;

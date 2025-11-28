@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Álbum - CollectionHub</title>
+    <link rel="stylesheet" href="/assets/styles/global.css">
+    <link rel="stylesheet" href="/assets/styles/albums.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .create-album-container {
+            max-width: 700px;
+            margin: 100px auto 40px;
+            padding: 40px 20px;
+        }
+
+        .create-album-card {
+            background: linear-gradient(145deg, #1e1e1e 0%, #2a2a2a 100%);
+            border: 2px solid #333;
+            border-radius: 16px;
+            padding: 50px 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .create-album-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .create-album-header h1 {
+            font-size: 2.2em;
+            color: #fff;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .create-album-header p {
+            color: #aaa;
+            font-size: 1em;
+        }
+
+        .album-type-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: rgba(255, 62, 108, 0.1);
+            border: 1px solid rgba(255, 62, 108, 0.3);
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .album-type-display i,
+        .album-type-display img {
+            font-size: 1.8em;
+            color: #ff3e6c;
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .album-type-display span {
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 18px;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff3e6c;
+            background: #222;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .char-count {
+            text-align: right;
+            color: #666;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff3e6c 0%, #ff1744 100%);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 62, 108, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #2a2a2a;
+            color: #fff;
+            border: 2px solid #444;
+        }
+
+        .btn-secondary:hover {
+            background: #333;
+            border-color: #555;
+        }
+
+        .error-message {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #f44336;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .create-album-card {
+                padding: 30px 25px;
+            }
+
+            .create-album-header h1 {
+                font-size: 1.8em;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="/index.html">
+                    <img src="/assets/images/logo.png" alt="CollectionHub Logo">
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="/pages/explorer.html" class="nav-item">Explorar</a>
+                <a href="/pages/app/collection.html" class="nav-item">Coleção</a>
+            </nav>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search collection...">
+                <button class="search-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </div>
+            <a href="#" id="profileLink">
+                <img src="/assets/images/icon.png" alt="Login / Register" id="profileImage">
+            </a>
+        </div>
+    </header>
+
+    <main class="create-album-container">
+        <div class="create-album-card">
+            <div class="create-album-header">
+                <h1>Criar Álbum</h1>
+                <p>Defina o nome e descrição do seu álbum</p>
+            </div>
+
+            <div class="album-type-display" id="albumTypeDisplay">
+                <i class="fa-solid fa-cards-blank"></i>
+                <span id="albumTypeName">Pokémon TCG Pocket</span>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <form id="createAlbumForm">
+                <div class="form-group">
+                    <label for="albumName">Nome do Álbum *</label>
+                    <input 
+                        type="text" 
+                        id="albumName" 
+                        name="albumName" 
+                        placeholder="Ex: Minha Coleção de Cartas" 
+                        required
+                        maxlength="100"
+                    >
+                    <div class="char-count"><span id="nameCount">0</span>/100</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="albumDescription">Descrição (opcional)</label>
+                    <textarea 
+                        id="albumDescription" 
+                        name="albumDescription" 
+                        placeholder="Descreva seu álbum..."
+                        maxlength="500"
+                    ></textarea>
+                    <div class="char-count"><span id="descCount">0</span>/500</div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">
+                        <i class="fa-solid fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fa-solid fa-check"></i>
+                        Criar Álbum
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/global-search.js"></script>
+    <script src="/assets/js/create-album.js"></script>
+</body>
+</html>

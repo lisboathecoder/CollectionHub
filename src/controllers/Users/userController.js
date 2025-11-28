@@ -9,6 +9,22 @@ export const listarUsuarios = async (req, res) => {
     res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
+
+export const searchUsers = async (req, res) => {
+  const { q } = req.query;
+
+  if (!q || q.trim() === '') {
+    return res.status(400).json({ error: "Query de busca é obrigatória" });
+  }
+
+  try {
+    const users = await userModel.searchByName(q.trim());
+    res.json(users);
+  } catch (error) {
+    console.error("Error searching users:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+};
 export const getUsuarioPorId = async (req, res) => {
   const id = parseInt(req.params.id);
 

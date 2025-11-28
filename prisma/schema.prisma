@@ -56,9 +56,10 @@ model Card {
 }
 
 model User {
-  id               Int       @id @default(autoincrement())
-  username         String    @unique
-  email            String    @unique
+  id               Int            @id @default(autoincrement())
+  username         String         @unique
+  name             String?
+  email            String         @unique
   password         String
   nickname         String?
   bio              String?
@@ -69,20 +70,25 @@ model User {
   twoFactorExpires DateTime?
   resetCode        String?
   resetCodeExpires DateTime?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
   albums           Album[]
+  friendsInitiated Friendship[]   @relation("FriendshipInitiator")
+  friendsReceived  Friendship[]   @relation("FriendshipReceiver")
+  notifications    Notification[]
 }
 
 model Album {
-  id        Int         @id @default(autoincrement())
-  userId    Int
-  name      String
-  isPublic  Boolean     @default(false)
-  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items     AlbumItem[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id          Int         @id @default(autoincrement())
+  userId      Int
+  name        String
+  description String?
+  gameType    String      @default("pokemon") // "pokemon" or "custom"
+  isPublic    Boolean     @default(false)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       AlbumItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model AlbumItem {
@@ -93,8 +99,32 @@ model AlbumItem {
   card        Card?    @relation(fields: [cardId], references: [id], onDelete: SetNull)
   customName  String?
   customImage String?
-  quantity    Int      @default(1)
-  notes       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Friendship {
+  id          Int      @id @default(autoincrement())
+  initiatorId Int
+  receiverId  Int
+  status      String   @default("pending") // "pending", "accepted", "rejected"
+  initiator   User     @relation("FriendshipInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
+  receiver    User     @relation("FriendshipReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([initiatorId, receiverId])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  type      String   // "friend_request", "friend_accepted", "album_created", "album_updated"
+  title     String
+  message   String
+  metadata  String?  // JSON string with extra data
+  isRead    Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

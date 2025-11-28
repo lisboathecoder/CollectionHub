@@ -172,6 +172,11 @@ a {
   letter-spacing: 0.5px;
 }
 
+.suggestion-item .suggestion-type--user {
+  background: rgba(52, 152, 219, 0.2);
+  color: #3498db;
+}
+
 .suggestion-item:hover {
   background-color: #3a3a3a;
 }

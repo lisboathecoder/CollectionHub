@@ -15,6 +15,6 @@ router.delete("/:id", albumController.deletarAlbum);
 
 router.post("/:albumId/items", albumController.adicionarItem);
 router.put("/items/:itemId", albumController.atualizarItem);
-router.delete("/items/:itemId", albumController.deletarItem);
+router.delete("/:albumId/items/:itemId", albumController.deletarItem);
 
 export default router;

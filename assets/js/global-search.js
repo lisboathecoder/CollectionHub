@@ -35,6 +35,7 @@ let typingInterval;
 let currentText = "";
 let isDeleting = false;
 let charIndex = 0;
+let searchDebounceTimer = null;
 
 // Initialize search for all pages
 function initGlobalSearch() {
@@ -58,7 +59,15 @@ function initGlobalSearch() {
 
     if (value.length > 0) {
       stopPlaceholderAnimation();
-      showSuggestions(value, suggestionsDropdown);
+      
+      // Debounce search requests
+      if (searchDebounceTimer) {
+        clearTimeout(searchDebounceTimer);
+      }
+      
+      searchDebounceTimer = setTimeout(() => {
+        showSuggestions(value, suggestionsDropdown);
+      }, 300);
     } else {
       hideSuggestions(suggestionsDropdown);
       startPlaceholderAnimation(searchInput);
@@ -153,55 +162,87 @@ function startPlaceholderAnimation(input) {
     isDeleting ? deleteSpeed : typeSpeed
   );
 }
-
-function stopPlaceholderAnimation() {
-  if (typingInterval) {
-    clearInterval(typingInterval);
-    typingInterval = null;
-  }
-}
-
 // Show suggestions based on input
-function showSuggestions(query, dropdown) {
-  const matches = sampleSuggestions.filter((item) =>
+async function showSuggestions(query, dropdown) {
+  // Get static card suggestions
+  const staticMatches = sampleSuggestions.filter((item) =>
     item.toLowerCase().includes(query.toLowerCase())
   );
 
-  if (matches.length === 0) {
-    hideSuggestions(dropdown);
-    return;
+  // Fetch user suggestions from API
+  let userMatches = [];
+  try {
+    const response = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`);
+    if (response.ok) {
+      userMatches = await response.json();
+    }
+  } catch (error) {
+    console.error("Error fetching user suggestions:", error);
   }
 
-  // Determine if it's a collection or card
+  // Combine all matches
+  const allMatches = [];
+  
+  // Add users first
+  userMatches.slice(0, 3).forEach(user => {
+    allMatches.push({
+      type: 'user',
+      value: user.username,
+      displayName: user.name || user.username,
+      id: user.id
+    });
+  });
+
+  // Add static card/collection suggestions
   const collections = [
     "Genetic Apex",
     "Mythical Island",
     "Space-Time Smackdown",
   ];
 
-  dropdown.innerHTML = matches
-    .slice(0, 6)
-    .map((match) => {
-      const isCollection = collections.includes(match);''
-      const icon = isCollection
-        ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-           </svg>`
-        : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-             <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-             <line x1="2" y1="9" x2="22" y2="9"></line>
-           </svg>`;
+  staticMatches.slice(0, 6).forEach(match => {
+    const isCollection = collections.includes(match);
+    allMatches.push({
+      type: isCollection ? 'collection' : 'card',
+      value: match,
+      displayName: match
+    });
+  });
 
-      const type = isCollection
-        ? '<span class="suggestion-type">Collection</span>'
-        : '<span class="suggestion-type">Card</span>';
+  if (allMatches.length === 0) {
+    hideSuggestions(dropdown);
+    return;
+  }
+
+  dropdown.innerHTML = allMatches
+    .map((match) => {
+      let icon, typeLabel;
+      
+      if (match.type === 'user') {
+        icon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                 <circle cx="12" cy="7" r="4"></circle>
+               </svg>`;
+        typeLabel = '<span class="suggestion-type suggestion-type--user">Usuário</span>';
+      } else if (match.type === 'collection') {
+        icon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+               </svg>`;
+        typeLabel = '<span class="suggestion-type">Collection</span>';
+      } else {
+        icon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                 <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                 <line x1="2" y1="9" x2="22" y2="9"></line>
+               </svg>`;
+        typeLabel = '<span class="suggestion-type">Card</span>';
+      }
 
       return `
-      <div class="suggestion-item" data-value="${match}">
+      <div class="suggestion-item" data-type="${match.type}" data-value="${match.value}" data-id="${match.id || ''}">
         ${icon}
-        <span class="suggestion-text">${highlightMatch(match, query)}</span>
-        ${type}
+        <span class="suggestion-text">${highlightMatch(match.displayName, query)}</span>
+        ${typeLabel}
       </div>
     `;
     })
@@ -212,13 +253,30 @@ function showSuggestions(query, dropdown) {
   // Add click handlers to suggestions
   dropdown.querySelectorAll(".suggestion-item").forEach((item) => {
     item.addEventListener("click", () => {
+      const type = item.getAttribute("data-type");
+      const value = item.getAttribute("data-value");
+      const id = item.getAttribute("data-id");
+      
+      if (type === 'user') {
+        // Redirect to user profile
+        window.location.href = `/pages/app/profile.html?id=${id}`;
+      } else {
+        // Perform regular search for cards/collections
+        document.querySelector(".search-input").value = value;
+        performSearch(value);
+      }
+      
+      hideSuggestions(dropdown);
+    });
+  });
+} dropdown.querySelectorAll(".suggestion-item").forEach((item) => {
+    item.addEventListener("click", () => {
       const value = item.getAttribute("data-value");
       document.querySelector(".search-input").value = value;
       performSearch(value);
       hideSuggestions(dropdown);
     });
   });
-}
 
 function hideSuggestions(dropdown) {
   dropdown.classList.remove("active");

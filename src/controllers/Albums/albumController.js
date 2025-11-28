@@ -44,10 +44,8 @@ export const getAlbum = async (req, res) => {
       return res.status(403).json({ erro: "Acesso negado" });
     }
 
-    res.status(200).json({
-      mensagem: "Álbum encontrado",
-      album: album
-    });
+    // Return album directly (not wrapped)
+    res.status(200).json(album);
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao buscar álbum",
@@ -58,19 +56,23 @@ export const getAlbum = async (req, res) => {
 
 export const criarAlbum = async (req, res) => {
   try {
-    const { name, isPublic } = req.body;
+    const { name, description, type, isPublic } = req.body;
     const userId = req.user.id;
 
     if (!name) {
       return res.status(400).json({ erro: "name é obrigatório" });
     }
 
-    const novoAlbum = await AlbumModel.create({ userId, name, isPublic });
-
-    res.status(201).json({
-      mensagem: "Álbum criado com sucesso",
-      album: novoAlbum
+    const novoAlbum = await AlbumModel.create({ 
+      userId, 
+      name, 
+      description: description || null,
+      type: type || 'custom',
+      isPublic: isPublic !== undefined ? isPublic : true
     });
+
+    // Return album directly
+    res.status(201).json(novoAlbum);
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao criar álbum",

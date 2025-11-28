@@ -51,6 +51,39 @@ export const findByUsernameOrEmail = async (username, email) => {
   });
 };
 
+export const searchByName = async (query) => {
+  return await prisma.user.findMany({
+    where: {
+      OR: [
+        {
+          username: {
+            contains: query,
+            mode: 'insensitive'
+          }
+        },
+        {
+          name: {
+            contains: query,
+            mode: 'insensitive'
+          }
+        }
+      ]
+    },
+    select: {
+      id: true,
+      username: true,
+      name: true,
+      email: false,
+      password: false,
+      createdAt: true
+    },
+    take: 20,
+    orderBy: {
+      username: 'asc'
+    }
+  });
+};
+
 export const update2FACode = async (id, code, expires) => {
     return await prisma.user.update({
         where: { id: Number(id) },
