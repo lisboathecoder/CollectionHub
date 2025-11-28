@@ -39,7 +39,6 @@
   "dependencies": {
     "@auth/core": "^0.41.1",
     "@auth/express": "^0.12.1",
-    "@emailjs/nodejs": "^5.0.2",
     "@prisma/client": "^6.19.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",

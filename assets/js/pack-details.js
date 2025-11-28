@@ -1,52 +1,51 @@
-// Mapeamento de códigos de set para nomes e logos
 const SET_INFO = {
-  A1: {
+  "A1": {
     name: "Genetic Apex",
-    logo: "/assets/images/logo-boosters/Genetic-Apex-Logo.webp",
+    logo: "https://i.ibb.co/JFH2gxzL/LOGO-expansion-A1-en-US.webp",
   },
-  A1A: {
+  "A1A": {
     name: "Mythical Island",
-    logo: "/assets/images/logo-boosters/Mythical-island-logo.webp",
+    logo: "https://i.ibb.co/Mx4LF0Bj/LOGO-expansion-A1-A-en-US.webp",
   },
-  A2: {
+  "A2": {
     name: "Space-Time Smackdown",
-    logo: "/assets/images/logo-boosters/Space-Time-Smackdown_Logo.webp",
+    logo: "https://i.ibb.co/7tsrnh7F/LOGO-expansion-A2-en-US.webp",
   },
-  A2A: {
+  "A2A": {
     name: "Triumphant Light",
-    logo: "/assets/images/logo-boosters/Triumphant-Ligth_Logo.webp",
+    logo: "https://i.ibb.co/HDJKYY9B/LOGO-expansion-A2-A-en-US.webp",
   },
-  A2B: {
+  "A2B": {
     name: "Shining Revelry",
-    logo: "/assets/images/logo-boosters/Shining-Revelry_Logo.webp",
+    logo: "https://i.ibb.co/8DpYB66d/LOGO-expansion-A2-B-en-US.webp",
   },
-  A3: {
+  "A3": {
     name: "Celestial Guardians",
-    logo: "/assets/images/logo-boosters/Celestial-Guardians_Logo.webp",
+    logo: "https://i.ibb.co/Ng9Z8NtS/LOGO-expansion-A3-en-US.webp",
   },
-  A3A: {
+  "A3A": {
     name: "Extradimensional Crisis",
-    logo: "/assets/images/logo-boosters/Extradimensional-Crisis_Logo.webp",
+    logo: "https://i.ibb.co/WNfxg3W4/LOGO-expansion-A3-A-en-US.webp",
   },
-  A3B: {
+  "A3B": {
     name: "Eevee Grove",
-    logo: "/assets/images/logo-boosters/Eevee-Grove_Logo.webp",
+    logo: "https://i.ibb.co/F4cbCqbN/LOGO-expansion-A3-B-en-US.webp",
   },
-  A4: {
+  "A4": {
     name: "Wisdom of Sea and Sky",
-    logo: "/assets/images/logo-boosters/Wisdom-Of-Sea-And-Sky_Logo.webp",
+    logo: "https://i.ibb.co/9mNDC3Ct/LOGO-expansion-A4-en-US.webp",
   },
-  A4A: {
+  "A4A": {
     name: "Secluded Springs",
-    logo: "/assets/images/logo-boosters/Secluded-Springs_Logo.webp",
+    logo: "https://i.ibb.co/wDXnz9K/LOGO-expansion-A4-A-en-US.webp",
   },
-  A4B: {
+  "A4B": {
     name: "Deluxe Pack: ex",
-    logo: "/assets/images/logo-boosters/Deluxe-Pack-Ex_Logo.webp",
+    logo: "https://i.ibb.co/Pv18yXWk/LOGO-expansion-A4-B-en-US.webp",
   },
-  B1: {
+  "B1": {
     name: "Mega Rising",
-    logo: "/assets/images/logo-boosters/Mega-Rising_Logo.webp",
+    logo: "https://i.ibb.co/1cBjRxD/LOGO-expansion-B1-en-US.webp",
   },
   "PROMO-A": {
     name: "Promos-A",
@@ -60,25 +59,25 @@ const SET_INFO = {
 
 // Mapeamento de imagens dos packs
 const PACK_IMAGES = {
-  Charizard: "/assets/images/packs/Genetic Apex - Charizard.jpg",
-  Mewtwo: "/assets/images/packs/Genetic Apex - Mewtwo.jpg",
-  Pikachu: "/assets/images/packs/Genetic Apex - Pikachu.jpg",
-  Mew: "/assets/images/packs/Mythical Island.jpg",
-  Dialga: "/assets/images/packs/Space-Time Smackdown - Dialga.jpg",
-  Palkia: "/assets/images/packs/Space-Time Smackdown - Palkia.jpg",
-  Arceus: "/assets/images/packs/Triumphant Light.png",
-  "Shining Revelry": "/assets/images/packs/Shining Revelry.jpg",
-  Lunala: "/assets/images/packs/Celestial Guardians - Lunala.jpg",
-  Solgaleo: "/assets/images/packs/Celestial Guardians - Solgaleo.jpg",
-  "Extradimensional Crisis": "/assets/images/packs/Extradimensional Crisis.jpg",
-  "Eevee Grove": "/assets/images/packs/Eevee Grove.jpg",
-  "Ho-Oh": "/assets/images/packs/Wisdom of Sea and Sky - Ho-Oh.jpg",
-  Lugia: "/assets/images/packs/Wisdom of Sea and Sky - Lugia.jpg",
-  "Secluded Springs": "/assets/images/packs/Secluded Springs.jpg",
-  "Deluxe Pack": "/assets/images/packs/Deluxe Pack.jpg",
-  "Mega Blaziken": "/assets/images/packs/Mega Rising - Mega Blaziken.jpg",
-  "Mega Altaria": "/assets/images/packs/Mega Rising - Mega Altaria.jpg",
-  "Mega Gyarados": "/assets/images/packs/Mega Rising - Mega Gyarados.jpg",
+  "Charizard": "https://i.ibb.co/DDHw39kH/Genetic-Apex-Charizard.jpg",
+  "Mewtwo": "https://i.ibb.co/wZ2cMYtN/Genetic-Apex-Mewtwo.jpg",
+  "Pikachu": "https://i.ibb.co/jvw2c0x7/Genetic-Apex-Pikachu.jpg",
+  "Mew": "https://i.ibb.co/zhvftLyp/Mythical-Island.jpg",
+  "Dialga": "https://i.ibb.co/cSZZ4q8S/Space-Time-Smackdown-Dialga.jpg",
+  "Palkia": "https://i.ibb.co/Rp9R9YZS/Space-Time-Smackdown-Palkia.jpg",
+  "Arceus": "https://i.ibb.co/Lh8YXp2Q/Triumphant-Light.png",
+  "Shining Revelry": "https://i.ibb.co/CGbPrHF/Shining-Revelry.jpg",
+  "Lunala": "https://i.ibb.co/v6N1RBxv/Celestial-Guardians-Lunala.jpg",
+  "Solgaleo": "https://i.ibb.co/ZzS9F16n/Celestial-Guardians-Solgaleo.jpg",
+  "Extradimensional Crisis": "https://i.ibb.co/ZpJm2m4R/Extradimensional-Crisis.jpg",
+  "Eevee Grove": "https://i.ibb.co/chKM3sP1/Eevee-Grove.jpg",
+  "Ho-Oh": "https://i.ibb.co/J83t3ND/Wisdom-of-Sea-and-Sky-Ho-Oh.jpg",
+  "Lugia": "https://i.ibb.co/pj0S8Nv4/Wisdom-of-Sea-and-Sky-Lugia.jpg",
+  "Secluded Springs": "https://i.ibb.co/S4hYrPML/Secluded-Springs.jpg",
+  "Deluxe Pack": "https://i.ibb.co/XZBT1ZD5/Deluxe-Pack.jpg",
+  "Mega Blaziken": "https://i.ibb.co/C5tW8vtW/Mega-Rising-Mega-Blaziken.jpg",
+  "Mega Altaria": "https://i.ibb.co/tMkkWXGy/Mega-Rising-Mega-Altaria.jpg",
+  "Mega Gyarados": "https://i.ibb.co/yc6QQYGp/Mega-Rising-Mega-Gyarados.jpg",
 };
 
 let allCards = [];
@@ -117,10 +116,10 @@ async function loadCards() {
     // Busca as cartas do set inteiro e filtra pelo pack
     const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
     console.log('🔍 Buscando cartas do pack:', packName, 'no set:', setCode);
-    console.log('🌐 API URL:', `${apiUrl}/api/pokemon/cards?set=${setCode}`);
+    console.log('🌐 API URL:', `${apiUrl}api/pokemon/cards?set=${setCode}`);
     
     const response = await fetch(
-      `${apiUrl}/api/pokemon/cards?set=${setCode}&orderBy=rarity&pageSize=500`
+      `${apiUrl}api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`
     );
 
     console.log('📡 Status da resposta:', response.status);
@@ -283,8 +282,8 @@ function openCardModal(card) {
       <div class="card-detail-modal__image-wrapper">
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image" onerror="this.src='/assets/images/placeholder-card.png'">
       </div>
-      <button class="card-detail-modal__add-btn" onclick="openAlbumModal('${card.id}')">
-        Add to your collection
+      <button class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(card).replace(/"/g, '&quot;')})">
+        <i class="fa-solid fa-plus"></i> Add to Album
       </button>
     </div>
   `;
@@ -318,6 +317,15 @@ function openCardModal(card) {
   setTimeout(() => {
     modal.classList.add("active");
   }, 10);
+}
+
+// Helper function to open Add to Album modal
+function openAddToAlbumModalWithCard(card) {
+  if (typeof openAddToAlbumModal === 'function') {
+    openAddToAlbumModal(card);
+  } else {
+    console.error('openAddToAlbumModal function not found');
+  }
 }
 
 function renderPagination(totalPages) {

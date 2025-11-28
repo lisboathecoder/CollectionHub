@@ -1,34 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hubb - A paixão por cartas</title>
+    <link rel="stylesheet" href="/assets/styles/style.css" />
+    <link rel="stylesheet" href="/assets/styles/boosters.css" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/images/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/images/favicon-32x32.png"
+    />
+    <link rel="manifest" href="/assets/images/site.webmanifest" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hubb - A paixão por cartas</title>
-  <link rel="stylesheet" href="/assets/styles/style.css" />
-  <link rel="stylesheet" href="/assets/styles/boosters.css" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-16x16.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-32x32.png" />
-  <link rel="manifest" href="/assets/images/site.webmanifest" />
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-</head>
-
-<body>
-  <header class="navbar">
-    <div class="navbar-left">
-      <a href="/index.html">
-        <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
-      </a>
-      <div class="search-box">
-        <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
-        <button class="search-btn">...</button>
-
-        <div class="search-suggestions" id="searchSuggestions" style="display: none;">
-          <div class="suggestion-item">
-            <span class="suggestion-icon">🔍</span><span>Pokemon cards</span>
-          </div>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="navbar-left">
+        <a href="/index.html">
+          <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
+        </a>
+        <div class="search-box">
+          <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
+          <button class="search-btn">...</button>
         </div>
       </div>
     </div>
@@ -39,14 +49,14 @@
       </a>
     </div>
 
-    <div class="navbar-right">
-      <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
-      <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
-
-      <a href="/pages/userLogin/login.html" class="nav-item user-profile" id="profileLink">
-        <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
-      </a>
-    </div>
+      <div class="navbar-right">
+        <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
+        <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" id="notificationBell" />
+        
+        <a href="/pages/userLogin/login.html" class="nav-item user-profile" id="profileLink">
+          <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
+        </a>
+      </div>
   </header>
   <main class="boosters-poke">
     <!-- Filter Buttons -->
@@ -55,35 +65,83 @@
       <button class="filter-btn" data-filter="promos">Promos</button>
     </div>
 
-    <!-- Pokemon Collections Container -->
-    <div id="pokemon-collections" class="collections-container">
-      <!-- Genetic Apex -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A1" class="collection-link">
-            <img src="/assets/images/logo-boosters/genetic-apex-logo.webp" alt="Genetic Apex" class="collection-logo" />
-          </a>
-        </div>
-        <div class="packs-row">
-          <a href="/pages/explore/detalhePackPokemon.html?set=A1&pack=Charizard" class="pack-link">
-            <img src="/assets/images/packs/Genetic Apex - Charizard.jpg" alt="Charizard Pack" class="pack-image" />
-          </a>
-          <a href="/pages/explore/detalhePackPokemon.html?set=A1&pack=Mewtwo" class="pack-link">
-            <img src="/assets/images/packs/Genetic Apex - Mewtwo.jpg" alt="Mewtwo Pack" class="pack-image" />
-          </a>
-          <a href="/pages/explore/detalhePackPokemon.html?set=A1&pack=Pikachu" class="pack-link">
-            <img src="/assets/images/packs/Genetic Apex - Pikachu.jpg" alt="Pikachu Pack" class="pack-image" />
-          </a>
+      <!-- Pokemon Collections Container -->
+      <div id="pokemon-collections" class="collections-container">
+        <!-- Genetic Apex -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A1"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/JFH2gxzL/LOGO-expansion-A1-en-US.webp"
+            alt="Genetic Apex"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A1&pack=Charizard"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/DDHw39kH/Genetic-Apex-Charizard.jpg"
+            alt="Charizard Pack"
+            class="pack-image"
+          />
+        </a>
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A1&pack=Mewtwo"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/wZ2cMYtN/Genetic-Apex-Mewtwo.jpg"
+            alt="Mewtwo Pack"
+            class="pack-image"
+          />
+        </a>
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A1&pack=Pikachu"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/jvw2c0x7/Genetic-Apex-Pikachu.jpg"
+            alt="Pikachu Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
         </div>
       </div>
 
-      <!-- Mythical Island -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A1A" class="collection-link">
-            <img src="/assets/images/logo-boosters/Mythical-island-logo.webp" alt="Mythical Island"
-              class="collection-logo" />
-          </a>
+        <!-- Mythical Island -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A1A"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/Mx4LF0Bj/LOGO-expansion-A1-A-en-US.webp"
+            alt="Mythical Island"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A1A&pack=Mew"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/zhvftLyp/Mythical-Island.jpg"
+            alt="Mythical Island Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
         </div>
         <div class="packs-row">
           <a href="/pages/explore/detalhePackPokemon.html?set=A1A&pack=Mew" class="pack-link">
@@ -92,13 +150,42 @@
         </div>
       </div>
 
-      <!-- Space-Time Smackdown -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A2" class="collection-link">
-            <img src="/assets/images/logo-boosters/Space-Time-Smackdown_Logo.webp" alt="Space-Time Smackdown"
-              class="collection-logo" />
-          </a>
+        <!-- Space-Time Smackdown -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A2"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/7tsrnh7F/LOGO-expansion-A2-en-US.webp"
+            alt="Space-Time Smackdown"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A2&pack=Dialga"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/cSZZ4q8S/Space-Time-Smackdown-Dialga.jpg"
+            alt="Dialga Pack"
+            class="pack-image"
+          />
+        </a>
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A2&pack=Palkia"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/Rp9R9YZS/Space-Time-Smackdown-Palkia.jpg"
+            alt="Palkia Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
         </div>
         <div class="packs-row">
           <a href="/pages/explore/detalhePackPokemon.html?set=A2&pack=Dialga" class="pack-link">
@@ -110,43 +197,100 @@
         </div>
       </div>
 
-      <!-- Triumphant Light -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A2A" class="collection-link">
-            <img src="/assets/images/logo-boosters/Triumphant-Ligth_Logo.webp" alt="Triumphant Light"
-              class="collection-logo" />
-          </a>
-        </div>
-        <div class="packs-row">
-          <a href="/pages/explore/detalhePackPokemon.html?set=A2A&pack=Arceus" class="pack-link">
-            <img src="/assets/images/packs/Triumphant Light.png" alt="Triumphant Light Pack" class="pack-image" />
-          </a>
+        <!-- Triumphant Light -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A2A"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/HDJKYY9B/LOGO-expansion-A2-A-en-US.webp"
+            alt="Triumphant Light"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A2A&pack=Arceus"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/Lh8YXp2Q/Triumphant-Light.png"
+            alt="Triumphant Light Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
         </div>
       </div>
 
-      <!-- Shining Revelry -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A2B" class="collection-link">
-            <img src="/assets/images/logo-boosters/Shining-Revelry_Logo.webp" alt="Shining Revelry"
-              class="collection-logo" />
-          </a>
-        </div>
-        <div class="packs-row">
-          <a href="/pages/explore/detalhePackPokemon.html?set=A2B&pack=Shining%20Revelry" class="pack-link">
-            <img src="/assets/images/packs/Shining Revelry.jpg" alt="Shining Revelry Pack" class="pack-image" />
-          </a>
+        <!-- Shining Revelry -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A2B"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/8DpYB66d/LOGO-expansion-A2-B-en-US.webp"
+            alt="Shining Revelry"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A2B&pack=Shining%20Revelry"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/CGbPrHF/Shining-Revelry.jpg"
+            alt="Shining Revelry Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
         </div>
       </div>
 
-      <!-- Celestial Guardians -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A3" class="collection-link">
-            <img src="/assets/images/logo-boosters/Celestial-Guardians_Logo.webp" alt="Celestial Guardians"
-              class="collection-logo" />
-          </a>
+        <!-- Celestial Guardians -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A3"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/Ng9Z8NtS/LOGO-expansion-A3-en-US.webp"
+            alt="Celestial Guardians"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A3&pack=Lunala"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/v6N1RBxv/Celestial-Guardians-Lunala.jpg"
+            alt="Lunala Pack"
+            class="pack-image"
+          />
+        </a>
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A3&pack=Solgaleo"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/ZzS9F16n/Celestial-Guardians-Solgaleo.jpg"
+            alt="Solgaleo Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
         </div>
         <div class="packs-row">
           <a href="/pages/explore/detalhePackPokemon.html?set=A3&pack=Lunala" class="pack-link">
@@ -158,13 +302,32 @@
         </div>
       </div>
 
-      <!-- Extradimensional Crisis -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A3A" class="collection-link">
-            <img src="/assets/images/logo-boosters/Extradimensional-Crisis_Logo.webp" alt="Extradimensional Crisis"
-              class="collection-logo" />
-          </a>
+        <!-- Extradimensional Crisis -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A3A"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/WNfxg3W4/LOGO-expansion-A3-A-en-US.webp"
+            alt="Extradimensional Crisis"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A3A&pack=Extradimensional%20Crisis"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/ZpJm2m4R/Extradimensional-Crisis.jpg"
+            alt="Extradimensional Crisis Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
         </div>
         <div class="packs-row">
           <a href="/pages/explore/detalhePackPokemon.html?set=A3A&pack=Extradimensional%20Crisis" class="pack-link">
@@ -174,45 +337,100 @@
         </div>
       </div>
 
-      <!-- Eevee Grove -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A3B" class="collection-link">
-            <img src="/assets/images/logo-boosters/Eevee-Grove_Logo.webp" alt="Eevee Grove" class="collection-logo" />
-          </a>
-        </div>
-        <div class="packs-row">
-          <a href="/pages/explore/detalhePackPokemon.html?set=A3B&pack=Eevee%20Grove" class="pack-link">
-            <img src="/assets/images/packs/Eevee Grove.jpg" alt="Eevee Grove Pack" class="pack-image" />
-          </a>
-        </div>
-      </div>
-
-      <!-- Wisdom of Sea and Sky -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A4" class="collection-link">
-            <img src="/assets/images/logo-boosters/Wisdom-Of-Sea-And-Sky_Logo.webp" alt="Wisdom of Sea and Sky"
-              class="collection-logo" />
-          </a>
-        </div>
-        <div class="packs-row">
-          <a href="/pages/explore/detalhePackPokemon.html?set=A4&pack=Ho-Oh" class="pack-link">
-            <img src="/assets/images/packs/Wisdom of Sea and Sky - Ho-Oh.jpg" alt="Ho-Oh Pack" class="pack-image" />
-          </a>
-          <a href="/pages/explore/detalhePackPokemon.html?set=A4&pack=Lugia" class="pack-link">
-            <img src="/assets/images/packs/Wisdom of Sea and Sky - Lugia.jpg" alt="Lugia Pack" class="pack-image" />
-          </a>
+        <!-- Eevee Grove -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A3B"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/F4cbCqbN/LOGO-expansion-A3-B-en-US.webp"
+            alt="Eevee Grove"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A3B&pack=Eevee%20Grove"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/chKM3sP1/Eevee-Grove.jpg"
+            alt="Eevee Grove Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
         </div>
       </div>
 
-      <!-- Secluded Springs -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A4A" class="collection-link">
-            <img src="/assets/images/logo-boosters/Secluded-Springs_Logo.webp" alt="Secluded Springs"
-              class="collection-logo" />
-          </a>
+        <!-- Wisdom of Sea and Sky -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A4"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/9mNDC3Ct/LOGO-expansion-A4-en-US.webp"
+            alt="Wisdom of Sea and Sky"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A4&pack=Ho-Oh"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/J83t3ND/Wisdom-of-Sea-and-Sky-Ho-Oh.jpg"
+            alt="Ho-Oh Pack"
+            class="pack-image"
+          />
+        </a>
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A4&pack=Lugia"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/pj0S8Nv4/Wisdom-of-Sea-and-Sky-Lugia.jpg"
+            alt="Lugia Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
+        </div>
+      </div>
+
+        <!-- Secluded Springs -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A4A"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/wDXnz9K/LOGO-expansion-A4-A-en-US.webp"
+            alt="Secluded Springs"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A4A&pack=Secluded%20Springs"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/S4hYrPML/Secluded-Springs.jpg"
+            alt="Secluded Springs Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
         </div>
         <div class="packs-row">
           <a href="/pages/explore/detalhePackPokemon.html?set=A4A&pack=Secluded%20Springs" class="pack-link">
@@ -221,64 +439,122 @@
         </div>
       </div>
 
-      <!-- Deluxe Pack EX -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=A4B" class="collection-link">
-            <img src="/assets/images/logo-boosters/Deluxe-Pack-Ex_Logo.webp" alt="Deluxe Pack EX"
-              class="collection-logo" />
-          </a>
-        </div>
-        <div class="packs-row">
-          <a href="/pages/explore/detalhePackPokemon.html?set=A4B&pack=Deluxe%20Pack" class="pack-link">
-            <img src="/assets/images/packs/Deluxe Pack.jpg" alt="Deluxe Pack" class="pack-image" />
-          </a>
-        </div>
-      </div>
-
-      <!-- Mega Rising -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=B1" class="collection-link">
-            <img src="/assets/images/logo-boosters/Mega-Rising_Logo.webp" alt="Mega Rising" class="collection-logo" />
-          </a>
-        </div>
-        <div class="packs-row">
-          <a href="/pages/explore/detalhePackPokemon.html?set=B1&pack=Mega%20Blaziken" class="pack-link">
-            <img src="/assets/images/packs/Mega Rising - Mega Blaziken.jpg" alt="Mega Blaziken Pack"
-              class="pack-image" />
-          </a>
-          <a href="/pages/explore/detalhePackPokemon.html?set=B1&pack=Mega%20Altaria" class="pack-link">
-            <img src="/assets/images/packs/Mega Rising - Mega Altaria.jpg" alt="Mega Altaria Pack" class="pack-image" />
-          </a>
-          <a href="/pages/explore/detalhePackPokemon.html?set=B1&pack=Mega%20Gyarados" class="pack-link">
-            <img src="/assets/images/packs/Mega Rising - Mega Gyarados.jpg" alt="Mega Gyarados Pack"
-              class="pack-image" />
-          </a>
-        </div>
-      </div>
-    </div>
-    <!-- End Pokemon Collections -->
-
-    <!-- Promos Collections Container -->
-    <div id="promos-collections" class="collections-container" style="display: none">
-      <!-- Promo-A -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=PROMO-A" class="collection-link">
-            <img src="https://i.ibb.co/Xx8FWqrk/LOGO-expansion-PROMO-A-en-US.webp" alt="Promos-A"
-              class="collection-logo" />
-          </a>
+        <!-- Deluxe Pack EX -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=A4B"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/Pv18yXWk/LOGO-expansion-A4-B-en-US.webp"
+            alt="Deluxe Pack EX"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=A4B&pack=Deluxe%20Pack"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/XZBT1ZD5/Deluxe-Pack.jpg"
+            alt="Deluxe Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
         </div>
       </div>
 
-      <!-- Promo-B -->
-      <div class="collection-section">
-        <div class="collection-header">
-          <a href="/pages/explore/detalheSetPokemon.html?set=PROMO-B" class="collection-link">
-            <img src="https://i.ibb.co/sd9sWXZN/LOGO-expansion-PROMO-B-en-US.webp" alt="Promos-B"
-              class="collection-logo" />
-          </a>
+        <!-- Mega Rising -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=B1"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/1cBjRxD/LOGO-expansion-B1-en-US.webp"
+            alt="Mega Rising"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+          <div class="packs-row">
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=B1&pack=Mega%20Blaziken"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/C5tW8vtW/Mega-Rising-Mega-Blaziken.jpg"
+            alt="Mega Blaziken Pack"
+            class="pack-image"
+          />
+        </a>
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=B1&pack=Mega%20Altaria"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/tMkkWXGy/Mega-Rising-Mega-Altaria.jpg"
+            alt="Mega Altaria Pack"
+            class="pack-image"
+          />
+        </a>
+        <a
+          href="/pages/explore/detalhePackPokemon.html?set=B1&pack=Mega%20Gyarados"
+          class="pack-link"
+        >
+          <img
+            src="https://i.ibb.co/yc6QQYGp/Mega-Rising-Mega-Gyarados.jpg"
+            alt="Mega Gyarados Pack"
+            class="pack-image"
+          />
+        </a>
+          </div>
+        </div>
+      </div>
+      <!-- End Pokemon Collections -->
+
+      <!-- Promos Collections Container -->
+      <div
+        id="promos-collections"
+        class="collections-container"
+        style="display: none"
+      >
+        <!-- Promo-A -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=PROMO-A"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/Xx8FWqrk/LOGO-expansion-PROMO-A-en-US.webp"
+            alt="Promos-A"
+            class="collection-logo"
+          />
+        </a>
+          </div>
+        </div>
+      </div>
+
+        <!-- Promo-B -->
+        <div class="collection-section">
+          <div class="collection-header">
+        <a
+          href="/pages/explore/detalheSetPokemon.html?set=PROMO-B"
+          class="collection-link"
+        >
+          <img
+            src="https://i.ibb.co/sd9sWXZN/LOGO-expansion-PROMO-B-en-US.webp"
+            alt="Promos-B"
+            class="collection-logo"
+          />
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -365,18 +641,12 @@
           </a>
         </div>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <p class="small-print">
-        Design inspirado em comunidades de colecionáveis digitais.
-      </p>
-    </div>
-  </footer>
+    </footer>
+    
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/global-search.js?v=2"></script>
+    <script src="/assets/js/notifications.js"></script>
+    <script src="/assets/js/header.js"></script>
 
-  <script src="/assets/js/config.js"></script>
-  <script src="/assets/js/global-search.js?v=2"></script>
-  <script src="/assets/js/header.js"></script>
-
-</body>
-
+  </body>
 </html>

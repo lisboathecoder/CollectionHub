@@ -41,7 +41,9 @@ export const create = async (data) => {
     data: {
       userId: data.userId,
       name: data.name,
-      isPublic: data.isPublic || false
+      description: data.description || null,
+      gameType: data.type || 'custom',
+      isPublic: data.isPublic !== undefined ? data.isPublic : false
     },
     include: includeAlbum
   });
@@ -52,6 +54,8 @@ export const update = async (id, data) => {
     where: { id: Number(id) },
     data: {
       ...(data.name && { name: data.name }),
+      ...(data.description !== undefined && { description: data.description }),
+      ...(data.type && { gameType: data.type }),
       ...(data.isPublic !== undefined && { isPublic: data.isPublic })
     },
     include: includeAlbum

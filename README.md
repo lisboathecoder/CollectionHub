@@ -40,7 +40,6 @@
 - **HTML5** - Estrutura semântica
 - **CSS3** - Estilização (Grid, Flexbox, Animations)
 - **JavaScript (ES6+)** - Lógica do cliente
-- **Vanilla JS** - Sem frameworks (performance otimizada)
 
 ### Ferramentas
 

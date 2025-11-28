@@ -30,11 +30,13 @@ const placeholderTexts = [
   "Articuno ex ",
 ];
 
+
 let currentPlaceholderIndex = 0;
 let typingInterval;
 let currentText = "";
 let isDeleting = false;
 let charIndex = 0;
+let searchDebounceTimer = null;
 
 // Initialize search for all pages
 function initGlobalSearch() {
@@ -58,7 +60,15 @@ function initGlobalSearch() {
 
     if (value.length > 0) {
       stopPlaceholderAnimation();
-      showSuggestions(value, suggestionsDropdown);
+      
+      // Debounce search requests
+      if (searchDebounceTimer) {
+        clearTimeout(searchDebounceTimer);
+      }
+      
+      searchDebounceTimer = setTimeout(() => {
+        showSuggestions(value, suggestionsDropdown);
+      }, 300);
     } else {
       hideSuggestions(suggestionsDropdown);
       startPlaceholderAnimation(searchInput);
@@ -153,57 +163,78 @@ function startPlaceholderAnimation(input) {
     isDeleting ? deleteSpeed : typeSpeed
   );
 }
-
-function stopPlaceholderAnimation() {
-  if (typingInterval) {
-    clearInterval(typingInterval);
-    typingInterval = null;
-  }
-}
-
 // Show suggestions based on input
-function showSuggestions(query, dropdown) {
-  const matches = sampleSuggestions.filter((item) =>
+async function showSuggestions(query, dropdown) {
+  // Get static card suggestions
+  const staticMatches = sampleSuggestions.filter((item) =>
     item.toLowerCase().includes(query.toLowerCase())
   );
 
-  if (matches.length === 0) {
-    hideSuggestions(dropdown);
-    return;
+  // Fetch user suggestions from API
+  let userMatches = [];
+  try {
+    const response = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`);
+    if (response.ok) {
+      userMatches = await response.json();
+    }
+  } catch (error) {
+    console.error("Error fetching user suggestions:", error);
   }
 
-  // Determine if it's a collection or card
+  // Combine all matches
+  const allMatches = [];
+  
+  // Add users first
+  userMatches.slice(0, 3).forEach(user => {
+    allMatches.push({
+      type: 'user',
+      value: user.username,
+      displayName: user.name || user.username,
+      id: user.id
+    });
+  });
+
+  // Add static card/collection suggestions
   const collections = [
     "Genetic Apex",
     "Mythical Island",
     "Space-Time Smackdown",
   ];
 
-  dropdown.innerHTML = matches
-    .slice(0, 6)
+  staticMatches.slice(0, 6).forEach(match => {
+    const isCollection = collections.includes(match);
+    allMatches.push({
+      type: isCollection ? 'collection' : 'card',
+      value: match,
+      displayName: match
+    });
+  });
+
+  if (allMatches.length === 0) {
+    hideSuggestions(dropdown);
+    return;
+  }
+
+  dropdown.innerHTML = allMatches
     .map((match) => {
-      const isCollection = collections.includes(match);''
-      const icon = isCollection
-        ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-           </svg>`
-        : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-             <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-             <line x1="2" y1="9" x2="22" y2="9"></line>
-           </svg>`;
-
-      const type = isCollection
-        ? '<span class="suggestion-type">Collection</span>'
-        : '<span class="suggestion-type">Card</span>';
-
+      let icon = "", typeLabel = "";
+      if (match.type === 'user') {
+        icon = '<i class="fa-solid fa-user"></i>';
+        typeLabel = '<span class="suggestion-type">Usuário</span>';
+      } else if (match.type === 'collection') {
+        icon = '<i class="fa-solid fa-folder"></i>';
+        typeLabel = '<span class="suggestion-type">Coleção</span>';
+      } else {
+        icon = '<i class="fa-solid fa-clone"></i>';
+        typeLabel = '<span class="suggestion-type">Carta</span>';
+      }
       return `
-      <div class="suggestion-item" data-value="${match}">
-        ${icon}
-        <span class="suggestion-text">${highlightMatch(match, query)}</span>
-        ${type}
-      </div>
-    `;
+        <div class="suggestion-item" data-type="${match.type}" data-value="${match.value}" data-id="${match.id || ''}">
+          ${icon}
+          <span class="suggestion-text">${highlightMatch(match.displayName, query)}</span>
+          ${typeLabel}
+        </div>
+      `;
     })
     .join("");
 
@@ -212,13 +243,23 @@ function showSuggestions(query, dropdown) {
   // Add click handlers to suggestions
   dropdown.querySelectorAll(".suggestion-item").forEach((item) => {
     item.addEventListener("click", () => {
+      const type = item.getAttribute("data-type");
       const value = item.getAttribute("data-value");
-      document.querySelector(".search-input").value = value;
-      performSearch(value);
+      const id = item.getAttribute("data-id");
+      
+      if (type === 'user') {
+        // Redirect to user profile
+        window.location.href = `/pages/app/profile.html?id=${id}`;
+      } else {
+        // Perform regular search for cards/collections
+        document.querySelector(".search-input").value = value;
+        performSearch(value);
+      }
+      
       hideSuggestions(dropdown);
     });
   });
-}
+} 
 
 function hideSuggestions(dropdown) {
   dropdown.classList.remove("active");
@@ -239,6 +280,64 @@ async function performSearch(query) {
   window.location.href = `/pages/explore/searchResults.html?q=${encodeURIComponent(
     query
   )}`;
+}
+
+// Search users via API
+async function searchUsersAPI(query, dropdown) {
+  if (query.length < 2) {
+    hideSuggestions(dropdown);
+    return;
+  }
+
+  try {
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    const token = localStorage.getItem('token');
+    
+    const response = await fetch(`${apiUrl}/api/users/search?q=${encodeURIComponent(query)}`, {
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : ''
+      }
+    });
+
+    if (response.ok) {
+      const users = await response.json();
+      
+      if (users.length === 0) {
+        dropdown.innerHTML = `
+          <div class="suggestion-item no-results">
+            <i class="fa-solid fa-user-slash"></i>
+            <span class="suggestion-text">Nenhum usuário encontrado</span>
+          </div>
+        `;
+        dropdown.classList.add("active");
+        return;
+      }
+
+      dropdown.innerHTML = users.slice(0, 5).map(user => `
+        <div class="suggestion-item user-suggestion" data-user-id="${user.id}">
+          <img src="${user.avatarUrl || '/assets/images/icon.png'}" alt="${user.username}" class="user-avatar-small" />
+          <div class="user-info">
+            <span class="suggestion-text">${user.username}</span>
+            ${user.nickname ? `<span class="user-nickname">@${user.nickname}</span>` : ''}
+          </div>
+          <span class="suggestion-type">User</span>
+        </div>
+      `).join('');
+
+      dropdown.classList.add("active");
+
+      // Add click handlers
+      dropdown.querySelectorAll(".user-suggestion").forEach((item) => {
+        item.addEventListener("click", () => {
+          const userId = item.getAttribute("data-user-id");
+          window.location.href = `/pages/app/profile.html?id=${userId}`;
+          hideSuggestions(dropdown);
+        });
+      });
+    }
+  } catch (error) {
+    console.error('Error searching users:', error);
+  }
 }
 
 // Initialize on page load

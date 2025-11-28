@@ -1,52 +1,51 @@
-// Mapeamento de códigos de set para nomes e logos
 const SET_INFO = {
-  A1: {
+  "A1": {
     name: "Genetic Apex",
-    logo: "/assets/images/logo-boosters/Genetic-Apex-Logo.webp",
+    logo: "https://i.ibb.co/JFH2gxzL/LOGO-expansion-A1-en-US.webp",
   },
-  A1A: {
+  "A1A": {
     name: "Mythical Island",
-    logo: "/assets/images/logo-boosters/Mythical-island-logo.webp",
+    logo: "https://i.ibb.co/Mx4LF0Bj/LOGO-expansion-A1-A-en-US.webp",
   },
-  A2: {
+  "A2": {
     name: "Space-Time Smackdown",
-    logo: "/assets/images/logo-boosters/Space-Time-Smackdown_Logo.webp",
+    logo: "https://i.ibb.co/7tsrnh7F/LOGO-expansion-A2-en-US.webp",
   },
-  A2A: {
+  "A2A": {
     name: "Triumphant Light",
-    logo: "/assets/images/logo-boosters/Triumphant-Ligth_Logo.webp",
+    logo: "https://i.ibb.co/HDJKYY9B/LOGO-expansion-A2-A-en-US.webp",
   },
-  A2B: {
+  "A2B": {
     name: "Shining Revelry",
-    logo: "/assets/images/logo-boosters/Shining-Revelry_Logo.webp",
+    logo: "https://i.ibb.co/8DpYB66d/LOGO-expansion-A2-B-en-US.webp",
   },
-  A3: {
+  "A3": {
     name: "Celestial Guardians",
-    logo: "/assets/images/logo-boosters/Celestial-Guardians_Logo.webp",
+    logo: "https://i.ibb.co/Ng9Z8NtS/LOGO-expansion-A3-en-US.webp",
   },
-  A3A: {
+  "A3A": {
     name: "Extradimensional Crisis",
-    logo: "/assets/images/logo-boosters/Extradimensional-Crisis_Logo.webp",
+    logo: "https://i.ibb.co/WNfxg3W4/LOGO-expansion-A3-A-en-US.webp",
   },
-  A3B: {
+  "A3B": {
     name: "Eevee Grove",
-    logo: "/assets/images/logo-boosters/Eevee-Grove_Logo.webp",
+    logo: "https://i.ibb.co/F4cbCqbN/LOGO-expansion-A3-B-en-US.webp",
   },
-  A4: {
+  "A4": {
     name: "Wisdom of Sea and Sky",
-    logo: "/assets/images/logo-boosters/Wisdom-Of-Sea-And-Sky_Logo.webp",
+    logo: "https://i.ibb.co/9mNDC3Ct/LOGO-expansion-A4-en-US.webp",
   },
-  A4A: {
+  "A4A": {
     name: "Secluded Springs",
-    logo: "/assets/images/logo-boosters/Secluded-Springs_Logo.webp",
+    logo: "https://i.ibb.co/wDXnz9K/LOGO-expansion-A4-A-en-US.webp",
   },
-  A4B: {
+  "A4B": {
     name: "Deluxe Pack: ex",
-    logo: "/assets/images/logo-boosters/Deluxe-Pack-Ex_Logo.webp",
+    logo: "https://i.ibb.co/Pv18yXWk/LOGO-expansion-A4-B-en-US.webp",
   },
-  B1: {
+  "B1": {
     name: "Mega Rising",
-    logo: "/assets/images/logo-boosters/Mega-Rising_Logo.webp",
+    logo: "https://i.ibb.co/1cBjRxD/LOGO-expansion-B1-en-US.webp",
   },
   "PROMO-A": {
     name: "Promos-A",
@@ -93,12 +92,12 @@ async function loadCards() {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
-    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000' || 'https://collectionhub-production.up.railway.app';
     console.log('🔍 Buscando cartas do set:', setCode);
-    console.log('🌐 API URL:', `${apiUrl}/api/pokemon/cards?set=${setCode}`);
+    console.log('🌐 API URL:', `${apiUrl}api/pokemon/cards?set=${setCode}`);
     
     const response = await fetch(
-      `${apiUrl}/api/pokemon/cards?set=${setCode}&orderBy=rarity&pageSize=500`
+      `${apiUrl}api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`
     );
 
     console.log('📡 Status da resposta:', response.status);
@@ -321,8 +320,8 @@ function openCardModal(card) {
       <div class="card-detail-modal__image-wrapper">
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image">
       </div>
-      <button class="card-detail-modal__add-btn" onclick="event.stopPropagation(); typeof openAlbumModal === 'function' && openAlbumModal('${card.id}')">
-        Add to your collection
+      <button class="card-detail-modal__add-btn" onclick="event.stopPropagation(); openAddToAlbumModalWithCard(${JSON.stringify(card).replace(/"/g, '&quot;')})">
+        <i class="fa-solid fa-plus"></i> Add to Album
       </button>
     </div>
   `;
@@ -344,6 +343,15 @@ function openCardModal(card) {
 
   closeBtn.addEventListener("click", closeModal);
   backdrop.addEventListener("click", closeModal);
+}
+
+// Helper function to open Add to Album modal
+function openAddToAlbumModalWithCard(card) {
+  if (typeof openAddToAlbumModal === 'function') {
+    openAddToAlbumModal(card);
+  } else {
+    console.error('openAddToAlbumModal function not found');
+  }
 }
 
 // Event Listeners

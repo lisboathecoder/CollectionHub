@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Álbum - CollectionHub</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-32x32.png" />
+    <link rel="manifest" href="./assets/images/site.webmanifest" />
+    <link rel="stylesheet" href="/assets/styles/style.css">
+    <link rel="stylesheet" href="/assets/styles/albums.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="/index.html">
+                <img src="/assets/images/shop.png" alt="Ícone da loja" class="icone-imagem">
+            </a>
+            <div class="search-box">
+                <input type="text" placeholder="Buscar coleção..." class="search-input" id="searchInput">
+                <button class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+        <div class="logo">
+            <a href="/index.html">
+                <img src="/assets/images/Collection logo branca.png" alt="CollectionHub Logo">
+            </a>
+        </div>
+        <div class="navbar-right">
+            <img src="/assets/images/shopbag.png" alt="Ícone do shopbag" class="icone-imagem">
+            <img src="/assets/images/sino.png" alt="Ícone do sino" class="icone-imagem" id="notificationBell">
+            <a href="/pages/userLogin/login.html" class="nav-item user-profile" id="profileLink">
+                <img src="/assets/images/icon.png" alt="Perfil" class="icone-imagem" id="profileImage">
+            </a>
+        </div>
+    </header>
+
+    <main class="album-view-container">
+        <div class="album-header">
+            <div class="album-info">
+                <h1 id="albumName">Carregando...</h1>
+                <p id="albumDescription">-</p>
+                <div class="album-stats">
+                    <div class="stat-item">
+                        <i class="fa-solid fa-cards-blank"></i>
+                        <span id="cardCount">0 cartas</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-clock"></i>
+                        <span id="createdDate">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="album-actions">
+                <button class="btn-icon" title="Editar" id="editBtn">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+                <button class="btn-icon" title="Compartilhar" id="shareBtn">
+                    <i class="fa-solid fa-share"></i>
+                </button>
+                <button class="btn-icon" title="Deletar" id="deleteBtn">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <h2>
+                <i class="fa-solid fa-magnifying-glass"></i>
+                Adicionar Cartas
+            </h2>
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="cardSearchInput" 
+                    placeholder="Pesquise cartas para adicionar ao álbum..."
+                >
+                <button id="searchCardsBtn">
+                    <i class="fa-solid fa-search"></i>
+                    Pesquisar
+                </button>
+            </div>
+        </div>
+
+        <div class="cards-section">
+            <div class="section-header">
+                <h2>Cartas do Álbum (<span id="totalCards">0</span>)</h2>
+                <div class="view-toggle">
+                    <button class="active" data-view="grid">
+                        <i class="fa-solid fa-grip"></i>
+                    </button>
+                    <button data-view="list">
+                        <i class="fa-solid fa-list"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="cards-grid" id="cardsGrid">
+                <div class="empty-state">
+                    <i class="fa-solid fa-cards-blank"></i>
+                    <h3>Nenhuma carta adicionada</h3>
+                    <p>Use a pesquisa acima para adicionar cartas ao seu álbum</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section footer-nav">
+                <h4 class="footer-heading">Navegação</h4>
+                <a href="/pages/public/about.html" class="footer-link">Sobre</a>
+                <a href="/pages/public/contact.html" class="footer-link">Contato</a>
+                <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
+            </div>
+            <div class="footer-section footer-info">
+                <div class="footer-logo">
+                    <img src="/assets/images/Collection logo branca.png" alt="CollectionHub Logo">
+                </div>
+                <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
+            </div>
+            <div class="footer-section footer-social">
+                <!-- Links para redes sociais -->
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <!-- Informações adicionais -->
+        </div>
+    </footer>
+
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/global-search.js"></script>
+    <script src="/assets/js/albums/album-view.js"></script>
+    <script src="/assets/js/albums/album-modal.js"></script>
+</body>
+</html>

@@ -1,31 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="page-title">Set Details - Collection Hub</title>
+    <link rel="stylesheet" href="/assets/styles/style.css?v=8" />
+    <link rel="stylesheet" href="/assets/styles/set-details.css?v=13" />
+    <link rel="stylesheet" href="/assets/styles/albums.css" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/images/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/images/favicon-32x32.png"
+    />
+    <link rel="manifest" href="/assets/images/site.webmanifest" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="page-title">Set Details - Collection Hub</title>
-  <link rel="stylesheet" href="/assets/styles/style.css?v=8" />
-  <link rel="stylesheet" href="/assets/styles/set-details.css?v=13" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-16x16.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-32x32.png" />
-  <link rel="manifest" href="/assets/images/site.webmanifest" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-</head>
-
-<body>
-  <header class="navbar">
-    <div class="navbar-left">
-      <a href="/index.html">
-        <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
-      </a>
-      <div class="search-box">
-        <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
-        <button class="search-btn">...</button>
-
+  <body>
+    <header class="navbar">
+      <div class="navbar-left">
+        <a href="/index.html">
+          <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
+        </a>
+        <div class="search-box">
+          <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
+          <button class="search-btn">...</button>
         <div class="search-suggestions" id="searchSuggestions" style="display: none;">
           <div class="suggestion-item">
             <span class="suggestion-icon">🔍</span><span>Pokemon cards</span>
@@ -40,14 +56,14 @@
       </a>
     </div>
 
-    <div class="navbar-right">
-      <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
-      <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" />
-
-      <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
-        <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
-      </a>
-    </div>
+      <div class="navbar-right">
+        <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
+        <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" id="notificationBell" />
+        
+        <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
+          <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
+        </a>
+      </div>
   </header>
   <main class="set-details-container">
     <!-- Loading State -->
@@ -155,11 +171,12 @@
     </div>
   </footer>
 
-  <script src="/assets/js/config.js"></script>
-  <script src="/assets/js/set-details.js?v=5"></script>
-  <script src="/assets/js/album-modal.js?v=1"></script>
-  <script src="/assets/js/global-search.js?v=2"></script>
-  <script src="/assets/js/header.js?v=2"></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/set-details.js?v=5"></script>
+    <script src="/assets/js/add-to-album.js"></script>
+    <script src="/assets/js/global-search.js?v=2"></script>
+    <script src="/assets/js/notifications.js"></script>
+    <script src="/assets/js/header.js?v=2"></script>
 
 </body>
 

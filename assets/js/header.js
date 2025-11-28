@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const loginPath = "/pages/userLogin/login.html";
     const dashboardPath = "/pages/app/dashboard.html";
-    const albumsPath = "/albums/index.html";
+    const albumsPath = "/pages/app/select-album-type.html";
     const defaultImagePath = "/assets/images/icon.png";
 
     async function checkLoginStatus() {
@@ -57,13 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         dropdown.innerHTML = `
                             <a href="${dashboardPath}" style="display: block; padding: 12px 16px; color: #fff; text-decoration: none; border-bottom: 1px solid #333;">
-                                <i class="fa-solid fa-user"></i> Profile
+                                <i class="fa-solid fa-user"></i> Perfil
                             </a>
-                            <a href="${albumsPath}" style="display: block; padding: 12px 16px; color: #fff; text-decoration: none; border-bottom: 1px solid #333;">
-                                <i class="fa-solid fa-book"></i> Albums
+                            <a href="/pages/albums/albums-list.html" style="display: block; padding: 12px 16px; color: #fff; text-decoration: none; border-bottom: 1px solid #333;">
+                                <i class="fa-solid fa-book"></i> Meus Álbuns
                             </a>
+                            <a href="/pages/app/friends.html" style="display: block; padding: 12px 16px; color: #fff; text-decoration: none; border-bottom: 1px solid #333;">
+                                <i class="fa-solid fa-users"></i> Amigos
                             <a href="#" id="logout-btn" style="display: block; padding: 12px 16px; color: #FF3E6C; text-decoration: none;">
-                                <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                <i class="fa-solid fa-right-from-bracket"></i> Sair
                             </a>
                         `;
 

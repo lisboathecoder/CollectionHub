@@ -1,4 +1,5 @@
 import * as userModel from "../../models/Users/userModel.js";
+import { prisma } from "../../lib/prisma.js";
 
 export const listarUsuarios = async (req, res) => {
   try {
@@ -9,14 +10,54 @@ export const listarUsuarios = async (req, res) => {
     res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
+
+export const searchUsers = async (req, res) => {
+  const { q } = req.query;
+
+  if (!q || q.trim() === '') {
+    return res.status(400).json({ error: "Query de busca é obrigatória" });
+  }
+
+  try {
+    const users = await userModel.searchByName(q.trim());
+    res.json(users);
+  } catch (error) {
+    console.error("Error searching users:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+};
 export const getUsuarioPorId = async (req, res) => {
   const id = parseInt(req.params.id);
 
   try {
-    const user = await userModel.findOne(id);
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
+        avatarUrl: true,
+        bio: true,
+        createdAt: true,
+        _count: {
+          select: {
+            albums: true,
+            friendsInitiated: {
+              where: { status: 'accepted' }
+            },
+            friendsReceived: {
+              where: { status: 'accepted' }
+            }
+          }
+        }
+      }
+    });
+    
     if (!user) {
       return res.status(404).json({ error: "Usuário não encontrado" });
     }
+    
     res.json(user);
   } catch (error) {
     console.error("Error fetching user by ID:", error);
