@@ -86,64 +86,6 @@ CollectionHub/
 └── .env.example          # Environment template
 ```
 
-## 🚀 Instalação
-
-### Pré-requisitos
-
-- Node.js 18+ 
-- PostgreSQL 14+
-- NPM ou Yarn
-
-### Passo a passo
-
-1. **Clone o repositório**
-```bash
-git clone https://github.com/lisboathecoder/CollectionHub.git
-cd CollectionHub
-```
-
-2. **Instale as dependências**
-```bash
-npm install
-```
-
-3. **Configure as variáveis de ambiente**
-```bash
-cp .env.example .env
-# Edite .env com suas credenciais
-```
-
-4. **Configure o banco de dados**
-```bash
-npx prisma generate
-npx prisma migrate dev
-```
-
-5. **Inicie o servidor**
-```bash
-node server.js
-```
-
-6. **Acesse no navegador**
-```
-http://localhost:3000
-```
-
-## 🔑 Variáveis de Ambiente
-
-```env
-DATABASE_URL=                    # PostgreSQL connection string
-JWT_SECRET=                      # Secret for JWT signing
-IMGBB_API_KEY=                   # ImgBB API key (image hosting)
-RESEND_API_KEY=                  # Resend API key (emails)
-AUTH_GITHUB_ID=                  # GitHub OAuth client ID
-AUTH_GITHUB_SECRET=              # GitHub OAuth client secret
-AUTH_GOOGLE_ID=                  # Google OAuth client ID
-AUTH_GOOGLE_SECRET=              # Google OAuth client secret
-```
-
-Veja `.env.example` para mais detalhes.
-
 ## 🤝 Colaboradores
 
 Agradecemos às seguintes pessoas que contribuíram para este projeto:
