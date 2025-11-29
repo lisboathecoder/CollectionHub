@@ -1,15 +1,11 @@
-// Search Results Page Script
-
 let allCards = [];
 let filteredCards = [];
 let currentPage = 1;
-const cardsPerPage = 48;
+const cardsPerPage = 50;
 
-// Get search query from URL
 const urlParams = new URLSearchParams(window.location.search);
 const searchQuery = urlParams.get("q");
 
-// DOM Elements
 const loadingEl = document.getElementById("loading");
 const errorEl = document.getElementById("error");
 const searchTitleEl = document.getElementById("search-title");
@@ -20,7 +16,6 @@ const collectionsGrid = document.getElementById("collections-grid");
 const cardsGrid = document.getElementById("cards-grid");
 const cardsCountEl = document.getElementById("cards-count");
 
-// Initialize
 if (!searchQuery || searchQuery.trim().length === 0) {
   showError("Please enter a search term");
 } else {
@@ -53,7 +48,6 @@ async function performSearch(query) {
       return;
     }
 
-    // Display results
     displayCollections(data.collections || []);
     displayCards(data.cards || []);
   } catch (error) {
@@ -115,13 +109,11 @@ function renderCards() {
     return;
   }
 
-  // Calculate pagination
   const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = startIndex + cardsPerPage;
   const cardsToShow = filteredCards.slice(startIndex, endIndex);
 
-  // Render cards
   cardsToShow.forEach((card) => {
     const cardEl = document.createElement("div");
     cardEl.className = "card-item";
@@ -132,20 +124,19 @@ function renderCards() {
     const setCode = card.setCode || card.set?.code || "";
     const setName = card.set?.nameEn || "";
 
-    // Set logos mapping
     const setLogos = {
-      "A1": "/assets/images/logo-boosters/Genetic-Apex-Logo.webp",
-      "A1A": "/assets/images/logo-boosters/Mythical-island-logo.webp",
-      "A2": "/assets/images/logo-boosters/Space-Time-Smackdown_Logo.webp",
-      "A2A": "/assets/images/logo-boosters/Triumphant-Ligth_Logo.webp",
-      "A2B": "/assets/images/logo-boosters/Shining-Revelry_Logo.webp",
-      "A3": "/assets/images/logo-boosters/Celestial-Guardians_Logo.webp",
-      "A3A": "/assets/images/logo-boosters/Extradimensional-Crisis_Logo.webp",
-      "A3B": "/assets/images/logo-boosters/Eevee-Grove_Logo.webp",
-      "A4": "/assets/images/logo-boosters/Wisdom-Of-Sea-And-Sky_Logo.webp",
-      "A4A": "/assets/images/logo-boosters/Secluded-Springs_Logo.webp",
-      "A4B": "/assets/images/logo-boosters/Deluxe-Pack-Ex_Logo.webp",
-      "B1": "/assets/images/logo-boosters/Mega-Rising_Logo.webp",
+      "A1": "https://i.ibb.co/JFH2gxzL/LOGO-expansion-A1-en-US.webp",
+      "A1A": "https://i.ibb.co/Mx4LF0Bj/LOGO-expansion-A1-A-en-US.webp",
+      "A2": "https://i.ibb.co/7tsrnh7F/LOGO-expansion-A2-en-US.webp",
+      "A2A": "https://i.ibb.co/HDJKYY9B/LOGO-expansion-A2-A-en-US.webp",
+      "A2B": "https://i.ibb.co/8DpYB66d/LOGO-expansion-A2-B-en-US.webp",
+      "A3": "https://i.ibb.co/Ng9Z8NtS/LOGO-expansion-A3-en-US.webp",
+      "A3A": "https://i.ibb.co/WNfxg3W4/LOGO-expansion-A3-A-en-US.webp",
+      "A3B": "https://i.ibb.co/F4cbCqbN/LOGO-expansion-A3-B-en-US.webp",
+      "A4": "https://i.ibb.co/9mNDC3Ct/LOGO-expansion-A4-en-US.webp",
+      "A4A": "https://i.ibb.co/wDXnz9K/LOGO-expansion-A4-A-en-US.webp",
+      "A4B": "https://i.ibb.co/Pv18yXWk/LOGO-expansion-A4-B-en-US.webp",
+      "B1": "https://i.ibb.co/1cBjRxD/LOGO-expansion-B1-en-US.webp",
       "PROMO-A": "https://i.ibb.co/Xx8FWqrk/LOGO-expansion-PROMO-A-en-US.webp",
       "PROMO-B": "https://i.ibb.co/sd9sWXZN/LOGO-expansion-PROMO-B-en-US.webp",
     };
@@ -175,15 +166,12 @@ function renderCards() {
       </div>
     `;
 
-    // Add click event to open modal
     cardEl.addEventListener("click", () => {
       openCardModal(card);
     });
 
     cardsGrid.appendChild(cardEl);
   });
-
-  // Render pagination
   renderPagination(totalPages);
 }
 
@@ -210,7 +198,6 @@ function renderPagination(totalPages) {
     </button>
   `;
 
-  // Event listeners
   document.getElementById("prev-page")?.addEventListener("click", () => {
     if (currentPage > 1) {
       currentPage--;
@@ -228,7 +215,6 @@ function renderPagination(totalPages) {
   });
 }
 
-// Card Modal Functions
 function openCardModal(card) {
   const modal = document.createElement("div");
   modal.className = "card-detail-modal";
@@ -253,7 +239,6 @@ function openCardModal(card) {
 
   document.body.appendChild(modal);
 
-  // Close modal handlers
   const closeBtn = modal.querySelector(".card-detail-modal__close");
   const overlay = modal.querySelector(".card-detail-modal__overlay");
 
@@ -266,8 +251,6 @@ function openCardModal(card) {
 
   closeBtn.addEventListener("click", closeModal);
   overlay.addEventListener("click", closeModal);
-
-  // ESC key to close
   const escHandler = (e) => {
     if (e.key === "Escape") {
       closeModal();
@@ -276,7 +259,6 @@ function openCardModal(card) {
   };
   document.addEventListener("keydown", escHandler);
 
-  // Trigger animation
   setTimeout(() => {
     modal.classList.add("active");
   }, 10);
@@ -290,25 +272,24 @@ function showError(message) {
 
 function getCollectionLogo(code) {
   const logos = {
-    A1: "/assets/images/logo-boosters/genetic-apex-logo.webp",
-    A1A: "/assets/images/logo-boosters/Mythical-island-logo.webp",
-    A2: "/assets/images/logo-boosters/Space-Time-Smackdown_Logo.webp",
-    A2A: "/assets/images/logo-boosters/Triumphant-Ligth_Logo.webp",
-    A2B: "/assets/images/logo-boosters/Shining-Revelry_Logo.webp",
-    A3: "/assets/images/logo-boosters/Celestial-Guardians_Logo.webp",
-    A3A: "/assets/images/logo-boosters/Extradimensional-Crisis_Logo.webp",
-    A3B: "/assets/images/logo-boosters/Eevee-Grove_Logo.webp",
-    A4: "/assets/images/logo-boosters/Wisdom-Of-Sea-And-Sky_Logo.webp",
-    A4A: "/assets/images/logo-boosters/Secluded-Springs_Logo.webp",
-    A4B: "/assets/images/logo-boosters/Deluxe-Pack-Ex_Logo.webp",
-    B1: "/assets/images/logo-boosters/Mega-Rising_Logo.webp",
+    A1: "https://i.ibb.co/JFH2gxzL/LOGO-expansion-A1-en-US.webp",
+    A1A: "https://i.ibb.co/Mx4LF0Bj/LOGO-expansion-A1-A-en-US.webp",
+    A2: "https://i.ibb.co/7tsrnh7F/LOGO-expansion-A2-en-US.webp",
+    A2A: "https://i.ibb.co/HDJKYY9B/LOGO-expansion-A2-A-en-US.webp",
+    A2B: "https://i.ibb.co/8DpYB66d/LOGO-expansion-A2-B-en-US.webp",
+    A3: "https://i.ibb.co/Ng9Z8NtS/LOGO-expansion-A3-en-US.webp",
+    A3A: "https://i.ibb.co/WNfxg3W4/LOGO-expansion-A3-A-en-US.webp",
+    A3B: "https://i.ibb.co/F4cbCqbN/LOGO-expansion-A3-B-en-US.webp",
+    A4: "https://i.ibb.co/9mNDC3Ct/LOGO-expansion-A4-en-US.webp",
+    A4A: "https://i.ibb.co/wDXnz9K/LOGO-expansion-A4-A-en-US.webp",
+    A4B: "https://i.ibb.co/Pv18yXWk/LOGO-expansion-A4-B-en-US.webp",
+    B1: "https://i.ibb.co/1cBjRxD/LOGO-expansion-B1-en-US.webp",
     "PROMO-A": "https://i.ibb.co/Xx8FWqrk/LOGO-expansion-PROMO-A-en-US.webp",
     "PROMO-B": "https://i.ibb.co/sd9sWXZN/LOGO-expansion-PROMO-B-en-US.webp",
   };
   return logos[code] || "/assets/images/Collection logo branca.png";
 }
 
-// Stub function for album modal (not implemented on search page)
 function openAlbumModal(cardId) {
   alert(
     "Please navigate to the set details page to add cards to your collection."

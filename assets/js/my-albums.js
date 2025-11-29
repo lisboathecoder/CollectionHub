@@ -2,7 +2,6 @@
 const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if user is logged in
     const token = localStorage.getItem('token');
     if (!token) {
         window.location.href = '/pages/userLogin/login.html';
@@ -17,8 +16,7 @@ async function loadAlbums() {
     const content = document.getElementById('albumsContent');
 
     try {
-        // First, get user ID from profile
-        const profileResponse = await fetch(`${API_BASE_URL}/api/profile/me`, {
+        const profileResponse = await fetch(`${API_BASE_URL}api/profile/me`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -31,7 +29,7 @@ async function loadAlbums() {
         const user = await profileResponse.json();
 
         // Then fetch albums
-        const response = await fetch(`${API_BASE_URL}/api/albums/user/${user.id}`, {
+        const response = await fetch(`${API_BASE_URL}api/albums/user/${user.id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

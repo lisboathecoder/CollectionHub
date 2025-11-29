@@ -60,13 +60,11 @@ const SET_INFO = {
 let allCards = [];
 let filteredCards = [];
 let currentPage = 1;
-const cardsPerPage = 50;
+const cardsPerPage = 52;
 
-// Pega o código do set da URL
 const urlParams = new URLSearchParams(window.location.search);
 const setCode = urlParams.get("set");
 
-// Elementos DOM
 const loadingEl = document.getElementById("loading");
 const errorEl = document.getElementById("error");
 const setHeaderEl = document.getElementById("set-header");
@@ -92,7 +90,7 @@ async function loadCards() {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
-    const apiUrl = window.API_BASE_URL || 'http://localhost:3000' || 'https://collectionhub-production.up.railway.app';
+    const apiUrl = window.API_BASE_URL || 'http://localhost:3000/' || 'https://collectionhub.up.railway.app';
     console.log('🔍 Buscando cartas do set:', setCode);
     console.log('🌐 API URL:', `${apiUrl}api/pokemon/cards?set=${setCode}`);
     
@@ -119,10 +117,8 @@ async function loadCards() {
       return;
     }
 
-    // Popula filtros
     populateRarityFilter();
 
-    // Atualiza header com logo
     const setInfo = SET_INFO[setCode] || { name: setCode, logo: null };
     setNameEl.innerHTML = setInfo.logo
       ? `<img src="${setInfo.logo}" alt="${setInfo.name}" style="max-width: 300px; height: auto; margin-bottom: 20px;">`
@@ -132,7 +128,6 @@ async function loadCards() {
       "page-title"
     ).textContent = `${setInfo.name} - Collection Hub`;
 
-    // Mostra conteúdo
     loadingEl.style.display = "none";
     setHeaderEl.style.display = "block";
     filtersEl.style.display = "flex";
@@ -153,6 +148,9 @@ function showError(message) {
 }
 
 function populateRarityFilter() {
+
+  rarityFilterEl.innerHTML = '<option value="">All rarities</option>';
+
   const rarities = [
     ...new Set(allCards.map((card) => card.rarity?.name).filter(Boolean)),
   ];
@@ -174,7 +172,6 @@ function renderCards() {
     return;
   }
 
-  // Calcular paginação
   const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
   const startIndex = (currentPage - 1) * cardsPerPage;
   const endIndex = startIndex + cardsPerPage;
@@ -182,7 +179,6 @@ function renderCards() {
 
   console.log("📄 Mostrando cards", startIndex, "a", endIndex);
 
-  // Renderizar cards da página atual
   cardsToShow.forEach((card) => {
     const cardEl = document.createElement("div");
     cardEl.className = "card-item";
@@ -214,7 +210,6 @@ function renderCards() {
     cardsGridEl.appendChild(cardEl);
   });
 
-  // Renderizar paginação
   renderPagination(totalPages);
 }
 
@@ -281,7 +276,7 @@ function applyFilters() {
     return matchesRarity && matchesSearch;
   });
 
-  currentPage = 1; // Reset para primeira página ao filtrar
+  currentPage = 1; 
   applySorting();
   renderCards();
 }
@@ -297,7 +292,6 @@ function applySorting() {
         return (a.nameEn || "").localeCompare(b.nameEn || "");
       case "rarity":
       default:
-        // Mantém a ordem de raridade da API
         return 0;
     }
   });
@@ -345,7 +339,6 @@ function openCardModal(card) {
   backdrop.addEventListener("click", closeModal);
 }
 
-// Helper function to open Add to Album modal
 function openAddToAlbumModalWithCard(card) {
   if (typeof openAddToAlbumModal === 'function') {
     openAddToAlbumModal(card);
@@ -354,7 +347,6 @@ function openAddToAlbumModalWithCard(card) {
   }
 }
 
-// Event Listeners
 rarityFilterEl.addEventListener("change", applyFilters);
 sortFilterEl.addEventListener("change", () => {
   applySorting();
@@ -362,5 +354,4 @@ sortFilterEl.addEventListener("change", () => {
 });
 searchInputEl.addEventListener("input", applyFilters);
 
-// Inicializa
 loadCards();

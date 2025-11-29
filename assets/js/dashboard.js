@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-            const response = await fetch(`${apiUrl}/api/profile/me`, {
+            const response = await fetch(`${apiUrl}api/profile/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const resizedAvatar = await resizeImage(avatarInput.files[0], 400, 400);
                     console.log('✂️ Avatar redimensionado, tamanho:', resizedAvatar.length, 'chars');
 
-                    const uploadResponse = await fetch(`${apiUrl}/api/profile/upload-image`, {
+                    const uploadResponse = await fetch(`${apiUrl}api/profile/upload-image`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const resizedCover = await resizeImage(coverInput.files[0], 1500, 500);
                     console.log('✂️ Cover redimensionado, tamanho:', resizedCover.length, 'chars');
 
-                    const uploadResponse = await fetch(`${apiUrl}/api/profile/upload-image`, {
+                    const uploadResponse = await fetch(`${apiUrl}api/profile/upload-image`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 console.log('📤 Enviando dados do perfil:', profileData);
 
-                const response = await fetch(`${apiUrl}/api/profile/me`, {
+                const response = await fetch(`${apiUrl}api/profile/me`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

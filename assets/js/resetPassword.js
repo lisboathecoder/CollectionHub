@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const resetToken = localStorage.getItem("reset_token");
 
   if (!resetToken) {
-    alert("Invalid session. Please start the password reset process again.");
+    alert("Sessão inválida. Por favor, inicie o processo de redefinição de senha novamente.");
     window.location.href = "/pages/userLogin/forgotPassword.html";
     return;
   }
@@ -18,12 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmPassword = confirmPasswordInput.value;
 
     if (password.length < 8) {
-      alert("Password must be at least 8 characters long");
+      alert("Opa, a senha deve ter no mínimo 8 caracteres.");
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match. Please try again.");
+      alert("As senhas não coincidem. Por favor, tente novamente.");
       confirmPasswordInput.value = "";
       confirmPasswordInput.focus();
       return;
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-      const response = await fetch(`${apiUrl}/api/auth/reset-password`, {
+      const response = await fetch(`${apiUrl}api/auth/reset-password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
           window.location.href = "/pages/userLogin/login.html";
         }, 1500);
       } else {
-        alert(data.message || "Error resetting password. Please try again.");
+        alert(data.message || "Erro ao redefinir a senha. Por favor, tente novamente.");
 
         if (data.expired) {
           localStorage.removeItem("reset_token");
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     } catch (error) {
-      alert("An error occurred. Please check your connection and try again.");
+      alert("Ocorreu um erro. Por favor, verifique sua conexão e tente novamente.");
     }
   });
 });

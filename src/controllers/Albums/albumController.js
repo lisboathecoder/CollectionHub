@@ -4,14 +4,10 @@ export const listarAlbums = async (req, res) => {
   try {
     const userId = req.params.userId;
     const authenticatedUserId = req.user.id;
-
-    // Verify user can only access their own albums
     if (parseInt(userId) !== authenticatedUserId) {
       return res.status(403).json({ erro: "Acesso negado" });
     }
-
     const albums = await AlbumModel.list(userId);
-
     res.status(200).json({
       mensagem: "Lista de álbuns",
       total: albums.length,

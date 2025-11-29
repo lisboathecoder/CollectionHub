@@ -12,27 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initNotifications(bellElement) {
-    // Create dropdown
     createNotificationsDropdown(bellElement);
-    
-    // Load unread count
     loadUnreadCount();
-    
-    // Set up periodic refresh
-    setInterval(loadUnreadCount, 30000); // Refresh every 30 seconds
-    
-    // Click handler
+    setInterval(loadUnreadCount, 30000); 
     bellElement.addEventListener('click', async (e) => {
         e.stopPropagation();
-        
         if (notificationsDropdown.classList.contains('active')) {
             hideNotifications();
         } else {
             await showNotifications();
         }
     });
-    
-    // Close on click outside
     document.addEventListener('click', (e) => {
         if (!bellElement.contains(e.target) && !notificationsDropdown.contains(e.target)) {
             hideNotifications();
@@ -60,15 +50,11 @@ function createNotificationsDropdown(bellElement) {
             <a href="/pages/app/notifications.html">Ver todas</a>
         </div>
     `;
-    
-    // Position dropdown relative to navbar-right
     const navbarRight = document.querySelector('.navbar-right');
     if (navbarRight) {
         navbarRight.style.position = 'relative';
         navbarRight.appendChild(notificationsDropdown);
     }
-    
-    // Mark all as read handler
     document.getElementById('markAllReadBtn').addEventListener('click', async (e) => {
         e.stopPropagation();
         await markAllAsRead();
@@ -80,8 +66,8 @@ async function loadUnreadCount() {
     if (!token) return;
     
     try {
-        const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/notifications/unread-count`, {
+        const apiUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+        const response = await fetch(`${apiUrl}api/notifications/unread-count`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -101,13 +87,11 @@ function updateBellBadge() {
     const bell = document.getElementById('notificationBell');
     if (!bell) return;
     
-    // Remove existing badge
     const existingBadge = bell.querySelector('.notification-badge');
     if (existingBadge) {
         existingBadge.remove();
     }
     
-    // Add new badge if there are unread notifications
     if (unreadCount > 0) {
         const badge = document.createElement('span');
         badge.className = 'notification-badge';
@@ -136,7 +120,7 @@ async function showNotifications() {
     
     try {
         const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/notifications?limit=10`, {
+        const response = await fetch(`${apiUrl}api/notifications?limit=10`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -251,7 +235,7 @@ async function markAsRead(notificationId) {
     
     try {
         const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/notifications/${notificationId}/read`, {
+        const response = await fetch(`${apiUrl}api/notifications/${notificationId}/read`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -281,7 +265,7 @@ async function markAllAsRead() {
     
     try {
         const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/notifications/read-all`, {
+        const response = await fetch(`${apiUrl}api/notifications/read-all`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`
