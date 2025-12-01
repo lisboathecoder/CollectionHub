@@ -19,14 +19,26 @@ export const register = async (req, res) => {
   }
 
   try {
-    const existing = await prisma.user.findFirst({
-      where: {
-        OR: [{ username }, { email }],
-      },
+    const existingUser = await prisma.user.findUnique({
+      where: { username },
     });
 
-    if (existing) {
-      return res.status(400).json({ message: "Usuário ou email já existe" });
+    if (existingUser) {
+      return res.status(400).json({
+        message:
+          "Este nome de usuário já está em uso. Por favor, escolha outro.",
+      });
+    }
+
+    const existingEmail = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingEmail) {
+      return res.status(400).json({
+        message:
+          "Este email já está cadastrado. Faça login ou use outro email.",
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -70,12 +82,18 @@ export const login = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(401).json({ error: "Credenciais inválidas" });
+      return res.status(404).json({
+        error: "Usuário não encontrado",
+        message: "Não existe nenhuma conta com este email ou nome de usuário.",
+      });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return res.status(401).json({ error: "Credenciais inválidas" });
+      return res.status(401).json({
+        error: "Senha incorreta",
+        message: "A senha informada está incorreta. Tente novamente.",
+      });
     }
 
     const code = generate2FACode();

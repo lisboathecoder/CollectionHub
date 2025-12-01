@@ -6,12 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title id="page-title">Pack Details - Collection Hub</title>
   <link rel="stylesheet" href="/assets/styles/style.css?v=8" />
-  <link rel="stylesheet" href="/assets/styles/set-details.css?v=13" />
+  <link rel="stylesheet" href="/assets/styles/set-details.css" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-16x16.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-32x32.png" />
   <link rel="manifest" href="/assets/images/site.webmanifest" />
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
@@ -48,19 +47,16 @@
   </header>
 
   <main class="set-details-container">
-    <!-- Loading State -->
     <div id="loading" class="loading-state">
       <div class="spinner"></div>
       <p>Loading cards...</p>
     </div>
 
-    <!-- Error State -->
     <div id="error" class="error-state" style="display: none">
       <p>Failed to load cards. Please try again.</p>
       <button onclick="location.reload()">Retry</button>
     </div>
 
-    <!-- Pack Header -->
     <div id="pack-header" class="set-header" style="display: none">
       <a href="/pages/explore/homeSetPokemon.html" class="back-button">
         ← Back to Sets
@@ -69,7 +65,6 @@
       <p id="pack-info"></p>
     </div>
 
-    <!-- Filters -->
     <div id="filters" class="filters" style="display: none">
       <div class="filter-group">
         <input type="text" id="search-input" placeholder="Search cards..." class="search-input-filter" />
@@ -90,10 +85,8 @@
       </div>
     </div>
 
-    <!-- Cards Grid -->
     <div id="cards-grid" class="cards-grid" style="display: none"></div>
 
-    <!-- Pagination -->
     <div id="pagination" class="pagination" style="display: none">
       <button id="prev-page" disabled>← Previous</button>
       <span id="page-info">Page 1</span>

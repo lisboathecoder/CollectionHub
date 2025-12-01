@@ -12,15 +12,23 @@ form.addEventListener("submit", async (e) => {
 
   const email = emailInput.value.trim();
   const password = passwordInput.value;
+  const termsCheckbox = document.getElementById("signup");
 
   if (!email || !password) {
     showError("Por favor, preencha todos os campos");
     return;
   }
 
+  if (!termsCheckbox.checked) {
+    showError(
+      "Você deve aceitar os Termos de Uso e Política de Privacidade para continuar"
+    );
+    return;
+  }
+
   try {
-    const apiUrl = window.API_BASE_URL || 'http://localhost:3000/';
-    const response = await fetch(`${apiUrl}api/auth/login`, {
+    const apiUrl = window.apiUrl;
+    const response = await fetch(apiUrl("api/auth/login"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +47,16 @@ form.addEventListener("submit", async (e) => {
         window.location.href = "/index.html";
       }
     } else {
-      showError(data.message || "Email ou senha incorretos");
+      const errorMessage =
+        data.message || data.error || "Email ou senha incorretos";
+
+      if (response.status === 404) {
+        showError(errorMessage, "email");
+      } else if (response.status === 401) {
+        showError(errorMessage, "password");
+      } else {
+        showError(errorMessage);
+      }
     }
   } catch (error) {
     console.error("Erro:", error);
@@ -47,7 +64,7 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-function showError(message) {
+function showError(message, highlightField) {
   const existingError = document.querySelector(".error-message");
   if (existingError) {
     existingError.remove();
@@ -60,8 +77,17 @@ function showError(message) {
   const passwordInput = document.getElementById("password");
   passwordInput.parentNode.insertBefore(errorDiv, passwordInput.nextSibling);
 
-  emailInput.classList.add("input-error");
-  passwordInput.classList.add("input-error");
+  emailInput.classList.remove("input-error");
+  passwordInput.classList.remove("input-error");
+
+  if (highlightField === "email") {
+    emailInput.classList.add("input-error");
+  } else if (highlightField === "password") {
+    passwordInput.classList.add("input-error");
+  } else {
+    emailInput.classList.add("input-error");
+    passwordInput.classList.add("input-error");
+  }
 
   setTimeout(() => {
     emailInput.classList.remove("input-error");

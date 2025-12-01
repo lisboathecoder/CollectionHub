@@ -12,12 +12,12 @@ export const uploadImagem = async (req, res) => {
 
     res.status(200).json({
       mensagem: "Upload realizado com sucesso",
-      imageUrl: imageUrl
+      imageUrl: imageUrl,
     });
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao fazer upload",
-      detalhes: e.message
+      detalhes: e.message,
     });
   }
 };

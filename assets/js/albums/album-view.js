@@ -1,103 +1,216 @@
-const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
+window.API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/";
+const API_BASE = (window.API_BASE_URL || "http://localhost:3000").replace(
+  /\/+$/g,
+  ""
+);
+console.log("album-view.js loaded, API_BASE:", API_BASE);
+
 let currentAlbum = null;
 let albumCards = [];
 
-document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        window.location.href = '/pages/userLogin/login.html';
-        return;
-    }
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM loaded, API_BASE_URL:", window.API_BASE_URL);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const albumId = urlParams.get('id');
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.log("No token found, redirecting to login");
+    window.location.href = "/pages/userLogin/login.html";
+    return;
+  }
 
-    if (!albumId) {
-        alert('Álbum não encontrado');
-        window.history.back();
-        return;
-    }
+  const urlParams = new URLSearchParams(window.location.search);
+  const albumId = urlParams.get("id");
 
-    loadAlbum(albumId);
+  console.log("Album ID from URL:", albumId);
 
-    document.getElementById('searchCardsBtn').addEventListener('click', searchCards);
-    document.getElementById('cardSearchInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') searchCards();
+  if (!albumId) {
+    alert("Álbum não encontrado");
+    window.history.back();
+    return;
+  }
+
+  loadAlbum(albumId);
+
+  const searchBtn = document.getElementById("searchCardsBtn");
+  const searchInput = document.getElementById("cardSearchInput");
+  const editBtn = document.getElementById("editBtn");
+  const shareBtn = document.getElementById("shareBtn");
+  const deleteBtn = document.getElementById("deleteBtn");
+
+  if (searchBtn) {
+    searchBtn.addEventListener("click", searchCards);
+  } else {
+    console.error("searchCardsBtn not found");
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", handleSearchInput);
+    searchInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") searchCards();
     });
+  } else {
+    console.error("cardSearchInput not found");
+  }
 
-    document.getElementById('editBtn').addEventListener('click', () => editAlbum(albumId));
-    document.getElementById('shareBtn').addEventListener('click', () => shareAlbum(albumId));
-    document.getElementById('deleteBtn').addEventListener('click', () => deleteAlbum(albumId));
+  document.addEventListener("click", (e) => {
+    const searchResults = document.getElementById("searchResults");
+    const searchBox = document.querySelector(".search-box-albums");
 
-    document.querySelectorAll('.view-toggle button').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        });
+    if (searchResults && searchBox && !searchBox.contains(e.target)) {
+      searchResults.style.display = "none";
+    }
+  });
+
+  if (editBtn) {
+    editBtn.addEventListener("click", () => window.editAlbum(albumId));
+  } else {
+    console.error("editBtn not found");
+  }
+
+  if (shareBtn) {
+    shareBtn.addEventListener("click", () => window.shareAlbum(albumId));
+  } else {
+    console.error("shareBtn not found");
+  }
+
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", () => window.deleteAlbum(albumId));
+  } else {
+    console.error("deleteBtn not found");
+  }
+
+  document.querySelectorAll(".view-toggle button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document
+        .querySelectorAll(".view-toggle button")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
     });
+  });
 });
 
 async function loadAlbum(albumId) {
-    const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
-    try {
-        const response = await fetch(`${API_BASE_URL}api/albums/${albumId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+  try {
+    console.log("Loading album:", albumId);
+    console.log("API URL:", API_BASE);
 
-        if (!response.ok) {
-            throw new Error('Erro ao carregar álbum');
-        }
+    const response = await fetch(`${API_BASE}/api/albums/${albumId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-        currentAlbum = await response.json();
+    console.log("Response status:", response.status);
 
-        document.getElementById('albumName').textContent = currentAlbum.name;
-        document.getElementById('albumDescription').textContent = currentAlbum.description || 'Sem descrição';
-        
-        const cardCount = currentAlbum.items?.length || 0;
-        document.getElementById('cardCount').textContent = `${cardCount} ${cardCount === 1 ? 'carta' : 'cartas'}`;
-        document.getElementById('totalCards').textContent = cardCount;
-
-        const createdDate = new Date(currentAlbum.createdAt).toLocaleDateString('pt-BR');
-        document.getElementById('createdDate').textContent = createdDate;
-
-        if (currentAlbum.items && currentAlbum.items.length > 0) {
-            albumCards = currentAlbum.items;
-            renderCards();
-        }
-
-    } catch (error) {
-        console.error('Error loading album:', error);
-        alert('Erro ao carregar álbum');
-        window.history.back();
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Error response:", errorText);
+      throw new Error("Erro ao carregar álbum");
     }
+
+    currentAlbum = await response.json();
+    console.log("Album loaded:", currentAlbum);
+
+    // Check ownership
+    const currentUserId = await getCurrentUserId();
+    const isOwner = currentAlbum.userId === currentUserId;
+
+    // Show/hide action buttons based on ownership
+    const editBtn = document.getElementById("editBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+    if (editBtn && deleteBtn) {
+      editBtn.style.display = isOwner ? "flex" : "none";
+      deleteBtn.style.display = isOwner ? "flex" : "none";
+    }
+
+    document.getElementById("albumName").textContent =
+      currentAlbum.name || "Álbum sem nome";
+    document.getElementById("albumDescription").textContent =
+      currentAlbum.description || "Sem descrição";
+
+    const items = currentAlbum.items || currentAlbum._count?.items || [];
+    const cardCount = Array.isArray(items)
+      ? items.length
+      : typeof items === "number"
+      ? items
+      : 0;
+
+    console.log("Card count:", cardCount);
+
+    document.getElementById("cardCount").textContent = `${cardCount} ${
+      cardCount === 1 ? "carta" : "cartas"
+    }`;
+    document.getElementById("totalCards").textContent = cardCount;
+
+    const createdDate = new Date(currentAlbum.createdAt).toLocaleDateString(
+      "pt-BR"
+    );
+    document.getElementById("createdDate").textContent = createdDate;
+
+    // Display owner information
+    const ownerInfo = document.getElementById("albumOwner");
+    if (ownerInfo && currentAlbum.user) {
+      ownerInfo.textContent = `Por: ${
+        currentAlbum.user.username || currentAlbum.user.email
+      }`;
+      ownerInfo.style.display = "block";
+    }
+
+    // Display game type/category
+    const gameTypeEl = document.getElementById("albumGameType");
+    if (gameTypeEl) {
+      const gameTypeText =
+        currentAlbum.gameType === "pokemon"
+          ? "Pokémon TCG Pocket"
+          : currentAlbum.gameType || "Personalizado";
+      gameTypeEl.innerHTML = `<i class="fa-solid fa-tag"></i> ${gameTypeText}`;
+      gameTypeEl.style.display = "block";
+    }
+
+    if (
+      currentAlbum.items &&
+      Array.isArray(currentAlbum.items) &&
+      currentAlbum.items.length > 0
+    ) {
+      albumCards = currentAlbum.items;
+      renderCards();
+    } else {
+      console.log("No items to render");
+      renderCards();
+    }
+  } catch (error) {
+    console.error("Error loading album:", error);
+    alert("Erro ao carregar álbum: " + error.message);
+    window.history.back();
+  }
 }
 
 function renderCards() {
-    const grid = document.getElementById('cardsGrid');
+  const grid = document.getElementById("cardsGrid");
 
-    if (albumCards.length === 0) {
-        grid.innerHTML = `
+  if (albumCards.length === 0) {
+    grid.innerHTML = `
             <div class="empty-state">
                 <i class="fa-solid fa-cards-blank"></i>
                 <h3>Nenhuma carta adicionada</h3>
                 <p>Use a pesquisa acima para adicionar cartas ao seu álbum</p>
             </div>
         `;
-        return;
-    }
+    return;
+  }
 
-    grid.innerHTML = albumCards.map(item => {
-        const card = item.card || {};
-        const imageUrl = card.imageUrl || '/assets/images/placeholder-card.png';
-        const name = item.customName || card.nameEn || 'Unknown';
-        const number = card.number || '-';
+  grid.innerHTML = albumCards
+    .map((item) => {
+      const card = item.card || {};
+      const imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
+      const name = item.customName || card.nameEn || "Unknown";
+      const number = card.number || "-";
 
-        return `
+      return `
             <div class="card-item" data-item-id="${item.id}">
-                <button class="remove-card-btn" onclick="removeCard(${item.id})">
+                <button class="remove-card-btn" onclick="window.removeCard(${item.id})">
                     <i class="fa-solid fa-times"></i>
                 </button>
                 <img src="${imageUrl}" alt="${name}" onerror="this.src='/assets/images/placeholder-card.png'">
@@ -105,107 +218,395 @@ function renderCards() {
                 <div class="card-item-number">#${number}</div>
             </div>
         `;
-    }).join('');
+    })
+    .join("");
 }
+
+let searchTimeout = null;
 
 async function searchCards() {
-    const query = document.getElementById('cardSearchInput').value.trim();
+  const inputEl = document.getElementById("cardSearchInput");
+  const searchResults = document.getElementById("searchResults");
+  if (!inputEl || !searchResults) return;
 
-    if (!query) {
-        alert('Digite algo para pesquisar');
-        return;
+  const query = inputEl.value.trim();
+  if (query.length < 2) {
+    searchResults.style.display = "none";
+    return;
+  }
+
+  searchResults.style.display = "block";
+  searchResults.innerHTML =
+    '<div class="search-loading"><i class="fa-solid fa-spinner fa-spin"></i> Buscando...</div>';
+
+  try {
+    const response = await fetch(
+      `${API_BASE}/api/pokemon/cards/search?q=${encodeURIComponent(query)}`
+    );
+
+    if (!response.ok) throw new Error("Erro ao buscar cartas");
+
+    const data = await response.json();
+    const cards = Array.isArray(data) ? data : data.cards || [];
+
+    if (cards.length === 0) {
+      searchResults.innerHTML = `
+        <div class="search-no-results">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <p>Nenhuma carta encontrada para "${query}"</p>
+        </div>
+      `;
+      return;
     }
 
-    window.location.href = `/pages/explore/searchResults.html?q=${encodeURIComponent(query)}&album=${currentAlbum.id}`;
+    searchResults.innerHTML = cards
+      .map(
+        (card) => `
+        <div class="search-result-item" data-card-id="${card.id}">
+          <img src="${
+            card.imageUrl || "/assets/images/placeholder-card.png"
+          }" alt="${card.nameEn}" />
+          <div class="search-result-info">
+            <strong>${card.nameEn || "Unknown"}</strong>
+            <span>#${card.number || "-"} - ${card.set?.nameEn || ""}</span>
+          </div>
+          <button class="btn-add-card" onclick="window.addCardToAlbumById(${
+            card.id
+          })">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+      `
+      )
+      .join("");
+  } catch (error) {
+    console.error("Error searching cards:", error);
+    searchResults.innerHTML = `
+      <div class="search-no-results">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <p>Erro ao buscar cartas</p>
+      </div>
+    `;
+  }
 }
 
-async function removeCard(itemId) {
-    if (!confirm('Deseja remover esta carta do álbum?')) {
-        return;
+function handleSearchInput() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(searchCards, 300);
+}
+
+// Função global para adicionar carta por ID
+window.addCardToAlbumById = async function (cardId) {
+  console.log("🎴 Adicionando carta ID:", cardId);
+  const token = localStorage.getItem("token");
+
+  if (!currentAlbum || !currentAlbum.id) {
+    console.error("❌ Álbum inválido:", currentAlbum);
+    showToast("Álbum inválido", "error");
+    return;
+  }
+
+  const addButton = event.target.closest(".btn-add-card");
+  if (addButton) {
+    addButton.disabled = true;
+    addButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+  }
+
+  try {
+    console.log("📤 POST:", `${API_BASE}/api/albums/${currentAlbum.id}/cards`);
+    console.log("📦 Body:", JSON.stringify({ cardId: parseInt(cardId) }));
+
+    const response = await fetch(
+      `${API_BASE}/api/albums/${currentAlbum.id}/cards`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          cardId: parseInt(cardId),
+        }),
+      }
+    );
+
+    console.log("📥 Status:", response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("❌ Erro:", errorData);
+      throw new Error(errorData.message || "Erro ao adicionar carta");
     }
 
-    const token = localStorage.getItem('token');
+    const newItem = await response.json();
+    console.log("✅ Item criado:", newItem);
 
-    try {
-        const response = await fetch(`${API_BASE_URL}api/albums/${currentAlbum.id}/items/${itemId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+    // Atualiza a lista de cartas
+    albumCards.push(newItem);
+
+    // Atualiza contadores
+    const cardCount = albumCards.length;
+    document.getElementById("cardCount").textContent = `${cardCount} ${
+      cardCount === 1 ? "carta" : "cartas"
+    }`;
+    document.getElementById("totalCards").textContent = cardCount;
+
+    // Re-renderiza o grid
+    renderCards();
+
+    // Limpa busca
+    const searchResults = document.getElementById("searchResults");
+    const searchInput = document.getElementById("cardSearchInput");
+    if (searchResults) searchResults.style.display = "none";
+    if (searchInput) searchInput.value = "";
+
+    showToast("Carta adicionada com sucesso!", "success");
+  } catch (error) {
+    console.error("❌ Erro ao adicionar:", error);
+    showToast(error.message || "Erro ao adicionar carta", "error");
+  } finally {
+    if (addButton) {
+      addButton.disabled = false;
+      addButton.innerHTML = '<i class="fa-solid fa-plus"></i>';
+    }
+  }
+};
+
+window.removeCard = async function (itemId) {
+  if (!confirm("Deseja remover esta carta do álbum?")) {
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch(
+      `${API_BASE}/api/albums/${currentAlbum.id}/cards/${itemId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Erro ao remover carta");
+    }
+
+    albumCards = albumCards.filter((item) => item.id !== itemId);
+
+    document.getElementById("cardCount").textContent = `${albumCards.length} ${
+      albumCards.length === 1 ? "carta" : "cartas"
+    }`;
+    document.getElementById("totalCards").textContent = albumCards.length;
+
+    renderCards();
+
+    showToast("Carta removida com sucesso", "success");
+  } catch (error) {
+    console.error("Error removing card:", error);
+    showToast("Erro ao remover carta", "error");
+  }
+};
+
+window.editAlbum = function (albumId) {
+  if (!currentAlbum) return;
+
+  // Cria modal de edição
+  const modal = document.createElement("div");
+  modal.className = "modal-overlay";
+  modal.id = "editAlbumModal";
+  modal.innerHTML = `
+    <div class="modal-content edit-album-modal">
+      <div class="modal-header">
+        <h2>Editar Álbum</h2>
+        <button class="btn-close-modal" onclick="closeEditModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editAlbumForm">
+          <div class="form-group">
+            <label for="editAlbumName">Nome do Álbum *</label>
+            <input 
+              type="text" 
+              id="editAlbumName" 
+              class="form-input" 
+              value="${currentAlbum.name || ""}" 
+              required 
+              maxlength="100"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="editAlbumDescription">Descrição</label>
+            <textarea 
+              id="editAlbumDescription" 
+              class="form-input" 
+              rows="4" 
+              maxlength="500"
+            >${currentAlbum.description || ""}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="editAlbumGameType">Tipo de Jogo *</label>
+            <select id="editAlbumGameType" class="form-input" required>
+              <option value="pokemon" ${
+                currentAlbum.gameType === "pokemon" ||
+                currentAlbum.gameType === "pokemon-tcg-pocket"
+                  ? "selected"
+                  : ""
+              }>Pokémon TCG Pocket</option>
+              <option value="custom" ${
+                currentAlbum.gameType === "custom" ? "selected" : ""
+              }>Personalizado</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input 
+                type="checkbox" 
+                id="editAlbumPublic" 
+                ${currentAlbum.isPublic ? "checked" : ""}
+              />
+              Tornar álbum público
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
+            <button type="submit" class="btn-primary">Salvar Alterações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  setTimeout(() => modal.classList.add("active"), 10);
+
+  // Handler do form
+  document
+    .getElementById("editAlbumForm")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("editAlbumName").value.trim();
+      const description = document
+        .getElementById("editAlbumDescription")
+        .value.trim();
+      const gameType = document.getElementById("editAlbumGameType").value;
+      const isPublic = document.getElementById("editAlbumPublic").checked;
+
+      if (!name) {
+        showToast("Nome do álbum é obrigatório", "error");
+        return;
+      }
+
+      const token = localStorage.getItem("token");
+
+      try {
+        const response = await fetch(`${API_BASE}/api/albums/${albumId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name,
+            description,
+            gameType,
+            isPublic,
+          }),
         });
 
         if (!response.ok) {
-            throw new Error('Erro ao remover carta');
+          const error = await response.json();
+          throw new Error(error.message || "Erro ao atualizar álbum");
         }
 
-        albumCards = albumCards.filter(item => item.id !== itemId);
+        showToast("Álbum atualizado com sucesso!", "success");
+        closeEditModal();
 
-        document.getElementById('cardCount').textContent = `${albumCards.length} ${albumCards.length === 1 ? 'carta' : 'cartas'}`;
-        document.getElementById('totalCards').textContent = albumCards.length;
-
-        renderCards();
-
-        showToast('Carta removida com sucesso', 'success');
-
-    } catch (error) {
-        console.error('Error removing card:', error);
-        showToast('Erro ao remover carta', 'error');
-    }
-}
-
-function editAlbum(albumId) {
-    alert('Funcionalidade de edição em desenvolvimento');
-}
-
-function shareAlbum(albumId) {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-        showToast('Link copiado para a área de transferência!', 'success');
-    }).catch(() => {
-        showToast('Erro ao copiar link', 'error');
+        // Recarrega o álbum
+        await loadAlbum(albumId);
+      } catch (error) {
+        console.error("Error updating album:", error);
+        showToast(error.message || "Erro ao atualizar álbum", "error");
+      }
     });
-}
+};
 
-async function deleteAlbum(albumId) {
-    if (!confirm('Tem certeza que deseja deletar este álbum? Esta ação não pode ser desfeita.')) {
-        return;
+window.shareAlbum = function (albumId) {
+  const url = window.location.href;
+  navigator.clipboard
+    .writeText(url)
+    .then(() => {
+      showToast("Link copiado para a área de transferência!", "success");
+    })
+    .catch(() => {
+      showToast("Erro ao copiar link", "error");
+    });
+};
+
+window.deleteAlbum = async function (albumId) {
+  // Verify ownership before allowing delete
+  const currentUserId = await getCurrentUserId();
+  if (currentAlbum && currentAlbum.userId !== currentUserId) {
+    showToast("Você não tem permissão para deletar este álbum", "error");
+    return;
+  }
+
+  if (
+    !confirm(
+      "Tem certeza que deseja deletar este álbum? Esta ação não pode ser desfeita."
+    )
+  ) {
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch(`${API_BASE}/api/albums/${albumId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao deletar álbum");
     }
 
-    const token = localStorage.getItem('token');
+    showToast("Álbum deletado com sucesso", "success");
 
-    try {
-        const response = await fetch(`${API_BASE_URL}api/albums/${albumId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+    setTimeout(() => {
+      window.location.href = "/pages/app/collection.html";
+    }, 1500);
+  } catch (error) {
+    console.error("Error deleting album:", error);
+    showToast("Erro ao deletar álbum", "error");
+  }
+};
 
-        if (!response.ok) {
-            throw new Error('Erro ao deletar álbum');
-        }
-
-        showToast('Álbum deletado com sucesso', 'success');
-
-        setTimeout(() => {
-            window.location.href = '/pages/app/collection.html';
-        }, 1500);
-
-    } catch (error) {
-        console.error('Error deleting album:', error);
-        showToast('Erro ao deletar álbum', 'error');
-    }
-}
-
-function showToast(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = 'toast toast-' + type;
-    toast.textContent = message;
-    toast.style.cssText = `
+function showToast(message, type = "info") {
+  const toast = document.createElement("div");
+  toast.className = "toast toast-" + type;
+  toast.textContent = message;
+  toast.style.cssText = `
         position: fixed;
         bottom: 30px;
         right: 30px;
-        background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+        background: ${
+          type === "success"
+            ? "#4caf50"
+            : type === "error"
+            ? "#f44336"
+            : "#2196f3"
+        };
         color: white;
         padding: 15px 25px;
         border-radius: 8px;
@@ -214,17 +615,17 @@ function showToast(message, type = 'info') {
         animation: slideIn 0.3s ease-out;
     `;
 
-    document.body.appendChild(toast);
+  document.body.appendChild(toast);
 
+  setTimeout(() => {
+    toast.style.animation = "slideOut 0.3s ease-out";
     setTimeout(() => {
-        toast.style.animation = 'slideOut 0.3s ease-out';
-        setTimeout(() => {
-            document.body.removeChild(toast);
-        }, 300);
-    }, 3000);
+      document.body.removeChild(toast);
+    }, 300);
+  }, 5000); // Aumentado de 3000 para 4500ms (4.5 segundos)
 }
 
-const style = document.createElement('style');
+const style = document.createElement("style");
 style.textContent = `
     @keyframes slideIn {
         from {
@@ -251,3 +652,30 @@ style.textContent = `
 document.head.appendChild(style);
 
 window.removeCard = removeCard;
+
+// Função para fechar modal de edição
+window.closeEditModal = function () {
+  const modal = document.getElementById("editAlbumModal");
+  if (modal) {
+    modal.classList.remove("active");
+    setTimeout(() => modal.remove(), 300);
+  }
+};
+
+// Helper to get current user ID
+async function getCurrentUserId() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+    const response = await fetch(apiUrl("api/profile/me"), {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.ok) {
+      const user = await response.json();
+      return user.id;
+    }
+  } catch (error) {
+    console.error("Error getting current user:", error);
+  }
+  return null;
+}

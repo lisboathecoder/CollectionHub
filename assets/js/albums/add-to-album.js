@@ -1,12 +1,11 @@
-
 let currentCard = null;
 let userAlbums = [];
 
 function createAddToAlbumModal() {
-    const modal = document.createElement('div');
-    modal.id = 'addToAlbumModal';
-    modal.className = 'modal-overlay add-to-album-modal';
-    modal.innerHTML = `
+  const modal = document.createElement("div");
+  modal.id = "addToAlbumModal";
+  modal.className = "modal-overlay add-to-album-modal";
+  modal.innerHTML = `
         <div class="modal-content add-album-modal-content">
             <div class="modal-header">
                 <h2>Adicionar ao Álbum</h2>
@@ -36,48 +35,50 @@ function createAddToAlbumModal() {
             </div>
         </div>
     `;
-    document.body.appendChild(modal);
+  document.body.appendChild(modal);
 }
 
 async function openAddToAlbumModal(card) {
-    currentCard = card;
- 
-    if (!document.getElementById('addToAlbumModal')) {
-        createAddToAlbumModal();
-    }
-    
-    const modal = document.getElementById('addToAlbumModal');
-    const cardPreview = document.getElementById('cardPreview');
-    const albumsList = document.getElementById('albumsListModal');
-  
-    cardPreview.innerHTML = `
-        <img src="${card.imageUrl}" alt="${card.nameEn}" class="card-image-preview">
+  currentCard = card;
+
+  if (!document.getElementById("addToAlbumModal")) {
+    createAddToAlbumModal();
+  }
+
+  const modal = document.getElementById("addToAlbumModal");
+  const cardPreview = document.getElementById("cardPreview");
+  const albumsList = document.getElementById("albumsListModal");
+
+  cardPreview.innerHTML = `
+        <img src="${card.imageUrl}" alt="${
+    card.nameEn
+  }" class="card-image-preview">
         <div class="card-info-preview">
             <h4>${card.nameEn}</h4>
-            <p>${card.set?.nameEn || ''} - #${card.number}</p>
+            <p>${card.set?.nameEn || ""} - #${card.number}</p>
         </div>
     `;
 
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+  modal.classList.add("active");
+  document.body.classList.add("modal-open");
 
-    await loadUserAlbums(albumsList);
+  await loadUserAlbums(albumsList);
 }
 
 function closeAddToAlbumModal() {
-    const modal = document.getElementById('addToAlbumModal');
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-    }
-    currentCard = null;
+  const modal = document.getElementById("addToAlbumModal");
+  if (modal) {
+    modal.classList.remove("active");
+    document.body.classList.remove("modal-open");
+  }
+  currentCard = null;
 }
 
 async function loadUserAlbums(container) {
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-        container.innerHTML = `
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    container.innerHTML = `
             <div class="no-albums">
                 <i class="fa-solid fa-lock"></i>
                 <p>Faça login para adicionar cartas aos seus álbuns</p>
@@ -86,55 +87,64 @@ async function loadUserAlbums(container) {
                 </button>
             </div>
         `;
-        return;
-    }
-    
-    try {
-        const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/albums`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        
-        if (response.ok) {
-            userAlbums = await response.json();
-            renderAlbumsList(container);
-        } else {
-            container.innerHTML = `
+    return;
+  }
+
+  try {
+    const apiBase = (window.API_BASE_URL || "http://localhost:3000").replace(
+      /\/+$/g,
+      ""
+    );
+    const response = await fetch(`${apiBase}/api/albums`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      userAlbums = await response.json();
+      renderAlbumsList(container);
+    } else {
+      container.innerHTML = `
                 <div class="no-albums">
                     <i class="fa-solid fa-exclamation-triangle"></i>
                     <p>Erro ao carregar álbuns</p>
                 </div>
             `;
-        }
-    } catch (error) {
-        console.error('Error loading albums:', error);
-        container.innerHTML = `
+    }
+  } catch (error) {
+    console.error("Error loading albums:", error);
+    container.innerHTML = `
             <div class="no-albums">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 <p>Erro ao carregar álbuns</p>
             </div>
         `;
-    }
+  }
 }
 
 function renderAlbumsList(container) {
-    if (userAlbums.length === 0) {
-        container.innerHTML = `
+  if (userAlbums.length === 0) {
+    container.innerHTML = `
             <div class="no-albums">
                 <i class="fa-solid fa-book-open"></i>
                 <p>Você ainda não tem álbuns</p>
                 <p class="hint">Crie seu primeiro álbum para começar sua coleção!</p>
             </div>
         `;
-        return;
-    }
-    
-    container.innerHTML = userAlbums.map(album => `
+    return;
+  }
+
+  container.innerHTML = userAlbums
+    .map(
+      (album) => `
         <div class="album-item-modal" onclick="addCardToAlbum(${album.id})">
             <div class="album-icon">
-                <i class="${album.gameType === 'pokemon' ? 'fa-solid fa-book' : 'fa-solid fa-layer-group'}"></i>
+                <i class="${
+                  album.gameType === "pokemon"
+                    ? "fa-solid fa-book"
+                    : "fa-solid fa-layer-group"
+                }"></i>
             </div>
             <div class="album-info">
                 <h4>${album.name}</h4>
@@ -142,67 +152,72 @@ function renderAlbumsList(container) {
             </div>
             <i class="fa-solid fa-chevron-right"></i>
         </div>
-    `).join('');
+    `
+    )
+    .join("");
 }
 
 async function addCardToAlbum(albumId) {
-    if (!currentCard) return;
-    
-    const token = localStorage.getItem('token');
-    if (!token) {
-        alert('Faça login para adicionar cartas');
-        return;
+  if (!currentCard) return;
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Faça login para adicionar cartas");
+    return;
+  }
+
+  try {
+    const apiBase = (window.API_BASE_URL || "http://localhost:3000").replace(
+      /\/+$/g,
+      ""
+    );
+    const response = await fetch(`${apiBase}/api/albums/${albumId}/cards`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        cardId: currentCard.id,
+        quantity: 1,
+      }),
+    });
+
+    if (response.ok) {
+      showSuccessMessage();
+      closeAddToAlbumModal();
+    } else {
+      const error = await response.json();
+      alert(error.message || "Erro ao adicionar carta ao álbum");
     }
-    
-    try {
-        const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}api/albums/${albumId}/cards`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                cardId: currentCard.id,
-                quantity: 1
-            })
-        });
-        
-        if (response.ok) {
-            showSuccessMessage();
-            closeAddToAlbumModal();
-        } else {
-            const error = await response.json();
-            alert(error.message || 'Erro ao adicionar carta ao álbum');
-        }
-    } catch (error) {
-        console.error('Error adding card to album:', error);
-        alert('Erro ao adicionar carta ao álbum');
-    }
+  } catch (error) {
+    console.error("Error adding card to album:", error);
+    alert("Erro ao adicionar carta ao álbum");
+  }
 }
 
 function showSuccessMessage() {
-    const toast = document.createElement('div');
-    toast.className = 'toast-success';
-    toast.innerHTML = `
+  const toast = document.createElement("div");
+  toast.className = "toast-success";
+  toast.innerHTML = `
         <i class="fa-solid fa-check-circle"></i>
         <span>Carta adicionada ao álbum com sucesso!</span>
     `;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 100);
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add("show");
+  }, 100);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
 }
 
-document.addEventListener('click', (e) => {
-    const modal = document.getElementById('addToAlbumModal');
-    if (modal && e.target === modal) {
-        closeAddToAlbumModal();
-    }
+document.addEventListener("click", (e) => {
+  const modal = document.getElementById("addToAlbumModal");
+  if (modal && e.target === modal) {
+    closeAddToAlbumModal();
+  }
 });

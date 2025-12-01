@@ -1,44 +1,78 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap");
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-	--font-sans: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-	--base-font-size: 16px;
-	--line-height: 1.5;
-	--body-bg: #ffffff;
-	--text-color: #111827;
+  --font-sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", sans-serif;
+  --base-font-size: 16px;
+  --line-height: 1.5;
+  --body-bg: #ffffff;
+  --text-color: #111827;
 }
 
 *,
 *::before,
 *::after {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
-	font-family: var(--font-sans);
-	font-size: var(--base-font-size);
-	line-height: var(--line-height);
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-sans);
+  font-size: var(--base-font-size);
+  line-height: var(--line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-	margin: 0;
-	background: var(--body-bg);
-	color: var(--text-color);
+  margin: 0;
+  background: var(--body-bg);
+  color: var(--text-color);
 }
 
-a { color: inherit; text-decoration: none; }
-img, picture, video, canvas, svg { display: block; max-width: 100%; }
-button { font-family: inherit; }
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Utility Classes */
+.modal-open {
+  overflow: hidden !important;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+button {
+  font-family: inherit;
+}
 
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
 * {
@@ -57,5 +91,3 @@ button:focus-visible {
 a {
   text-decoration: none;
 }
-
-

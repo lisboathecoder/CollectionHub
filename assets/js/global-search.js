@@ -1,4 +1,4 @@
- const sampleSuggestions = [
+const sampleSuggestions = [
   "Charizard ex",
   "Pikachu ex",
   "Mewtwo ex",
@@ -15,7 +15,6 @@
   "Blastoise ex",
 ];
 
-
 const placeholderTexts = [
   "Search collection... ",
   "Charizard ex ",
@@ -27,7 +26,6 @@ const placeholderTexts = [
   "Articuno ex ",
   "@thiagoferreira ",
 ];
-
 
 let currentPlaceholderIndex = 0;
 let typingInterval;
@@ -54,11 +52,11 @@ function initGlobalSearch() {
 
     if (value.length > 0) {
       stopPlaceholderAnimation();
-      suggestionsDropdown.innerHTML = ""; 
+      suggestionsDropdown.innerHTML = "";
       if (searchDebounceTimer) {
         clearTimeout(searchDebounceTimer);
       }
-      
+
       searchDebounceTimer = setTimeout(() => {
         showSuggestions(value, suggestionsDropdown);
       }, 300);
@@ -86,12 +84,11 @@ function initGlobalSearch() {
     performSearch(searchInput.value);
   });
 
-searchInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    performSearch(searchInput.value);
-  }
-});
-
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      performSearch(searchInput.value);
+    }
+  });
 
   document.addEventListener("click", (e) => {
     if (!searchInput.parentElement.contains(e.target)) {
@@ -101,11 +98,11 @@ searchInput.addEventListener("keydown", (e) => {
 }
 
 function startPlaceholderAnimation(input) {
-  if (typingInterval) return; 
+  if (typingInterval) return;
 
-  const typeSpeed = 100; 
+  const typeSpeed = 100;
   const deleteSpeed = 50;
-  const pauseTime = 2000; 
+  const pauseTime = 2000;
 
   typingInterval = setInterval(
     () => {
@@ -147,45 +144,76 @@ function startPlaceholderAnimation(input) {
 }
 
 async function showSuggestions(query, dropdown) {
-  const staticMatches = sampleSuggestions.filter((item) =>
-    item.toLowerCase().includes(query.toLowerCase())
-  );
+  const isUserSearch = query.startsWith("@");
+  const searchQuery = isUserSearch ? query.substring(1) : query;
 
-  let userMatches = [];
-  try {
-    const response = await fetch(`/api/users/search?q=${encodeURIComponent(query)}`);
-    if (response.ok) {
-      userMatches = await response.json();
-    }
-  } catch (error) {
-    console.error("Error fetching user suggestions:", error);
+  if (isUserSearch && searchQuery.length < 2) {
+    hideSuggestions(dropdown);
+    return;
   }
 
   const allMatches = [];
-  
-  userMatches.slice(0, 3).forEach(user => {
-    allMatches.push({
-      type: 'user',
-      value: user.username,
-      displayName: user.name || user.username,
-      id: user.id
-    });
-  });
 
-  const collections = [
-    "Genetic Apex",
-    "Mythical Island",
-    "Space-Time Smackdown",
-  ];
+  if (isUserSearch) {
+    try {
+      const response = await fetch(
+        apiUrl(`api/users/search?q=${encodeURIComponent(searchQuery)}`)
+      );
+      if (response.ok) {
+        const users = await response.json();
+        users.slice(0, 8).forEach((user) => {
+          allMatches.push({
+            type: "user",
+            value: user.username || user.email,
+            displayName: user.username || user.name || user.email,
+            avatar: user.avatarUrl,
+            id: user.id,
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  } else {
+    const staticMatches = sampleSuggestions.filter((item) =>
+      item.toLowerCase().includes(query.toLowerCase())
+    );
 
-  staticMatches.slice(0, 6).forEach(match => {
-    const isCollection = collections.includes(match);
-    allMatches.push({
-      type: isCollection ? 'collection' : 'card',
-      value: match,
-      displayName: match
+    const collections = [
+      "Genetic Apex",
+      "Mythical Island",
+      "Space-Time Smackdown",
+    ];
+
+    staticMatches.slice(0, 6).forEach((match) => {
+      const isCollection = collections.includes(match);
+      allMatches.push({
+        type: isCollection ? "collection" : "card",
+        value: match,
+        displayName: match,
+      });
     });
-  });
+
+    try {
+      const response = await fetch(
+        apiUrl(`api/users/search?q=${encodeURIComponent(query)}`)
+      );
+      if (response.ok) {
+        const users = await response.json();
+        users.slice(0, 2).forEach((user) => {
+          allMatches.push({
+            type: "user",
+            value: user.username || user.email,
+            displayName: user.username || user.name || user.email,
+            avatar: user.avatarUrl,
+            id: user.id,
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching user suggestions:", error);
+    }
+  }
 
   if (allMatches.length === 0) {
     hideSuggestions(dropdown);
@@ -194,11 +222,14 @@ async function showSuggestions(query, dropdown) {
 
   dropdown.innerHTML = allMatches
     .map((match) => {
-      let icon = "", typeLabel = "";
-      if (match.type === 'user') {
-        icon = '<i class="fa-solid fa-user"></i>';
+      let icon = "",
+        typeLabel = "";
+      if (match.type === "user") {
+        icon = match.avatar
+          ? `<img src="${match.avatar}" alt="${match.displayName}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">`
+          : '<i class="fa-solid fa-user"></i>';
         typeLabel = '<span class="suggestion-type">Usuário</span>';
-      } else if (match.type === 'collection') {
+      } else if (match.type === "collection") {
         icon = '<i class="fa-solid fa-folder"></i>';
         typeLabel = '<span class="suggestion-type">Coleção</span>';
       } else {
@@ -206,9 +237,14 @@ async function showSuggestions(query, dropdown) {
         typeLabel = '<span class="suggestion-type">Carta</span>';
       }
       return `
-        <div class="suggestion-item" data-type="${match.type}" data-value="${match.value}" data-id="${match.id || ''}">
+        <div class="suggestion-item" data-type="${match.type}" data-value="${
+        match.value
+      }" data-id="${match.id || ""}">
           ${icon}
-          <span class="suggestion-text">${highlightMatch(match.displayName, query)}</span>
+          <span class="suggestion-text">${highlightMatch(
+            match.displayName,
+            searchQuery
+          )}</span>
           ${typeLabel}
         </div>
       `;
@@ -222,18 +258,18 @@ async function showSuggestions(query, dropdown) {
       const type = item.getAttribute("data-type");
       const value = item.getAttribute("data-value");
       const id = item.getAttribute("data-id");
-      
-      if (type === 'user') {
-        window.location.href = `/pages/app/profile.html?id=${id}`;
-      } else {s
+
+      if (type === "user") {
+        window.location.href = `/pages/app/user-profile.html?id=${id}`;
+      } else {
         document.querySelector(".search-input").value = value;
         performSearch(value);
       }
-      
+
       hideSuggestions(dropdown);
     });
   });
-} 
+}
 
 function hideSuggestions(dropdown) {
   dropdown.classList.remove("active");
@@ -261,18 +297,21 @@ async function searchUsersAPI(query, dropdown) {
   }
 
   try {
-    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-    const token = localStorage.getItem('token');
-    
-    const response = await fetch(`${apiUrl}/api/users/search?q=${encodeURIComponent(query)}`, {
-      headers: {
-        'Authorization': token ? `Bearer ${token}` : ''
+    const apiUrl = window.apiUrl;
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+      apiUrl(`api/users/search?q=${encodeURIComponent(query)}`),
+      {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
       }
-    });
+    );
 
     if (response.ok) {
       const users = await response.json();
-      
+
       if (users.length === 0) {
         dropdown.innerHTML = `
           <div class="suggestion-item no-results">
@@ -284,16 +323,27 @@ async function searchUsersAPI(query, dropdown) {
         return;
       }
 
-      dropdown.innerHTML = users.slice(0, 5).map(user => `
+      dropdown.innerHTML = users
+        .slice(0, 5)
+        .map(
+          (user) => `
         <div class="suggestion-item user-suggestion" data-user-id="${user.id}">
-          <img src="${user.avatarUrl || '/assets/images/icon.png'}" alt="${user.username}" class="user-avatar-small" />
+          <img src="${user.avatarUrl || "/assets/images/icon.png"}" alt="${
+            user.username
+          }" class="user-avatar-small" />
           <div class="user-info">
             <span class="suggestion-text">${user.username}</span>
-            ${user.nickname ? `<span class="user-nickname">@${user.nickname}</span>` : ''}
+            ${
+              user.nickname
+                ? `<span class="user-nickname">@${user.nickname}</span>`
+                : ""
+            }
           </div>
           <span class="suggestion-type">User</span>
         </div>
-      `).join('');
+      `
+        )
+        .join("");
 
       dropdown.classList.add("active");
 
@@ -306,7 +356,7 @@ async function searchUsersAPI(query, dropdown) {
       });
     }
   } catch (error) {
-    console.error('Error searching users:', error);
+    console.error("Error searching users:", error);
   }
 }
 

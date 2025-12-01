@@ -11,7 +11,6 @@
   min-height: calc(100vh - 200px);
 }
 
-/* Loading State */
 .loading-state,
 .error-state {
   display: flex;
@@ -52,7 +51,6 @@
   opacity: 0.8;
 }
 
-/* Set Header */
 .set-header {
   margin-bottom: 30px;
   text-align: center;
@@ -82,7 +80,6 @@
   font-size: 14px;
 }
 
-/* Filters */
 .filters {
   display: flex;
   gap: 20px;
@@ -121,7 +118,6 @@
   box-shadow: 0 0 20px rgba(255, 62, 108, 0.5);
 }
 
-/* Search Input in Filters */
 .search-input-filter {
   padding: 8px 15px;
   background: #000000;
@@ -143,7 +139,6 @@
   color: #666;
 }
 
-/* Cards Grid */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 200px));
@@ -155,7 +150,6 @@
 }
 
 .card-item {
-  /* gap: 10px; */
   display: block;
   background: rgba(30, 30, 30, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -236,7 +230,6 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Card Meta (Rarity + Set Logo) */
 .card-meta {
   display: flex;
   align-items: center;
@@ -258,10 +251,9 @@
   height: 20px;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
-/* Rarity Colors */
 .rarity-common {
   background: #4a5568;
   color: #fff;
@@ -327,7 +319,6 @@
   padding: 60px 20px;
 }
 
-/* Search Results Page Styles */
 .search-header {
   text-align: center;
   margin-bottom: 30px;
@@ -419,7 +410,6 @@
   letter-spacing: 1px;
 }
 
-/* Paginação */
 .pagination {
   display: flex;
   justify-content: center;
@@ -460,7 +450,6 @@
   padding: 0 20px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .set-details-container {
     padding: 20px;
@@ -506,7 +495,6 @@
   }
 }
 
-/* Card Detail Modal */
 .card-detail-modal {
   position: fixed;
   inset: 0;

@@ -1,128 +1,213 @@
-if (typeof window.API_BASE_URL === "undefined") {
-    window.API_BASE_URL = 'http://localhost:3000';
-}
-const API_BASE_URL = window.API_BASE_URL;
+window.API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/";
 
-document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        window.location.href = '/pages/userLogin/login.html';
-        return;
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/pages/userLogin/login.html";
+    return;
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const albumType = urlParams.get("type") || "pokemon-tcg-pocket";
+
+  updateAlbumTypeDisplay(albumType);
+
+  const form = document.getElementById("createAlbumForm");
+  const nameInput = document.getElementById("albumName");
+  const descInput = document.getElementById("albumDescription");
+  const categorySelect = document.getElementById("albumCategory");
+  const customCategoryInput = document.getElementById("customCategory");
+  const customCategoryGroup = document.getElementById("customCategoryGroup");
+  const coverInput = document.getElementById("albumCover");
+  const coverPreview = document.getElementById("coverPreview");
+  const coverPreviewImg = document.getElementById("coverPreviewImg");
+  const nameCount = document.getElementById("nameCount");
+  const descCount = document.getElementById("descCount");
+  const cancelBtn = document.getElementById("cancelBtn");
+  const submitBtn = document.getElementById("submitBtn");
+  const errorMessage = document.getElementById("errorMessage");
+  const successMessage = document.getElementById("successMessage");
+
+  nameInput.addEventListener("input", () => {
+    nameCount.textContent = nameInput.value.length;
+  });
+
+  descInput.addEventListener("input", () => {
+    descCount.textContent = descInput.value.length;
+  });
+
+  categorySelect.addEventListener("change", () => {
+    if (categorySelect.value === "custom") {
+      customCategoryGroup.classList.remove("hidden");
+      customCategoryInput.required = true;
+    } else {
+      customCategoryGroup.classList.add("hidden");
+      customCategoryInput.required = false;
+    }
+  });
+
+  coverInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        coverPreviewImg.src = e.target.result;
+        coverPreview.classList.remove("hidden");
+      };
+      reader.readAsDataURL(file);
+    } else {
+      coverPreview.classList.add("hidden");
+    }
+  });
+
+  cancelBtn.addEventListener("click", () => {
+    if (confirm("Deseja cancelar a criação do álbum?")) {
+      window.history.back();
+    }
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = nameInput.value.trim();
+    const description = descInput.value.trim();
+    const category = categorySelect.value;
+    const customCategory = customCategoryInput.value.trim();
+    const isPublic = document.getElementById("isPublic").checked;
+
+    if (!name) {
+      showError("Por favor, insira um nome para o álbum");
+      return;
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const albumType = urlParams.get('type') || 'pokemon-tcg-pocket';
+    if (category === "custom" && !customCategory) {
+      showError("Por favor, insira o nome da categoria personalizada");
+      return;
+    }
 
-    updateAlbumTypeDisplay(albumType);
+    try {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
 
-    const form = document.getElementById('createAlbumForm');
-    const nameInput = document.getElementById('albumName');
-    const descInput = document.getElementById('albumDescription');
-    const nameCount = document.getElementById('nameCount');
-    const descCount = document.getElementById('descCount');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const submitBtn = document.getElementById('submitBtn');
-    const errorMessage = document.getElementById('errorMessage');
+      let coverUrl = null;
 
-    nameInput.addEventListener('input', () => {
-        nameCount.textContent = nameInput.value.length;
-    });
+      if (coverInput.files && coverInput.files[0]) {
+        const file = coverInput.files[0];
+        const reader = new FileReader();
 
-    descInput.addEventListener('input', () => {
-        descCount.textContent = descInput.value.length;
-    });
-
-    cancelBtn.addEventListener('click', () => {
-        if (confirm('Deseja cancelar a criação do álbum?')) {
-            window.history.back();
-        }
-    });
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const name = nameInput.value.trim();
-        const description = descInput.value.trim();
-
-        if (!name) {
-            showError('Por favor, insira um nome para o álbum');
-            return;
-        }
-
-        try {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
-
-            const response = await fetch(`${API_BASE_URL}api/albums`, {
-                method: 'POST',
+        coverUrl = await new Promise((resolve, reject) => {
+          reader.onload = async (e) => {
+            try {
+              const base64Image = e.target.result;
+              const uploadResponse = await fetch(apiUrl("api/upload"), {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    name,
-                    description: description || null,
-                    type: albumType,
-                    isPublic: true
-                })
-            });
+                  image: base64Image,
+                  type: "album-cover",
+                }),
+              });
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Erro ao criar álbum');
+              if (uploadResponse.ok) {
+                const uploadData = await uploadResponse.json();
+                resolve(uploadData.url);
+              } else {
+                const errorData = await uploadResponse.json();
+                reject(
+                  new Error(errorData.error || "Erro ao fazer upload da imagem")
+                );
+              }
+            } catch (error) {
+              reject(error);
             }
+          };
+          reader.readAsDataURL(file);
+        });
+      }
 
-            const album = await response.json();
+      const albumData = {
+        name,
+        description: description || null,
+        type: category === "custom" ? customCategory : category,
+        gameType: category === "custom" ? customCategory : category,
+        isPublic: isPublic,
+      };
 
-            showSuccess('Álbum criado com sucesso!');
+      if (coverUrl) {
+        albumData.coverUrl = coverUrl;
+      }
 
-            setTimeout(() => {
-                window.location.href = `/pages/app/album-view.html?id=${album.id}`;
-            }, 1000);
+      const response = await fetch(apiUrl("api/albums"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(albumData),
+      });
 
-        } catch (error) {
-            console.error('Error creating album:', error);
-            showError(error.message);
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> Criar Álbum';
-        }
-    });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Erro ao criar álbum");
+      }
+
+      const album = await response.json();
+
+      showSuccess("Álbum criado com sucesso!");
+
+      setTimeout(() => {
+        window.location.href = `/pages/albums/album-view.html?id=${album.id}`;
+      }, 1500);
+    } catch (error) {
+      console.error(error);
+      showError(error.message || "Erro ao criar álbum");
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Criar Álbum';
+    }
+  });
+
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.classList.add("active");
+    successMessage.classList.remove("active");
+    setTimeout(() => {
+      errorMessage.classList.remove("active");
+    }, 5000);
+  }
+
+  function showSuccess(message) {
+    successMessage.textContent = message;
+    successMessage.classList.add("active");
+    errorMessage.classList.remove("active");
+  }
 });
 
 function updateAlbumTypeDisplay(type) {
-    const typeDisplay = document.getElementById('albumTypeDisplay');
-    const typeName = document.getElementById('albumTypeName');
+  const gameTypeIcon = document.getElementById("gameTypeIcon");
+  const gameTypeText = document.getElementById("gameTypeText");
 
-    if (type === 'pokemon-tcg-pocket') {
-        typeDisplay.innerHTML = `
-            <img src="/assets/images/pokemon-tcg-pocket-logo.png" alt="Pokemon TCG Pocket" 
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fa-solid fa-cards-blank" style="display: none;"></i>
-            <span>Pokémon TCG Pocket</span>
-        `;
-    } else {
-        typeDisplay.innerHTML = `
-            <i class="fa-solid fa-star"></i>
-            <span>Personalizado</span>
-        `;
-    }
-}
+  const typeMapping = {
+    "pokemon-tcg-pocket": {
+      icon: "fa-cards-blank",
+      text: "Pokémon TCG Pocket",
+    },
+    pokemon: { icon: "fa-cards-blank", text: "Pokémon TCG" },
+    magic: { icon: "fa-hat-wizard", text: "Magic: The Gathering" },
+    yugioh: { icon: "fa-dragon", text: "Yu-Gi-Oh!" },
+    onepiece: { icon: "fa-ship", text: "One Piece Card Game" },
+    custom: { icon: "fa-star", text: "Personalizado" },
+  };
 
-function showError(message) {
-    const errorEl = document.getElementById('errorMessage');
-    errorEl.textContent = message;
-    errorEl.style.display = 'block';
+  const config = typeMapping[type] || typeMapping["custom"];
 
-    setTimeout(() => {
-        errorEl.style.display = 'none';
-    }, 5000);
-}
-
-function showSuccess(message) {
-    const errorEl = document.getElementById('errorMessage');
-    errorEl.style.background = 'rgba(76, 175, 80, 0.1)';
-    errorEl.style.borderColor = 'rgba(76, 175, 80, 0.3)';
-    errorEl.style.color = '#4caf50';
-    errorEl.textContent = message;
-    errorEl.style.display = 'block';
+  if (gameTypeIcon) {
+    gameTypeIcon.className = `fa-solid ${config.icon} game-type-icon`;
+  }
+  if (gameTypeText) {
+    gameTypeText.textContent = config.text;
+  }
 }

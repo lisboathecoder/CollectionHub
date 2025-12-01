@@ -10,4 +10,3 @@ router.put("/:code", setController.atualizarSet);
 router.delete("/:code", setController.deletarSet);
 
 export default router;
-

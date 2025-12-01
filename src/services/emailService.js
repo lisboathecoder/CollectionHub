@@ -1,19 +1,13 @@
 import { Resend } from "resend";
-
-// Inicializa o cliente de email APENAS se a chave existir.
-// Isso evita que o servidor caia se você ainda não tiver configurado o .env.
 const apiKey = process.env.RESEND_API_KEY;
 const resend = apiKey ? new Resend(apiKey) : null;
 
+const FROM_EMAIL = process.env.EMAIL_FROM || "onboarding@resend.dev";
 
-const FROM_EMAIL = process.env.EMAIL_FROM || 'onboarding@resend.dev';
-
-// Gera um código numérico de 6 dígitos aleatório
 export const generate2FACode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// Define que o código expira em X minutos (padrão 5)
 export const get2FAExpiration = () => {
   const expiration = new Date();
   const minutes = parseInt(process.env.TWO_FACTOR_CODE_EXPIRES_IN) || 5;
@@ -21,29 +15,25 @@ export const get2FAExpiration = () => {
   return expiration;
 };
 
-// Função principal de envio
 export const send2FACode = async (email, code, username) => {
-    try {
-        // Se não houver chave de API configurada (modo desenvolvimento),
-        // apenas mostramos o código no terminal para você testar sem enviar email real.
-        if (!resend) {
-            console.log('\n==================================================');
-            console.log('⚠️  AVISO: Sem chave de Email. Modo Simulação.');
-            console.log(`📧  Para: ${email}`);
-            console.log(`🔑  CÓDIGO DE VERIFICAÇÃO: ${code}`);
-            console.log('==================================================\n');
-            
-            return { success: true };
-        }
+  try {
+    if (!resend) {
+      console.log("\n==================================================");
+      console.log("⚠️  AVISO: Sem chave de Email. Modo Simulação.");
+      console.log(`📧  Para: ${email}`);
+      console.log(`🔑  CÓDIGO DE VERIFICAÇÃO: ${code}`);
+      console.log("==================================================\n");
 
-        const expiresIn = parseInt(process.env.TWO_FACTOR_CODE_EXPIRES_IN) || 5;
+      return { success: true };
+    }
 
-        // Envio real do email usando o Resend
-        const { data, error } = await resend.emails.send({
-            from: FROM_EMAIL,
-            to: email,
-            subject: `Código de Verificação - CollectionHub`,
-            html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    const expiresIn = parseInt(process.env.TWO_FACTOR_CODE_EXPIRES_IN) || 5;
+
+    const { data, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: `Código de Verificação - CollectionHub`,
+      html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html dir="ltr" lang="pt-BR">
       <head>
         <meta content="width=device-width" name="viewport" />
@@ -152,10 +142,10 @@ export const send2FACode = async (email, code, username) => {
       return { success: false, error: error.message };
     }
 
-    console.log('✅ Email enviado com sucesso:', data);
+    console.log("✅ Email enviado com sucesso:", data);
     return { success: true, data };
   } catch (err) {
     console.error("❌ Exceção ao enviar email:", err);
-    return { success: false, error: 'Erro interno ao enviar email.' };
+    return { success: false, error: "Erro interno ao enviar email." };
   }
 };

@@ -11,12 +11,12 @@ export const listarAlbums = async (req, res) => {
     res.status(200).json({
       mensagem: "Lista de álbuns",
       total: albums.length,
-      albums: albums
+      albums: albums,
     });
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao listar álbuns",
-      detalhes: e.message
+      detalhes: e.message,
     });
   }
 };
@@ -34,18 +34,15 @@ export const getAlbum = async (req, res) => {
     if (!album) {
       return res.status(404).json({ erro: "Álbum não encontrado" });
     }
-
-    // Verify user owns the album or album is public
     if (album.userId !== req.user.id && !album.isPublic) {
       return res.status(403).json({ erro: "Acesso negado" });
     }
 
-    // Return album directly (not wrapped)
     res.status(200).json(album);
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao buscar álbum",
-      detalhes: e.message
+      detalhes: e.message,
     });
   }
 };
@@ -59,20 +56,19 @@ export const criarAlbum = async (req, res) => {
       return res.status(400).json({ erro: "name é obrigatório" });
     }
 
-    const novoAlbum = await AlbumModel.create({ 
-      userId, 
-      name, 
+    const novoAlbum = await AlbumModel.create({
+      userId,
+      name,
       description: description || null,
-      type: type || 'custom',
-      isPublic: isPublic !== undefined ? isPublic : true
+      type: type || "custom",
+      isPublic: isPublic !== undefined ? isPublic : true,
     });
 
-    // Return album directly
     res.status(201).json(novoAlbum);
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao criar álbum",
-      detalhes: e.message
+      detalhes: e.message,
     });
   }
 };
@@ -90,7 +86,6 @@ export const atualizarAlbum = async (req, res) => {
       return res.status(404).json({ erro: "Álbum não encontrado" });
     }
 
-    // Verify user owns the album
     if (albumExiste.userId !== req.user.id) {
       return res.status(403).json({ erro: "Acesso negado" });
     }
@@ -99,12 +94,12 @@ export const atualizarAlbum = async (req, res) => {
 
     res.status(200).json({
       mensagem: "Álbum atualizado com sucesso",
-      album: albumAtualizado
+      album: albumAtualizado,
     });
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao atualizar álbum",
-      detalhes: e.message
+      detalhes: e.message,
     });
   }
 };
@@ -122,7 +117,6 @@ export const deletarAlbum = async (req, res) => {
       return res.status(404).json({ erro: "Álbum não encontrado" });
     }
 
-    // Verify user owns the album
     if (albumExiste.userId !== req.user.id) {
       return res.status(403).json({ erro: "Acesso negado" });
     }
@@ -131,12 +125,12 @@ export const deletarAlbum = async (req, res) => {
 
     res.status(200).json({
       mensagem: "Álbum deletado com sucesso",
-      album: albumExiste
+      album: albumExiste,
     });
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao deletar álbum",
-      detalhes: e.message
+      detalhes: e.message,
     });
   }
 };
@@ -154,7 +148,6 @@ export const adicionarItem = async (req, res) => {
       return res.status(404).json({ erro: "Álbum não encontrado" });
     }
 
-    // Verify user owns the album
     if (albumExiste.userId !== req.user.id) {
       return res.status(403).json({ erro: "Acesso negado" });
     }
@@ -163,12 +156,12 @@ export const adicionarItem = async (req, res) => {
 
     res.status(201).json({
       mensagem: "Item adicionado ao álbum",
-      item: novoItem
+      item: novoItem,
     });
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao adicionar item",
-      detalhes: e.message
+      detalhes: e.message,
     });
   }
 };
@@ -185,12 +178,12 @@ export const atualizarItem = async (req, res) => {
 
     res.status(200).json({
       mensagem: "Item atualizado",
-      item: itemAtualizado
+      item: itemAtualizado,
     });
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao atualizar item",
-      detalhes: e.message
+      detalhes: e.message,
     });
   }
 };
@@ -206,12 +199,12 @@ export const deletarItem = async (req, res) => {
     await AlbumModel.removeItem(itemId);
 
     res.status(200).json({
-      mensagem: "Item removido do álbum"
+      mensagem: "Item removido do álbum",
     });
   } catch (e) {
     res.status(500).json({
       erro: "Erro ao deletar item",
-      detalhes: e.message
+      detalhes: e.message,
     });
   }
 };
