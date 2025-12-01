@@ -1,52 +1,55 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify Code - Collection Hub</title>
+    <link rel="stylesheet" href="../../assets/styles/login2FA.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Verify Code - Collection Hub</title>
-  <link rel="stylesheet" href="../../assets/styles/login2FA.css" />
-</head>
-
-<body>
-  <div class="logo-Collection-Hub">
-    <img src="../../assets/images/Collection logo branca.png" alt="Collection Hub logo" />
-  </div>
-
-  <div class="twofa-container">
-    <p class="info-text">
-      For your security, we've sent a verification code to
-      <strong>your registered email address</strong>. Please check your inbox
-      (and don't forget to look in your spam or junk folder) for an email from
-      us containing the code.<br />
-      <strong>Enter the code below</strong> to verify your identity and
-      proceed with resetting your password.<br />
-      If you don't receive the email within a few minutes, you can request a
-      new code or reach out to our support team for further assistance.
-    </p>
-
-    <form id="forgot-twofa-form">
-      <div class="code-inputs">
-        <input type="text" maxlength="1" class="code-box" id="digit1" />
-        <input type="text" maxlength="1" class="code-box" id="digit2" />
-        <input type="text" maxlength="1" class="code-box" id="digit3" />
-        <input type="text" maxlength="1" class="code-box" id="digit4" />
-        <input type="text" maxlength="1" class="code-box" id="digit5" />
-        <input type="text" maxlength="1" class="code-box" id="digit6" />
-      </div>
-
-      <div id="error-message" class="error-message"></div>
-
-      <button type="submit" class="confirm-button">Confirm</button>
-    </form>
-
-    <div class="back-to-login">
-      <a href="/pages/userLogin/forgotPassword.html">Cancel and Return to Previous Page</a>
+  <body>
+    <div class="logo-Collection-Hub">
+      <img
+        src="../../assets/images/Collection logo branca.png"
+        alt="Collection Hub logo"
+      />
     </div>
-  </div>
 
-  <script src="../../assets/js/config.js"></script>
-  <script src="../../assets/js/forgot2FA.js"></script>
-</body>
+    <div class="twofa-container">
+      <p class="info-text">
+        For your security, we've sent a verification code to
+        <strong>your registered email address</strong>. Please check your inbox
+        (and don't forget to look in your spam or junk folder) for an email from
+        us containing the code.<br />
+        <strong>Enter the code below</strong> to verify your identity and
+        proceed with resetting your password.<br />
+        If you don't receive the email within a few minutes, you can request a
+        new code or reach out to our support team for further assistance.
+      </p>
 
+      <form id="forgot-twofa-form">
+        <div class="code-inputs">
+          <input type="text" maxlength="1" class="code-box" id="digit1" />
+          <input type="text" maxlength="1" class="code-box" id="digit2" />
+          <input type="text" maxlength="1" class="code-box" id="digit3" />
+          <input type="text" maxlength="1" class="code-box" id="digit4" />
+          <input type="text" maxlength="1" class="code-box" id="digit5" />
+          <input type="text" maxlength="1" class="code-box" id="digit6" />
+        </div>
+
+        <div id="error-message" class="error-message"></div>
+
+        <button type="submit" class="confirm-button">Confirm</button>
+      </form>
+
+      <div class="back-to-login">
+        <a href="/pages/userLogin/forgotPassword.html"
+          >Cancel and Return to Previous Page</a
+        >
+      </div>
+    </div>
+
+    <script src="../../assets/js/config.js"></script>
+    <script src="../../assets/js/forgot2FA.js"></script>
+  </body>
 </html>

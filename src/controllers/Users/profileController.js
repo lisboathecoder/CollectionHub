@@ -28,10 +28,15 @@ export const getProfile = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ error: "USER_NOT_FOUND", message: "Usuário não encontrado" });
+      return res
+        .status(404)
+        .json({ error: "USER_NOT_FOUND", message: "Usuário não encontrado" });
     }
 
-    const totalItems = user.albums.reduce((sum, album) => sum + album.items.length, 0);
+    const totalItems = user.albums.reduce(
+      (sum, album) => sum + album.items.length,
+      0
+    );
     const totalAlbums = user.albums.length;
 
     res.json({
@@ -51,7 +56,9 @@ export const getProfile = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Erro ao buscar perfil:", error);
-    res.status(500).json({ error: "INTERNAL_ERROR", message: "Erro ao buscar perfil" });
+    res
+      .status(500)
+      .json({ error: "INTERNAL_ERROR", message: "Erro ao buscar perfil" });
   }
 };
 
@@ -60,7 +67,14 @@ export const updateProfile = async (req, res) => {
     const userId = req.user.id;
     const { nickname, bio, location, avatarUrl, coverUrl } = req.body;
 
-    console.log('📝 Atualizando perfil:', { userId, nickname, bio, location, avatarUrl, coverUrl });
+    console.log("📝 Atualizando perfil:", {
+      userId,
+      nickname,
+      bio,
+      location,
+      avatarUrl,
+      coverUrl,
+    });
 
     const updateData = {};
     if (nickname !== undefined) updateData.nickname = nickname;
@@ -83,7 +97,7 @@ export const updateProfile = async (req, res) => {
       },
     });
 
-    console.log('✅ Perfil atualizado:', updatedUser);
+    console.log("✅ Perfil atualizado:", updatedUser);
 
     res.json({
       message: "Perfil atualizado com sucesso",
@@ -91,10 +105,10 @@ export const updateProfile = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Erro ao atualizar perfil:", error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: "UPDATE_FAILED",
       message: "Erro ao atualizar perfil",
-      details: error.message 
+      details: error.message,
     });
   }
 };
@@ -104,16 +118,23 @@ export const uploadImage = async (req, res) => {
     const { image, type } = req.body;
 
     if (!image) {
-      return res.status(400).json({ error: "IMAGE_MISSING", message: "Imagem não fornecida" });
+      return res
+        .status(400)
+        .json({ error: "IMAGE_MISSING", message: "Imagem não fornecida" });
     }
 
     const IMGBB_API_KEY = process.env.IMGBB_API_KEY;
 
     if (!IMGBB_API_KEY) {
-      return res.status(500).json({ error: "CONFIG_ERROR", message: "Serviço de upload não configurado" });
+      return res
+        .status(500)
+        .json({
+          error: "CONFIG_ERROR",
+          message: "Serviço de upload não configurado",
+        });
     }
 
-    console.log(`📤 Iniciando upload de ${type || 'imagem'}...`);
+    console.log(`📤 Iniciando upload de ${type || "imagem"}...`);
 
     const base64Image = image.replace(/^data:image\/\w+;base64,/, "");
 
@@ -129,23 +150,31 @@ export const uploadImage = async (req, res) => {
     const data = await response.json();
 
     if (data.success) {
-      console.log(`✅ Upload de ${type || 'imagem'} bem-sucedido:`, data.data.url);
-      
+      console.log(
+        `✅ Upload de ${type || "imagem"} bem-sucedido:`,
+        data.data.url
+      );
+
       res.json({
         success: true,
         url: data.data.url,
         deleteUrl: data.data.delete_url,
       });
     } else {
-      console.error('❌ Falha no upload para ImgBB:', data);
-      res.status(500).json({ error: "UPLOAD_FAILED", message: "Erro ao fazer upload da imagem" });
+      console.error("❌ Falha no upload para ImgBB:", data);
+      res
+        .status(500)
+        .json({
+          error: "UPLOAD_FAILED",
+          message: "Erro ao fazer upload da imagem",
+        });
     }
   } catch (error) {
     console.error("❌ Erro ao fazer upload:", error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: "INTERNAL_ERROR",
       message: "Erro ao fazer upload da imagem",
-      details: error.message 
+      details: error.message,
     });
   }
 };

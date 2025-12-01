@@ -374,7 +374,7 @@ a {
 }
 
 .notification-item.unread::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
@@ -472,7 +472,6 @@ a {
   opacity: 0.8;
 }
 
-/* Scrollbar for notifications list */
 .notifications-list::-webkit-scrollbar {
   width: 6px;
 }
@@ -867,7 +866,6 @@ h1 {
   }
 }
 
-/* Profile Dropdown Styles */
 .user-profile {
   position: relative;
 }
@@ -877,7 +875,7 @@ h1 {
   width: 40px;
   height: 40px;
   object-fit: cover;
-  border: 2px solid #FF3E6C;
+  border: 2px solid #ff3e6c;
   transition: transform 0.2s;
 }
 

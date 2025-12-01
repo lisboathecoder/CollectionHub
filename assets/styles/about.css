@@ -1,129 +1,128 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-    --primary-color: #ff3e6c;
-    --text-color: #ffffff;
-    --card-bg: #1e1e1e;
+  --primary-color: #ff3e6c;
+  --text-color: #ffffff;
+  --card-bg: #1e1e1e;
 }
 
 .page-content {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    min-height: 70vh;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 70vh;
 }
 
 .page-content h1 {
-    font-size: 48px;
-    font-weight: 800;
-    margin-bottom: 20px;
-    background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .page-content h2 {
-    font-size: 28px;
-    color: var(--primary-color);
-    margin-top: 40px;
-    margin-bottom: 15px;
-    border-bottom: 2px solid rgba(255, 62, 108, 0.3);
-    padding-bottom: 5px;
+  font-size: 28px;
+  color: var(--primary-color);
+  margin-top: 40px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 62, 108, 0.3);
+  padding-bottom: 5px;
 }
 
 .page-content p {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #ccc;
-    margin-bottom: 20px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #ccc;
+  margin-bottom: 20px;
 }
 
 .page-content ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 20px;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
 }
 
 .page-content ul li {
-    margin-bottom: 10px;
-    padding-left: 20px;
-    position: relative;
-    color: #ccc;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+  color: #ccc;
 }
 
 .page-content ul li::before {
-    content: "•";
-    color: var(--primary-color);
-    font-weight: 700;
-    position: absolute;
-    left: 0;
-    font-size: 1.2em;
+  content: "•";
+  color: var(--primary-color);
+  font-weight: 700;
+  position: absolute;
+  left: 0;
+  font-size: 1.2em;
 }
 
 .team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 30px;
-    margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
 }
 
 .team-member {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 62, 108, 0.2);
-    transition: transform 0.3s ease;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 62, 108, 0.2);
+  transition: transform 0.3s ease;
 }
 
 .team-member:hover {
-    transform: translateY(-5px);
-    border-color: var(--primary-color);
+  transform: translateY(-5px);
+  border-color: var(--primary-color);
 }
 
 .team-member img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
-    border: 3px solid var(--primary-color);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid var(--primary-color);
 }
 
 .team-member h3 {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 5px;
 }
 
 .team-member .role {
-    font-size: 14px;
-    color: #888;
-    display: block;
+  font-size: 14px;
+  color: #888;
+  display: block;
 }
 
 .team-member .social-link-small {
-    display: inline-block;
-    margin-top: 10px;
-    color: var(--primary-color);
-    opacity: 0.8;
-    transition: opacity 0.2s;
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--primary-color);
+  opacity: 0.8;
+  transition: opacity 0.2s;
 }
 
 .team-member .social-link-small:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
-/* Ajustes Responsivos para o conteúdo da página */
 @media (max-width: 768px) {
-    .page-content h1 {
-        font-size: 36px;
-    }
+  .page-content h1 {
+    font-size: 36px;
+  }
 }

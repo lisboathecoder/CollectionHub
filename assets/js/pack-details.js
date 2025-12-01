@@ -82,7 +82,7 @@ const PACK_IMAGES = {
 let allCards = [];
 let filteredCards = [];
 let currentPage = 1;
-const cardsPerPage = 52;
+const cardsPerPage = 50;
 
 const urlParams = new URLSearchParams(window.location.search);
 const setCode = urlParams.get("set");

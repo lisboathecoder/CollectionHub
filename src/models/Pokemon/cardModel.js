@@ -1,14 +1,22 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-
 const includeCard = {
   set: true,
   rarity: true,
-  packs: true
+  packs: true,
 };
 
-export const list = async ({ q, set, setCode, number, rarity, page = 1, pageSize = 50, orderBy = 'default' }) => {
+export const list = async ({
+  q,
+  set,
+  setCode,
+  number,
+  rarity,
+  page = 1,
+  pageSize = 50,
+  orderBy = "default",
+}) => {
   const where = {};
   if (set || setCode) where.setCode = set || setCode;
   if (number) where.number = Number(number);
@@ -23,15 +31,10 @@ export const list = async ({ q, set, setCode, number, rarity, page = 1, pageSize
   const skip = (Number(page) - 1) * Number(pageSize);
 
   let orderByClause;
-  if (orderBy === 'rarity') {
-    orderByClause = [
-      { number: 'asc' }
-    ];
+  if (orderBy === "rarity") {
+    orderByClause = [{ number: "asc" }];
   } else {
-    orderByClause = [
-      { setCode: "asc" }, 
-      { number: "asc" }
-    ];
+    orderByClause = [{ setCode: "asc" }, { number: "asc" }];
   }
 
   const [items, total] = await Promise.all([
@@ -45,19 +48,19 @@ export const list = async ({ q, set, setCode, number, rarity, page = 1, pageSize
     prisma.card.count({ where }),
   ]);
 
-  if (orderBy === 'rarity') {
+  if (orderBy === "rarity") {
     const rarityOrder = {
-      'C': 1,
-      'U': 2,
-      'R': 3,
-      'RR': 4,
-      'AR': 5,
-      'SR': 6,
-      'SAR': 7,
-      'IM': 8,
-      'UR': 9,
-      'S': 10,
-      'SSR': 11
+      C: 1,
+      U: 2,
+      R: 3,
+      RR: 4,
+      AR: 5,
+      SR: 6,
+      SAR: 7,
+      IM: 8,
+      UR: 9,
+      S: 10,
+      SSR: 11,
     };
 
     items.sort((a, b) => {
@@ -81,13 +84,12 @@ export const getByComposite = async (setCode, number) => {
 export const get = async (id) => {
   return prisma.card.findUnique({
     where: { id: Number(id) },
-    include: includeCard
+    include: includeCard,
   });
 };
 
-
 export const create = async (data) => {
-  const { packs, ...rest } = data; 
+  const { packs, ...rest } = data;
   const connectPacks = (packs || []).map((p) => ({
     setCode_name: { setCode: rest.setCode, name: p },
   }));
@@ -100,13 +102,12 @@ export const create = async (data) => {
       namePt: rest.namePt,
       rarityCode: rest.rarityCode,
       slug: rest.slug,
-      
-      packs: { connect: connectPacks }
+
+      packs: { connect: connectPacks },
     },
     include: includeCard,
   });
 };
-
 
 export const updateByComposite = async (setCode, number, data) => {
   const { packs, ...rest } = data;
@@ -123,7 +124,7 @@ export const updateByComposite = async (setCode, number, data) => {
       ...(rest.rarityCode && { rarityCode: rest.rarityCode }),
       ...(rest.slug && { slug: rest.slug }),
 
-      ...(packs && packs.length > 0 && { packs: { connect: connectPacks } })
+      ...(packs && packs.length > 0 && { packs: { connect: connectPacks } }),
     },
     include: includeCard,
   });
