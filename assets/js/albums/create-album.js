@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
           reader.onload = async (e) => {
             try {
               const base64Image = e.target.result;
-              const uploadResponse = await fetch(`${API_BASE_URL}api/upload`, {
+              const uploadResponse = await fetch(apiUrl("api/upload"), {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
         albumData.coverUrl = coverUrl;
       }
 
-      const response = await fetch(`${API_BASE_URL}api/albums`, {
+      const response = await fetch(apiUrl("api/albums"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

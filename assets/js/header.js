@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (token) {
       try {
-        const apiUrl = window.API_BASE_URL;
-        const response = await fetch(`${apiUrl}api/profile/me`, {
+        const apiUrl = window.apiUrl;
+        const response = await fetch(apiUrl("api/profile/me"), {
           headers: { Authorization: `Bearer ${token}` },
         });
 

@@ -1,4 +1,4 @@
-const API_BASE_URL = window.API_BASE_URL || "http://localhost:3000";
+const apiUrl = window.apiUrl;
 
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
@@ -15,7 +15,7 @@ async function loadAlbums() {
   const content = document.getElementById("albumsContent");
 
   try {
-    const profileResponse = await fetch(`${API_BASE_URL}api/profile/me`, {
+    const profileResponse = await fetch(apiUrl("api/profile/me"), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -27,7 +27,7 @@ async function loadAlbums() {
 
     const user = await profileResponse.json();
 
-    const response = await fetch(`${API_BASE_URL}api/albums/user/${user.id}`, {
+    const response = await fetch(apiUrl(`api/albums/user/${user.id}`), {
       headers: {
         Authorization: `Bearer ${token}`,
       },

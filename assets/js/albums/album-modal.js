@@ -3,6 +3,7 @@ let selectedCardId = null;
 function openAlbumModal(cardId) {
   selectedCardId = cardId;
   const modal = document.getElementById("albumModal");
+  if (!modal) return;
   modal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
   loadUserAlbums();
@@ -10,7 +11,7 @@ function openAlbumModal(cardId) {
 
 function closeAlbumModal() {
   const modal = document.getElementById("albumModal");
-  modal.setAttribute("aria-hidden", "true");
+  if (modal) modal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-open");
   selectedCardId = null;
 }
@@ -18,6 +19,8 @@ function closeAlbumModal() {
 async function loadUserAlbums() {
   const albumsList = document.getElementById("albumsList");
   const token = localStorage.getItem("token");
+
+  if (!albumsList) return;
 
   if (!token) {
     albumsList.innerHTML = `
@@ -29,8 +32,11 @@ async function loadUserAlbums() {
   }
 
   try {
-    const apiUrl = window.API_BASE_URL || "http://localhost:3000/";
-    const response = await fetch(`${apiUrl}api/albums`, {
+    const apiBase = (window.API_BASE_URL || "http://localhost:3000").replace(
+      /\/+$/g,
+      ""
+    );
+    const response = await fetch(`${apiBase}/api/albums`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -132,7 +138,9 @@ function showNotification(message, isError = false) {
 
 document.addEventListener("click", (e) => {
   const modal = document.getElementById("albumModal");
-  if (e.target === modal.querySelector(".modal__backdrop")) {
+  if (!modal) return;
+  const backdrop = modal.querySelector(".modal__backdrop");
+  if (backdrop && e.target === backdrop) {
     closeAlbumModal();
   }
 });

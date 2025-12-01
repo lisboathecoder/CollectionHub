@@ -109,12 +109,12 @@ async function loadCards() {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
-    const apiUrl = window.API_BASE_URL || "http://localhost:3000/";
+    const apiUrl = window.apiUrl;
     console.log("🔍 Buscando cartas do pack:", packName, "no set:", setCode);
-    console.log("🌐 API URL:", `${apiUrl}api/pokemon/cards?set=${setCode}`);
+    console.log("🌐 API URL:", apiUrl(`api/pokemon/cards?set=${setCode}`));
 
     const response = await fetch(
-      `${apiUrl}api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`
+      apiUrl(`api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`)
     );
 
     console.log("📡 Status da resposta:", response.status);

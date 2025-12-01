@@ -2,6 +2,11 @@ const urlParams = new URLSearchParams(window.location.search);
 const albumId = urlParams.get("id");
 let album = null;
 
+const API_BASE = (window.API_BASE_URL || "http://localhost:3000").replace(
+  /\/+$/g,
+  ""
+);
+
 document.addEventListener("DOMContentLoaded", async () => {
   await checkAuth();
   if (albumId) {
@@ -27,7 +32,7 @@ async function loadAlbumDetails() {
   const albumContent = document.getElementById("albumContent");
 
   try {
-    const response = await fetch(`${API_BASE_URL}albums/${albumId}`, {
+    const response = await fetch(`${API_BASE}/api/albums/${albumId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -142,7 +147,7 @@ async function updateAlbum(updates) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch(`${API_BASE_URL}api/albums/${albumId}`, {
+    const response = await fetch(`${API_BASE}/api/albums/${albumId}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -176,7 +181,7 @@ async function deleteAlbum() {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch(`${API_BASE_URL}api/albums/${albumId}`, {
+    const response = await fetch(`${API_BASE}/api/albums/${albumId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -207,7 +212,7 @@ async function removeItem(itemId, itemName) {
 
   try {
     const response = await fetch(
-      `${API_BASE_URL}api/albums/${albumId}/cards/${itemId}`,
+      `${API_BASE}/api/albums/${albumId}/cards/${itemId}`,
       {
         method: "DELETE",
         headers: {

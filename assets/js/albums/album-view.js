@@ -1,5 +1,9 @@
 window.API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/";
-console.log("album-view.js loaded, API_BASE_URL:", API_BASE_URL);
+const API_BASE = (window.API_BASE_URL || "http://localhost:3000").replace(
+  /\/+$/g,
+  ""
+);
+console.log("album-view.js loaded, API_BASE:", API_BASE);
 
 let currentAlbum = null;
 let albumCards = [];
@@ -58,19 +62,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   if (editBtn) {
-    editBtn.addEventListener("click", () => editAlbum(albumId));
+    editBtn.addEventListener("click", () => window.editAlbum(albumId));
   } else {
     console.error("editBtn not found");
   }
 
   if (shareBtn) {
-    shareBtn.addEventListener("click", () => shareAlbum(albumId));
+    shareBtn.addEventListener("click", () => window.shareAlbum(albumId));
   } else {
     console.error("shareBtn not found");
   }
 
   if (deleteBtn) {
-    deleteBtn.addEventListener("click", () => deleteAlbum(albumId));
+    deleteBtn.addEventListener("click", () => window.deleteAlbum(albumId));
   } else {
     console.error("deleteBtn not found");
   }
@@ -90,9 +94,9 @@ async function loadAlbum(albumId) {
 
   try {
     console.log("Loading album:", albumId);
-    console.log("API URL:", API_BASE_URL);
+    console.log("API URL:", API_BASE);
 
-    const response = await fetch(`${API_BASE_URL}api/albums/${albumId}`, {
+    const response = await fetch(`${API_BASE}/api/albums/${albumId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -108,6 +112,18 @@ async function loadAlbum(albumId) {
 
     currentAlbum = await response.json();
     console.log("Album loaded:", currentAlbum);
+
+    // Check ownership
+    const currentUserId = await getCurrentUserId();
+    const isOwner = currentAlbum.userId === currentUserId;
+
+    // Show/hide action buttons based on ownership
+    const editBtn = document.getElementById("editBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+    if (editBtn && deleteBtn) {
+      editBtn.style.display = isOwner ? "flex" : "none";
+      deleteBtn.style.display = isOwner ? "flex" : "none";
+    }
 
     document.getElementById("albumName").textContent =
       currentAlbum.name || "Álbum sem nome";
@@ -132,6 +148,26 @@ async function loadAlbum(albumId) {
       "pt-BR"
     );
     document.getElementById("createdDate").textContent = createdDate;
+
+    // Display owner information
+    const ownerInfo = document.getElementById("albumOwner");
+    if (ownerInfo && currentAlbum.user) {
+      ownerInfo.textContent = `Por: ${
+        currentAlbum.user.username || currentAlbum.user.email
+      }`;
+      ownerInfo.style.display = "block";
+    }
+
+    // Display game type/category
+    const gameTypeEl = document.getElementById("albumGameType");
+    if (gameTypeEl) {
+      const gameTypeText =
+        currentAlbum.gameType === "pokemon"
+          ? "Pokémon TCG Pocket"
+          : currentAlbum.gameType || "Personalizado";
+      gameTypeEl.innerHTML = `<i class="fa-solid fa-tag"></i> ${gameTypeText}`;
+      gameTypeEl.style.display = "block";
+    }
 
     if (
       currentAlbum.items &&
@@ -174,7 +210,7 @@ function renderCards() {
 
       return `
             <div class="card-item" data-item-id="${item.id}">
-                <button class="remove-card-btn" onclick="removeCard(${item.id})">
+                <button class="remove-card-btn" onclick="window.removeCard(${item.id})">
                     <i class="fa-solid fa-times"></i>
                 </button>
                 <img src="${imageUrl}" alt="${name}" onerror="this.src='/assets/images/placeholder-card.png'">
@@ -189,9 +225,11 @@ function renderCards() {
 let searchTimeout = null;
 
 async function searchCards() {
-  const query = document.getElementById("cardSearchInput").value.trim();
+  const inputEl = document.getElementById("cardSearchInput");
   const searchResults = document.getElementById("searchResults");
+  if (!inputEl || !searchResults) return;
 
+  const query = inputEl.value.trim();
   if (query.length < 2) {
     searchResults.style.display = "none";
     return;
@@ -203,54 +241,44 @@ async function searchCards() {
 
   try {
     const response = await fetch(
-      `${API_BASE_URL}api/cards/search?q=${encodeURIComponent(query)}`
+      `${API_BASE}/api/pokemon/cards/search?q=${encodeURIComponent(query)}`
     );
 
     if (!response.ok) throw new Error("Erro ao buscar cartas");
 
-    const cards = await response.json();
+    const data = await response.json();
+    const cards = Array.isArray(data) ? data : data.cards || [];
 
     if (cards.length === 0) {
       searchResults.innerHTML = `
         <div class="search-no-results">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <p>Nenhuma carta encontrada</p>
+          <p>Nenhuma carta encontrada para "${query}"</p>
         </div>
       `;
       return;
     }
 
     searchResults.innerHTML = cards
-      .slice(0, 10)
       .map(
         (card) => `
-        <div class="search-result-item" data-card='${JSON.stringify(
-          card
-        ).replace(/'/g, "&#39;")}'>
-          <img src="${card.imageUrl}" alt="${
-          card.nameEn
-        }" class="search-result-image" onerror="this.src='/assets/images/placeholder-card.png'">
+        <div class="search-result-item" data-card-id="${card.id}">
+          <img src="${
+            card.imageUrl || "/assets/images/placeholder-card.png"
+          }" alt="${card.nameEn}" />
           <div class="search-result-info">
-            <div class="search-result-name">${card.nameEn}</div>
-            <div class="search-result-details">
-              <span><i class="fa-solid fa-layer-group"></i> ${
-                card.set?.nameEn || "N/A"
-              }</span>
-              <span><i class="fa-solid fa-hashtag"></i>${card.number}</span>
-            </div>
+            <strong>${card.nameEn || "Unknown"}</strong>
+            <span>#${card.number || "-"} - ${card.set?.nameEn || ""}</span>
           </div>
-          <i class="fa-solid fa-plus search-result-add"></i>
+          <button class="btn-add-card" onclick="window.addCardToAlbumById(${
+            card.id
+          })">
+            <i class="fa-solid fa-plus"></i>
+          </button>
         </div>
       `
       )
       .join("");
-
-    document.querySelectorAll(".search-result-item").forEach((item) => {
-      item.addEventListener("click", function () {
-        const cardData = JSON.parse(this.dataset.card);
-        addCardToAlbum(cardData);
-      });
-    });
   } catch (error) {
     console.error("Error searching cards:", error);
     searchResults.innerHTML = `
@@ -267,13 +295,29 @@ function handleSearchInput() {
   searchTimeout = setTimeout(searchCards, 300);
 }
 
-async function addCardToAlbum(card) {
+// Função global para adicionar carta por ID
+window.addCardToAlbumById = async function (cardId) {
+  console.log("🎴 Adicionando carta ID:", cardId);
   const token = localStorage.getItem("token");
-  const searchResults = document.getElementById("searchResults");
+
+  if (!currentAlbum || !currentAlbum.id) {
+    console.error("❌ Álbum inválido:", currentAlbum);
+    showToast("Álbum inválido", "error");
+    return;
+  }
+
+  const addButton = event.target.closest(".btn-add-card");
+  if (addButton) {
+    addButton.disabled = true;
+    addButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+  }
 
   try {
+    console.log("📤 POST:", `${API_BASE}/api/albums/${currentAlbum.id}/cards`);
+    console.log("📦 Body:", JSON.stringify({ cardId: parseInt(cardId) }));
+
     const response = await fetch(
-      `${API_BASE_URL}api/albums/${currentAlbum.id}/cards`,
+      `${API_BASE}/api/albums/${currentAlbum.id}/cards`,
       {
         method: "POST",
         headers: {
@@ -281,44 +325,54 @@ async function addCardToAlbum(card) {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          cardId: card.id,
-          quantity: 1,
+          cardId: parseInt(cardId),
         }),
       }
     );
 
+    console.log("📥 Status:", response.status);
+
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || "Erro ao adicionar carta");
+      const errorData = await response.json();
+      console.error("❌ Erro:", errorData);
+      throw new Error(errorData.message || "Erro ao adicionar carta");
     }
 
     const newItem = await response.json();
+    console.log("✅ Item criado:", newItem);
 
-    albumCards.push({
-      id: newItem.id,
-      card: card,
-      customName: null,
-    });
+    // Atualiza a lista de cartas
+    albumCards.push(newItem);
 
+    // Atualiza contadores
     const cardCount = albumCards.length;
     document.getElementById("cardCount").textContent = `${cardCount} ${
       cardCount === 1 ? "carta" : "cartas"
     }`;
     document.getElementById("totalCards").textContent = cardCount;
 
+    // Re-renderiza o grid
     renderCards();
 
-    searchResults.style.display = "none";
-    document.getElementById("cardSearchInput").value = "";
+    // Limpa busca
+    const searchResults = document.getElementById("searchResults");
+    const searchInput = document.getElementById("cardSearchInput");
+    if (searchResults) searchResults.style.display = "none";
+    if (searchInput) searchInput.value = "";
 
     showToast("Carta adicionada com sucesso!", "success");
   } catch (error) {
-    console.error("Error adding card:", error);
+    console.error("❌ Erro ao adicionar:", error);
     showToast(error.message || "Erro ao adicionar carta", "error");
+  } finally {
+    if (addButton) {
+      addButton.disabled = false;
+      addButton.innerHTML = '<i class="fa-solid fa-plus"></i>';
+    }
   }
-}
+};
 
-async function removeCard(itemId) {
+window.removeCard = async function (itemId) {
   if (!confirm("Deseja remover esta carta do álbum?")) {
     return;
   }
@@ -327,7 +381,7 @@ async function removeCard(itemId) {
 
   try {
     const response = await fetch(
-      `${API_BASE_URL}api/albums/${currentAlbum.id}/items/${itemId}`,
+      `${API_BASE}/api/albums/${currentAlbum.id}/items/${itemId}`,
       {
         method: "DELETE",
         headers: {
@@ -354,13 +408,13 @@ async function removeCard(itemId) {
     console.error("Error removing card:", error);
     showToast("Erro ao remover carta", "error");
   }
-}
+};
 
-function editAlbum(albumId) {
+window.editAlbum = function (albumId) {
   alert("Funcionalidade de edição em desenvolvimento");
-}
+};
 
-function shareAlbum(albumId) {
+window.shareAlbum = function (albumId) {
   const url = window.location.href;
   navigator.clipboard
     .writeText(url)
@@ -370,9 +424,16 @@ function shareAlbum(albumId) {
     .catch(() => {
       showToast("Erro ao copiar link", "error");
     });
-}
+};
 
-async function deleteAlbum(albumId) {
+window.deleteAlbum = async function (albumId) {
+  // Verify ownership before allowing delete
+  const currentUserId = await getCurrentUserId();
+  if (currentAlbum && currentAlbum.userId !== currentUserId) {
+    showToast("Você não tem permissão para deletar este álbum", "error");
+    return;
+  }
+
   if (
     !confirm(
       "Tem certeza que deseja deletar este álbum? Esta ação não pode ser desfeita."
@@ -384,7 +445,7 @@ async function deleteAlbum(albumId) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch(`${API_BASE_URL}api/albums/${albumId}`, {
+    const response = await fetch(`${API_BASE}/api/albums/${albumId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -404,7 +465,7 @@ async function deleteAlbum(albumId) {
     console.error("Error deleting album:", error);
     showToast("Erro ao deletar álbum", "error");
   }
-}
+};
 
 function showToast(message, type = "info") {
   const toast = document.createElement("div");
@@ -466,3 +527,21 @@ style.textContent = `
 document.head.appendChild(style);
 
 window.removeCard = removeCard;
+
+// Helper to get current user ID
+async function getCurrentUserId() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+    const response = await fetch(apiUrl("api/profile/me"), {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.ok) {
+      const user = await response.json();
+      return user.id;
+    }
+  } catch (error) {
+    console.error("Error getting current user:", error);
+  }
+  return null;
+}

@@ -61,7 +61,7 @@ form.addEventListener("submit", async (e) => {
       password: "***",
     });
 
-    const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
+    const apiUrl = window.API_BASE_URL || "http://localhost:3000";
     const response = await fetch(`${apiUrl}api/auth/register`, {
       method: "POST",
       headers: {
@@ -83,7 +83,17 @@ form.addEventListener("submit", async (e) => {
       window.location.href = "/pages/userLogin/login.html";
     } else {
       submitButton.disabled = false;
-      showError(data.message || data.error || "Erro ao criar conta");
+      const errorMessage = data.message || data.error || "Erro ao criar conta";
+      showError(errorMessage);
+
+      if (
+        errorMessage.includes("nome de usuário") ||
+        errorMessage.includes("username")
+      ) {
+        nicknameInput.classList.add("input-error");
+      } else if (errorMessage.includes("email")) {
+        emailInput.classList.add("input-error");
+      }
     }
   } catch (error) {
     console.error("Erro completo:", error);

@@ -173,31 +173,41 @@ export const deleteAlbum = async (req, res) => {
 export const addCardToAlbum = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.sub;
-    const { cardId, customName, customImage, quantity, notes } = req.body;
+    const userId = req.user.id || req.user.sub;
+    const { cardId, customName, customImage } = req.body;
+
+    console.log("📝 addCardToAlbum chamado:", {
+      albumId: id,
+      userId,
+      cardId,
+      customName,
+      customImage,
+    });
 
     const album = await prisma.album.findUnique({
       where: { id: parseInt(id) },
     });
 
     if (!album) {
+      console.error("❌ Álbum não encontrado:", id);
       return res.status(404).json({ message: "Álbum não encontrado" });
     }
 
     if (album.userId !== parseInt(userId)) {
+      console.error("❌ Sem permissão:", { albumUserId: album.userId, userId });
       return res
         .status(403)
         .json({ message: "Sem permissão para adicionar cartas neste álbum" });
     }
 
+    console.log("✅ Criando AlbumItem...");
+
     const albumItem = await prisma.albumItem.create({
       data: {
         albumId: parseInt(id),
         cardId: cardId ? parseInt(cardId) : null,
-        customName,
-        customImage,
-        quantity: quantity || 1,
-        notes,
+        customName: customName || null,
+        customImage: customImage || null,
       },
       include: {
         card: {
@@ -209,17 +219,22 @@ export const addCardToAlbum = async (req, res) => {
       },
     });
 
+    console.log("✅ AlbumItem criado:", albumItem);
     res.status(201).json(albumItem);
   } catch (error) {
-    console.error("Error adding card to album:", error);
-    res.status(500).json({ message: "Erro ao adicionar carta ao álbum" });
+    console.error("❌ Error adding card to album:", error);
+    console.error("Stack:", error.stack);
+    res.status(500).json({
+      message: "Erro ao adicionar carta ao álbum",
+      error: error.message,
+    });
   }
 };
 
 export const removeCardFromAlbum = async (req, res) => {
   try {
     const { id, itemId } = req.params;
-    const userId = req.user.sub;
+    const userId = req.user.id || req.user.sub;
 
     const album = await prisma.album.findUnique({
       where: { id: parseInt(id) },

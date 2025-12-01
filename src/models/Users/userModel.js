@@ -49,18 +49,26 @@ export const findByUsernameOrEmail = async (username, email) => {
 };
 
 export const searchByName = async (query) => {
+  const cleanQuery = query.startsWith("@") ? query.substring(1) : query;
+
   return await prisma.user.findMany({
     where: {
       OR: [
         {
           username: {
-            contains: query,
+            contains: cleanQuery,
             mode: "insensitive",
           },
         },
         {
           name: {
-            contains: query,
+            contains: cleanQuery,
+            mode: "insensitive",
+          },
+        },
+        {
+          email: {
+            contains: cleanQuery,
             mode: "insensitive",
           },
         },
@@ -70,8 +78,8 @@ export const searchByName = async (query) => {
       id: true,
       username: true,
       name: true,
-      email: false,
-      password: false,
+      email: true,
+      avatarUrl: true,
       createdAt: true,
     },
     take: 20,

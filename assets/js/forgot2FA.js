@@ -58,8 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-      const response = await fetch(`${apiUrl}/api/auth/verify-reset-code`, {
+      const apiUrl = window.apiUrl;
+      const response = await fetch(apiUrl("api/auth/verify-reset-code"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

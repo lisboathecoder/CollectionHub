@@ -157,9 +157,7 @@ async function showSuggestions(query, dropdown) {
   if (isUserSearch) {
     try {
       const response = await fetch(
-        `${window.API_BASE_URL || "/"}api/users/search?q=${encodeURIComponent(
-          searchQuery
-        )}`
+        apiUrl(`api/users/search?q=${encodeURIComponent(searchQuery)}`)
       );
       if (response.ok) {
         const users = await response.json();
@@ -198,9 +196,7 @@ async function showSuggestions(query, dropdown) {
 
     try {
       const response = await fetch(
-        `${window.API_BASE_URL || "/"}api/users/search?q=${encodeURIComponent(
-          query
-        )}`
+        apiUrl(`api/users/search?q=${encodeURIComponent(query)}`)
       );
       if (response.ok) {
         const users = await response.json();
@@ -301,11 +297,11 @@ async function searchUsersAPI(query, dropdown) {
   }
 
   try {
-    const apiUrl = window.API_BASE_URL || "http://localhost:3000";
+    const apiUrl = window.apiUrl;
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-      `${apiUrl}/api/users/search?q=${encodeURIComponent(query)}`,
+      apiUrl(`api/users/search?q=${encodeURIComponent(query)}`),
       {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",

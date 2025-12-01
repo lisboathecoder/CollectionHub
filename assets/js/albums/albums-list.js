@@ -22,7 +22,7 @@ async function loadAlbums() {
   const emptyState = document.getElementById("emptyState");
 
   try {
-    const response = await fetch(`${API_BASE_URL}api/albums`, {
+    const response = await fetch(apiUrl("api/albums"), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -78,11 +78,6 @@ function displayAlbums(albums) {
                     </p>
                 </div>
                 <div class="album-card-actions">
-                    <button onclick="event.stopPropagation(); editAlbum('${
-                      album.id
-                    }')" class="btn-icon" title="Editar">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
                     <button onclick="event.stopPropagation(); deleteAlbum('${
                       album.id
                     }', '${
@@ -167,7 +162,7 @@ async function deleteAlbum(albumId, albumName) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch(`${API_BASE_URL}api/albums/${albumId}`, {
+    const response = await fetch(apiUrl(`api/albums/${albumId}`), {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

@@ -1,9 +1,10 @@
 window.API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/";
+const apiUrl = window.apiUrl;
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
   const list = document.getElementById("albumsList");
   try {
-    const response = await fetch(`${API_BASE_URL}api/albums/me`, {
+    const response = await fetch(apiUrl("api/albums/me"), {
       headers: { Authorization: token ? `Bearer ${token}` : "" },
     });
     if (response.ok) {

@@ -65,10 +65,11 @@ export const getProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { nickname, bio, location, avatarUrl, coverUrl } = req.body;
+    const { username, nickname, bio, location, avatarUrl, coverUrl } = req.body;
 
     console.log("📝 Atualizando perfil:", {
       userId,
+      username,
       nickname,
       bio,
       location,
@@ -77,6 +78,7 @@ export const updateProfile = async (req, res) => {
     });
 
     const updateData = {};
+    if (username !== undefined) updateData.username = username;
     if (nickname !== undefined) updateData.nickname = nickname;
     if (bio !== undefined) updateData.bio = bio;
     if (location !== undefined) updateData.location = location;
@@ -126,12 +128,10 @@ export const uploadImage = async (req, res) => {
     const IMGBB_API_KEY = process.env.IMGBB_API_KEY;
 
     if (!IMGBB_API_KEY) {
-      return res
-        .status(500)
-        .json({
-          error: "CONFIG_ERROR",
-          message: "Serviço de upload não configurado",
-        });
+      return res.status(500).json({
+        error: "CONFIG_ERROR",
+        message: "Serviço de upload não configurado",
+      });
     }
 
     console.log(`📤 Iniciando upload de ${type || "imagem"}...`);
@@ -162,12 +162,10 @@ export const uploadImage = async (req, res) => {
       });
     } else {
       console.error("❌ Falha no upload para ImgBB:", data);
-      res
-        .status(500)
-        .json({
-          error: "UPLOAD_FAILED",
-          message: "Erro ao fazer upload da imagem",
-        });
+      res.status(500).json({
+        error: "UPLOAD_FAILED",
+        message: "Erro ao fazer upload da imagem",
+      });
     }
   } catch (error) {
     console.error("❌ Erro ao fazer upload:", error);

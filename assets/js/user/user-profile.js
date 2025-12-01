@@ -1,4 +1,4 @@
-const API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/";
+const apiUrl = window.apiUrl;
 
 document.addEventListener("DOMContentLoaded", async () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -26,13 +26,13 @@ async function loadUserProfile(userId, username) {
     let user;
 
     if (userId) {
-      const response = await fetch(`${API_BASE_URL}api/users/${userId}`);
+      const response = await fetch(apiUrl(`api/users/${userId}`));
       if (!response.ok) throw new Error("Usuário não encontrado");
       user = await response.json();
     } else if (username) {
       const cleanUsername = username.replace("@", "");
       const response = await fetch(
-        `${API_BASE_URL}api/users/search?q=${encodeURIComponent(cleanUsername)}`
+        apiUrl(`api/users/search?q=${encodeURIComponent(cleanUsername)}`)
       );
       if (!response.ok) throw new Error("Usuário não encontrado");
       const users = await response.json();
@@ -95,7 +95,7 @@ async function loadUserAlbums(userId) {
 
   try {
     const response = await fetch(
-      `${API_BASE_URL}api/albums?userId=${userId}&isPublic=true`
+      apiUrl(`api/albums?userId=${userId}&isPublic=true`)
     );
 
     if (!response.ok) {
