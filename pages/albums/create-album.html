@@ -125,8 +125,76 @@
             </div>
 
             <div class="form-group">
+              <label for="albumDescription" class="form-label"
+                >Descrição (opcional)</label
+              >
+              <textarea
+                id="albumDescription"
+                class="form-input"
+                placeholder="Descreva seu álbum..."
+                rows="4"
+                maxlength="200"
+              ></textarea>
+              <span class="form-hint"
+                ><span id="descCount">0</span>/200 caracteres</span
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="albumCategory" class="form-label">Categoria</label>
+              <select id="albumCategory" class="form-input" required>
+                <option value="pokemon">Pokemon TCG</option>
+                <option value="custom">Personalizado</option>
+              </select>
+              <span class="form-hint">Escolha a categoria do seu álbum</span>
+            </div>
+
+            <div
+              class="form-group"
+              id="customCategoryGroup"
+              style="display: none"
+            >
+              <label for="customCategory" class="form-label"
+                >Nome da Categoria Personalizada</label
+              >
+              <input
+                type="text"
+                id="customCategory"
+                class="form-input"
+                placeholder="Ex: Coleção de Figurinhas"
+                maxlength="30"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="albumCover" class="form-label"
+                >Imagem de Capa (opcional)</label
+              >
+              <input
+                type="file"
+                id="albumCover"
+                class="form-input"
+                accept="image/*"
+              />
+              <span class="form-hint"
+                >Adicione uma imagem personalizada para o álbum</span
+              >
+              <div id="coverPreview" style="margin-top: 10px; display: none">
+                <img
+                  id="coverPreviewImg"
+                  style="max-width: 200px; border-radius: 8px"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
               <label class="form-checkbox-label">
-                <input type="checkbox" id="isPublic" class="form-checkbox" />
+                <input
+                  type="checkbox"
+                  id="isPublic"
+                  class="form-checkbox"
+                  checked
+                />
                 <span>Tornar álbum público</span>
               </label>
               <span class="form-hint"
@@ -135,17 +203,32 @@
             </div>
 
             <div class="form-actions">
-              <button type="button" class="btn-cancel" onclick="history.back()">
+              <button type="button" class="btn-cancel" id="cancelBtn">
                 Cancelar
               </button>
-              <button
-                type="submit"
-                class="btn-create"
-                formaction="/pages/albums/album-view.html"
-              >
+              <button type="submit" class="btn-create" id="submitBtn">
                 <i class="fa-solid fa-plus"></i> Criar Álbum
               </button>
             </div>
+
+            <div
+              id="errorMessage"
+              style="
+                display: none;
+                color: #ff3e6c;
+                margin-top: 10px;
+                text-align: center;
+              "
+            ></div>
+            <div
+              id="successMessage"
+              style="
+                display: none;
+                color: #10b981;
+                margin-top: 10px;
+                text-align: center;
+              "
+            ></div>
           </form>
         </div>
       </div>
