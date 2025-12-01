@@ -1,9 +1,7 @@
-// Add Card to Album Modal
 
 let currentCard = null;
 let userAlbums = [];
 
-// Create modal HTML
 function createAddToAlbumModal() {
     const modal = document.createElement('div');
     modal.id = 'addToAlbumModal';
@@ -41,11 +39,9 @@ function createAddToAlbumModal() {
     document.body.appendChild(modal);
 }
 
-// Open modal with card data
 async function openAddToAlbumModal(card) {
     currentCard = card;
-    
-    // Create modal if it doesn't exist
+ 
     if (!document.getElementById('addToAlbumModal')) {
         createAddToAlbumModal();
     }
@@ -53,8 +49,7 @@ async function openAddToAlbumModal(card) {
     const modal = document.getElementById('addToAlbumModal');
     const cardPreview = document.getElementById('cardPreview');
     const albumsList = document.getElementById('albumsListModal');
-    
-    // Show card preview
+  
     cardPreview.innerHTML = `
         <img src="${card.imageUrl}" alt="${card.nameEn}" class="card-image-preview">
         <div class="card-info-preview">
@@ -62,16 +57,13 @@ async function openAddToAlbumModal(card) {
             <p>${card.set?.nameEn || ''} - #${card.number}</p>
         </div>
     `;
-    
-    // Show modal
+
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    
-    // Load user albums
+
     await loadUserAlbums(albumsList);
 }
 
-// Close modal
 function closeAddToAlbumModal() {
     const modal = document.getElementById('addToAlbumModal');
     if (modal) {
@@ -81,7 +73,6 @@ function closeAddToAlbumModal() {
     currentCard = null;
 }
 
-// Load user albums
 async function loadUserAlbums(container) {
     const token = localStorage.getItem('token');
     
@@ -128,7 +119,6 @@ async function loadUserAlbums(container) {
     }
 }
 
-// Render albums list
 function renderAlbumsList(container) {
     if (userAlbums.length === 0) {
         container.innerHTML = `
@@ -155,7 +145,6 @@ function renderAlbumsList(container) {
     `).join('');
 }
 
-// Add card to selected album
 async function addCardToAlbum(albumId) {
     if (!currentCard) return;
     
@@ -167,7 +156,7 @@ async function addCardToAlbum(albumId) {
     
     try {
         const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/albums/${albumId}/cards`, {
+        const response = await fetch(`${apiUrl}api/albums/${albumId}/cards`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -180,7 +169,6 @@ async function addCardToAlbum(albumId) {
         });
         
         if (response.ok) {
-            // Show success message
             showSuccessMessage();
             closeAddToAlbumModal();
         } else {
@@ -193,7 +181,6 @@ async function addCardToAlbum(albumId) {
     }
 }
 
-// Show success message
 function showSuccessMessage() {
     const toast = document.createElement('div');
     toast.className = 'toast-success';
@@ -213,7 +200,6 @@ function showSuccessMessage() {
     }, 3000);
 }
 
-// Click outside to close
 document.addEventListener('click', (e) => {
     const modal = document.getElementById('addToAlbumModal');
     if (modal && e.target === modal) {

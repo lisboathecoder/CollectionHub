@@ -1,9 +1,7 @@
-// Get album ID from URL
 const urlParams = new URLSearchParams(window.location.search);
 const albumId = urlParams.get('id');
 let album = null;
 
-// Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
     await checkAuth();
     if (albumId) {
@@ -15,7 +13,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// Check authentication
 async function checkAuth() {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -24,14 +21,13 @@ async function checkAuth() {
     }
 }
 
-// Load album details
 async function loadAlbumDetails() {
     const token = localStorage.getItem('token');
     const loading = document.getElementById('loading');
     const albumContent = document.getElementById('albumContent');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/albums/${albumId}`, {
+        const response = await fetch(`${API_BASE_URL}albums/${albumId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -43,10 +39,8 @@ async function loadAlbumDetails() {
 
         album = await response.json();
 
-        // Update page title
         document.title = `${album.name} - Collection Hub`;
 
-        // Update header
         document.getElementById('albumName').textContent = album.name;
         
         const gameTypeElement = document.getElementById('albumGameType');
@@ -63,7 +57,6 @@ async function loadAlbumDetails() {
         document.getElementById('albumItemCount').textContent = `${album.items?.length || 0} ${album.items?.length === 1 ? 'item' : 'itens'}`;
         document.getElementById('albumDate').textContent = `Criado em ${formatDate(album.createdAt)}`;
 
-        // Load items
         displayItems(album.items || []);
 
         loading.style.display = 'none';
@@ -76,7 +69,6 @@ async function loadAlbumDetails() {
     }
 }
 
-// Display album items
 function displayItems(items) {
     const itemsGrid = document.getElementById('itemsGrid');
     const emptyItems = document.getElementById('emptyItems');
@@ -108,27 +100,23 @@ function displayItems(items) {
     }
 }
 
-// Setup event listeners
 function setupEventListeners() {
     document.getElementById('editAlbumBtn').addEventListener('click', editAlbum);
     document.getElementById('deleteAlbumBtn').addEventListener('click', deleteAlbum);
 }
 
-// Edit album
 function editAlbum() {
-    // For now, just show alert - can implement edit modal later
     const newName = prompt('Novo nome do álbum:', album.name);
     if (newName && newName !== album.name) {
         updateAlbum({ name: newName });
     }
 }
 
-// Update album
 async function updateAlbum(updates) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/albums/${albumId}`, {
+        const response = await fetch(`${API_BASE_URL}albums/${albumId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -150,7 +138,6 @@ async function updateAlbum(updates) {
     }
 }
 
-// Delete album
 async function deleteAlbum() {
     if (!confirm(`Tem certeza que deseja excluir o álbum "${album.name}"? Esta ação não pode ser desfeita.`)) {
         return;
@@ -159,7 +146,7 @@ async function deleteAlbum() {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/albums/${albumId}`, {
+        const response = await fetch(`${API_BASE_URL}albums/${albumId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -181,7 +168,6 @@ async function deleteAlbum() {
     }
 }
 
-// Remove item from album
 async function removeItem(itemId, itemName) {
     if (!confirm(`Remover "${itemName}" do álbum?`)) {
         return;
@@ -190,7 +176,7 @@ async function removeItem(itemId, itemName) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/albums/${albumId}/cards/${itemId}`, {
+        const response = await fetch(`${API_BASE_URL}albums/${albumId}/cards/${itemId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -210,7 +196,6 @@ async function removeItem(itemId, itemName) {
     }
 }
 
-// Format date
 function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-BR', {
@@ -220,7 +205,6 @@ function formatDate(dateString) {
     });
 }
 
-// Show toast notification
 function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast-success ${type}`;

@@ -1,13 +1,11 @@
 let allAlbums = [];
 let filteredAlbums = [];
 
-// Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
     await checkAuth();
     await loadAlbums();
 });
 
-// Check authentication
 async function checkAuth() {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -16,7 +14,6 @@ async function checkAuth() {
     }
 }
 
-// Load user albums
 async function loadAlbums() {
     const token = localStorage.getItem('token');
     const loadingState = document.getElementById('loadingState');
@@ -24,7 +21,7 @@ async function loadAlbums() {
     const emptyState = document.getElementById('emptyState');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/albums`, {
+        const response = await fetch(`${API_BASE_URL}albums`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -53,7 +50,6 @@ async function loadAlbums() {
     }
 }
 
-// Display albums
 function displayAlbums(albums) {
     const albumsGrid = document.getElementById('albumsGrid');
     
@@ -96,7 +92,6 @@ function displayAlbums(albums) {
     albumsGrid.style.display = 'grid';
 }
 
-// Filter albums
 function filterAlbums() {
     const gameTypeFilter = document.getElementById('gameTypeFilter').value;
     
@@ -109,7 +104,6 @@ function filterAlbums() {
     sortAlbums();
 }
 
-// Sort albums
 function sortAlbums() {
     const sortFilter = document.getElementById('sortFilter').value;
     
@@ -128,12 +122,10 @@ function sortAlbums() {
     displayAlbums(filteredAlbums);
 }
 
-// Edit album
 function editAlbum(albumId) {
     window.location.href = `/pages/albums/edit-album.html?id=${albumId}`;
 }
 
-// Delete album
 async function deleteAlbum(albumId, albumName) {
     if (!confirm(`Tem certeza que deseja excluir o álbum "${albumName}"? Esta ação não pode ser desfeita.`)) {
         return;
@@ -142,7 +134,7 @@ async function deleteAlbum(albumId, albumName) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/albums/${albumId}`, {
+        const response = await fetch(`${API_BASE_URL}albums/${albumId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -162,7 +154,6 @@ async function deleteAlbum(albumId, albumName) {
     }
 }
 
-// Format date
 function formatDate(dateString) {
     const date = new Date(dateString);
     const now = new Date();
@@ -184,7 +175,6 @@ function formatDate(dateString) {
     }
 }
 
-// Show toast notification
 function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast-success ${type}`;
