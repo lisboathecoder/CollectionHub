@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-            const response = await fetch(`${apiUrl}/api/profile/me`, {
+            const response = await fetch(`${apiUrl}api/profile/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const avatarInput = document.getElementById('avatar-upload');
                 if (avatarInput.files && avatarInput.files[0]) {
                     const resizedAvatar = await resizeImage(avatarInput.files[0], 400, 400);
-                    const uploadResponse = await fetch(`${apiUrl}/api/profile/upload-image`, {
+                    const uploadResponse = await fetch(`${apiUrl}api/profile/upload-image`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const coverInput = document.getElementById('cover-upload');
                 if (coverInput.files && coverInput.files[0]) {
                     const resizedCover = await resizeImage(coverInput.files[0], 1500, 500);
-                    const uploadResponse = await fetch(`${apiUrl}/api/profile/upload-image`, {
+                    const uploadResponse = await fetch(`${apiUrl}api/profile/upload-image`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (avatarUrl) profileData.avatarUrl = avatarUrl;
                 if (coverUrl) profileData.coverUrl = coverUrl;
 
-                const response = await fetch(`${apiUrl}/api/profile/me`, {
+                const response = await fetch(`${apiUrl}api/profile/me`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

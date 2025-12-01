@@ -1,157 +1,262 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hubb - A paixão por cartas</title>
+    <link rel="stylesheet" href="/assets/styles/style.css" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/images/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assets/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="./assets/images/android-chrome-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="./assets/images/android-chrome-512x512.png"
+    />
+    <link rel="manifest" href="./assets/images/site.webmanifest" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hubb - A paixão por cartas</title>
-  <link rel="stylesheet" href="/assets/styles/style.css" />
-  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-16x16.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-32x32.png" />
-  <link rel="manifest" href="./assets/images/site.webmanifest" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-</head>
-
-<body>
-  <header class="navbar">
-    <div class="navbar-left">
-      <a href="/index.html">
-        <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
-      </a>
-      <div class="search-box">
-        <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
-        <button class="search-btn">...</button>
-      </div>
-    </div>
-    <div class="logo">
-      <a href="/index.html">
-        <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
-      </a>
-    </div>
-    <div class="navbar-right">
-      <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
-      <img src="/assets/images/sino.png" alt="icone do sino" class="icone-imagem" id="notificationBell" />
-      <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
-        <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
-      </a>
-    </div>
-  </header>
-
-  <main class="hero">
-    <h1>A paixão por cartas<br />que une<br />comunidades.</h1>
-
-    <p class="subtitle">Clique em uma das cartas para começar</p>
-
-    <div class="cards-container">
-      <a href="/pages/explore/commingSoon.html" class="card card-fortnite">
-        <div class="card-title">
-          Fortnite
-          <div class="card-members">
-            <span>⭐</span>
-            <span>4.5</span>
-          </div>
-        </div>
-        <img src="/assets/images/Fortnite Skin.png" alt="Fortnite" class="card-image" />
-      </a>
-
-      <a href="/pages/explore/commingSoon.html" class="card card-kaiba">
-        <div class="card-title">
-          Seto Kaiba
-          <div class="card-members">
-            <span>⭐</span>
-            <span>4.2</span>
-          </div>
-        </div>
-        <img src="/assets/images/seto kaiba.png" alt="Seto Kaiba" class="card-image" />
-      </a>
-
-      <a href="/pages/explore/homeSetPokemon.html" class="card card-pokemon">
-        <div class="card-title">
-          Pokemon
-          <div class="card-members">
-            <span>⭐</span>
-            <span>5.0</span>
-          </div>
-        </div>
-        <img src="/assets/images/Bullbasour.png" alt="Pokemon Bulbasaur" class="card-image" />
-      </a>
-
-      <a href="/pages/explore/commingSoon.html" class="card card-moedas">
-        <div class="card-title">
-          Minecraft
-          <div class="card-members">
-            <span>⭐</span>
-            <span>4.5</span>
-          </div>
-        </div>
-        <img src="/assets/images/Maicola skin.png" alt="Minecraft" class="card-image" />
-      </a>
-
-      <a href="/pages/explore/commingSoon.html" class="card card-counter">
-        <div class="card-title">
-          Counter-Strike
-          <div class="card-members">
-            <span>⭐</span>
-            <span>4.0</span>
-          </div>
-        </div>
-        <img src="/assets/images/Csgo personagem.png" alt="Counter-Strike" class="card-image-cs" />
-      </a>
-    </div>
-  </main>
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section footer-nav">
-        <h4 class="footer-heading">Navegação</h4>
-        <a href="/pages/public/about.html" class="footer-link">Sobre</a>
-        <a href="/pages/public/contact.html" class="footer-link">Contato</a>
-        <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
-      </div>
-
-      <div class="footer-section footer-info">
-        <div class="footer-logo">
-          Collection<span class="text-primary">Hub</span>
-        </div>
-        <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
-      </div>
-
-      <div class="footer-section footer-social">
-        <h4 class="footer-heading">Siga-nos</h4>
-        <div class="social-icons">
-          <a href="https://www.instagram.com/collectionhub.co/" target="_blank" class="social-link"
-            aria-label="Instagram">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="feather feather-instagram">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-          </a>
-          <a href="mailto:collectionhub2025@gmail.com" class="social-link" aria-label="Email">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="feather feather-mail">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-              <polyline points="22,6 12,13 2,6"></polyline>
-            </svg>
-          </a>
+  <body>
+    <header class="navbar">
+      <div class="navbar-left">
+        <a href="/index.html">
+          <img
+            src="/assets/images/shop.png"
+            alt="icone da loja"
+            class="icone-imagem"
+          />
+        </a>
+        <div class="search-box">
+          <input
+            type="text"
+            placeholder="Search Collection..."
+            class="search-input"
+            id="searchInput"
+          />
+          <button class="search-btn">...</button>
         </div>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <p class="small-print">
-        Design inspirado em comunidades de colecionáveis digitais.
-      </p>
-    </div>
-  </footer>
-  <script src="/assets/js/config.js"></script>
-  <script src="/assets/js/header.js"></script>
-  <script src="/assets/js/token-handler.js"></script>
-  <script src="/assets/js/global-search.js?v=2"></script>
-  <script src="/assets/js/notifications.js"></script>
-</body>
+      <div class="logo">
+        <a href="/index.html">
+          <img
+            src="/assets/images/Collection logo branca.png"
+            alt="Hubb Logo"
+          />
+        </a>
+      </div>
+      <div class="navbar-right">
+        <img
+          src="/assets/images/shopbag.png"
+          alt="icone do shopbag"
+          class="icone-imagem"
+        />
+        <img
+          src="/assets/images/sino.png"
+          alt="icone do sino"
+          class="icone-imagem"
+          id="notificationBell"
+        />
+        <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
+          <img
+            src="/assets/images/icon.png"
+            alt=""
+            class="icone-imagem"
+            id="profileImage"
+          />
+        </a>
+      </div>
+    </header>
 
+    <main class="hero">
+      <h1>A paixão por cartas<br />que une<br />comunidades.</h1>
+
+      <p class="subtitle">Clique em uma das cartas para começar</p>
+
+      <div class="cards-container">
+        <a href="/pages/explore/commingSoon.html" class="card card-fortnite">
+          <div class="card-title">
+            Fortnite
+            <div class="card-members">
+              <span>⭐</span>
+              <span>4.5</span>
+            </div>
+          </div>
+          <img
+            src="/assets/images/Fortnite Skin.png"
+            alt="Fortnite"
+            class="card-image"
+          />
+        </a>
+
+        <a href="/pages/explore/commingSoon.html" class="card card-kaiba">
+          <div class="card-title">
+            Seto Kaiba
+            <div class="card-members">
+              <span>⭐</span>
+              <span>4.2</span>
+            </div>
+          </div>
+          <img
+            src="/assets/images/seto kaiba.png"
+            alt="Seto Kaiba"
+            class="card-image"
+          />
+        </a>
+
+        <a href="/pages/explore/homeSetPokemon.html" class="card card-pokemon">
+          <div class="card-title">
+            Pokemon
+            <div class="card-members">
+              <span>⭐</span>
+              <span>5.0</span>
+            </div>
+          </div>
+          <img
+            src="/assets/images/Bullbasour.png"
+            alt="Pokemon Bulbasaur"
+            class="card-image"
+          />
+        </a>
+
+        <a href="/pages/explore/commingSoon.html" class="card card-moedas">
+          <div class="card-title">
+            Minecraft
+            <div class="card-members">
+              <span>⭐</span>
+              <span>4.5</span>
+            </div>
+          </div>
+          <img
+            src="/assets/images/Maicola skin.png"
+            alt="Minecraft"
+            class="card-image"
+          />
+        </a>
+
+        <a href="/pages/explore/commingSoon.html" class="card card-counter">
+          <div class="card-title">
+            Counter-Strike
+            <div class="card-members">
+              <span>⭐</span>
+              <span>4.0</span>
+            </div>
+          </div>
+          <img
+            src="/assets/images/Csgo personagem.png"
+            alt="Counter-Strike"
+            class="card-image-cs"
+          />
+        </a>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section footer-nav">
+          <h4 class="footer-heading">Navegação</h4>
+          <a href="/pages/public/about.html" class="footer-link">Sobre</a>
+          <a href="/pages/public/contact.html" class="footer-link">Contato</a>
+          <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
+        </div>
+
+        <div class="footer-section footer-info">
+          <div class="footer-logo">
+            Collection<span class="text-primary">Hub</span>
+          </div>
+          <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
+        </div>
+
+        <div class="footer-section footer-social">
+          <h4 class="footer-heading">Siga-nos</h4>
+          <div class="social-icons">
+            <a
+              href="https://www.instagram.com/collectionhub.co/"
+              target="_blank"
+              class="social-link"
+              aria-label="Instagram"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-instagram"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path
+                  d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                ></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a
+              href="mailto:collectionhub2025@gmail.com"
+              class="social-link"
+              aria-label="Email"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-mail"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                ></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="small-print">
+          Design inspirado em comunidades de colecionáveis digitais.
+        </p>
+      </div>
+    </footer>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/token-handler.js"></script>
+    <script src="/assets/js/global-search.js?v=2"></script>
+  </body>
 </html>
