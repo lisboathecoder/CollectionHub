@@ -1,3 +1,4 @@
+window.API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/";
 let allAlbums = [];
 let filteredAlbums = [];
 
@@ -21,7 +22,7 @@ async function loadAlbums() {
   const emptyState = document.getElementById("emptyState");
 
   try {
-    const response = await fetch(`${window.API_BASE_URL}api/albums`, {
+    const response = await fetch(apiUrl("api/albums"), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -56,7 +57,7 @@ function displayAlbums(albums) {
   albumsGrid.innerHTML = albums
     .map(
       (album) => `
-        <div class="album-card-list" onclick="window.location.href='/pages/app/album-details.html?id=${
+        <div class="album-card-list" onclick="window.location.href='/pages/albums/album-view.html?id=${
           album.id
         }'">
             <div class="album-card-header">
@@ -77,11 +78,6 @@ function displayAlbums(albums) {
                     </p>
                 </div>
                 <div class="album-card-actions">
-                    <button onclick="event.stopPropagation(); editAlbum('${
-                      album.id
-                    }')" class="btn-icon" title="Editar">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
                     <button onclick="event.stopPropagation(); deleteAlbum('${
                       album.id
                     }', '${
@@ -166,15 +162,12 @@ async function deleteAlbum(albumId, albumName) {
   const token = localStorage.getItem("token");
 
   try {
-    const response = await fetch(
-      `${window.API_BASE_URL}api/albums/${albumId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(apiUrl(`api/albums/${albumId}`), {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.ok) {
       showToast("Álbum excluído com sucesso", "success");

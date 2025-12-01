@@ -45,3 +45,26 @@ export const verificarProprietario = async (req, res, next) => {
 
 export const authenticateToken = verificarToken;
 export const authenticate = verificarToken;
+
+export const optionalAuth = (req, res, next) => {
+  const token =
+    req.headers.authorization?.replace("Bearer ", "") || req.cookies?.token;
+
+  if (!token) {
+    req.user = null;
+    return next();
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = {
+      id: decoded.sub,
+      username: decoded.username,
+      ...decoded,
+    };
+    next();
+  } catch (error) {
+    req.user = null;
+    next();
+  }
+};

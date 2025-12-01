@@ -113,16 +113,10 @@
 
       <div id="albumsGrid" class="albums-grid-list"></div>
 
-      <div id="emptyState" class="empty-state" style="display: none">
+      <div id="emptyState" class="empty-state" style="display: block">
         <i class="fa-solid fa-book"></i>
         <h3>Você ainda não tem álbuns</h3>
         <p>Crie seu primeiro álbum para começar a organizar sua coleção!</p>
-        <button
-          onclick="window.location.href='/pages/albums/select-game.html'"
-          class="btn-primary"
-        >
-          <i class="fa-solid fa-plus"></i> Criar Primeiro Álbum
-        </button>
       </div>
 
       <div id="loadingState" class="loading-state">
@@ -207,9 +201,8 @@
     </footer>
 
     <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/notifications.js"></script>
     <script src="/assets/js/global-search.js"></script>
     <script src="/assets/js/header.js"></script>
-    <script src="/assets/js/albums-list.js"></script>
+    <script src="/assets/js/albums/albums-list.js"></script>
   </body>
 </html>

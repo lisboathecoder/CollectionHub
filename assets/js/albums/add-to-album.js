@@ -59,8 +59,8 @@ async function openAddToAlbumModal(card) {
         </div>
     `;
 
-  modal.style.display = "flex";
-  document.body.style.overflow = "hidden";
+  modal.classList.add("active");
+  document.body.classList.add("modal-open");
 
   await loadUserAlbums(albumsList);
 }
@@ -68,8 +68,8 @@ async function openAddToAlbumModal(card) {
 function closeAddToAlbumModal() {
   const modal = document.getElementById("addToAlbumModal");
   if (modal) {
-    modal.style.display = "none";
-    document.body.style.overflow = "";
+    modal.classList.remove("active");
+    document.body.classList.remove("modal-open");
   }
   currentCard = null;
 }
@@ -91,8 +91,11 @@ async function loadUserAlbums(container) {
   }
 
   try {
-    const apiUrl = window.API_BASE_URL || "http://localhost:3000";
-    const response = await fetch(`${apiUrl}api/albums`, {
+    const apiBase = (window.API_BASE_URL || "http://localhost:3000").replace(
+      /\/+$/g,
+      ""
+    );
+    const response = await fetch(`${apiBase}/api/albums`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -164,8 +167,11 @@ async function addCardToAlbum(albumId) {
   }
 
   try {
-    const apiUrl = window.API_BASE_URL || "http://localhost:3000";
-    const response = await fetch(`${apiUrl}api/albums/${albumId}/cards`, {
+    const apiBase = (window.API_BASE_URL || "http://localhost:3000").replace(
+      /\/+$/g,
+      ""
+    );
+    const response = await fetch(`${apiBase}/api/albums/${albumId}/cards`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

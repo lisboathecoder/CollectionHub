@@ -76,7 +76,6 @@ const rarityFilterEl = document.getElementById("rarity-filter");
 const sortFilterEl = document.getElementById("sort-filter");
 const searchInputEl = document.getElementById("search-input");
 
-// Carrega as cartas do set
 async function loadCards() {
   console.log("🚀 Iniciando carregamento de cards...");
   console.log("📋 Set code:", setCode);
@@ -92,7 +91,7 @@ async function loadCards() {
 
     const apiUrl =
       window.API_BASE_URL ||
-      "http://localhost:3000" ||
+      "http://localhost:3000/" ||
       "https://collectionhub.up.railway.app";
     console.log("🔍 Buscando cartas do set:", setCode);
     console.log("🌐 API URL:", `${apiUrl}api/pokemon/cards?set=${setCode}`);
@@ -245,7 +244,6 @@ function renderPagination(totalPages) {
     </button>
   `;
 
-  // Event listeners para paginação
   document.getElementById("prev-page")?.addEventListener("click", () => {
     if (currentPage > 1) {
       currentPage--;

@@ -7,7 +7,7 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="./assets/images/apple-touch-icon.png"
+      href="/assets/images/apple-touch-icon.png"
     />
     <link
       rel="icon"
@@ -21,7 +21,11 @@
       sizes="16x16"
       href="/assets/images/favicon-32x32.png"
     />
-    <link rel="manifest" href="./assets/images/site.webmanifest" />
+    <link rel="manifest" href="/assets/images/site.webmanifest" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/assets/styles/style.css" />
     <link rel="stylesheet" href="/assets/styles/albums.css" />
     <link
@@ -87,7 +91,22 @@
         <div class="album-info">
           <h1 id="albumName">Carregando...</h1>
           <p id="albumDescription">-</p>
+          <p
+            id="albumOwner"
+            style="
+              color: #9aa7b0;
+              font-size: 14px;
+              margin-top: 8px;
+              display: none;
+            "
+          >
+            <i class="fa-solid fa-user"></i> Por: Carregando...
+          </p>
           <div class="album-stats">
+            <div class="stat-item" id="albumGameType" style="display: none">
+              <i class="fa-solid fa-tag"></i>
+              <span>Categoria</span>
+            </div>
             <div class="stat-item">
               <i class="fa-solid fa-cards-blank"></i>
               <span id="cardCount">0 cartas</span>
@@ -111,7 +130,7 @@
         </div>
       </div>
 
-      <div class="search-section">
+      <div class="search-section-albums">
         <h2>
           <i class="fa-solid fa-magnifying-glass"></i>
           Adicionar Cartas
@@ -127,6 +146,11 @@
             Pesquisar
           </button>
         </div>
+        <div
+          id="searchResults"
+          class="search-results"
+          style="display: none"
+        ></div>
       </div>
 
       <div class="cards-section">
@@ -160,12 +184,6 @@
           <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
         </div>
         <div class="footer-section footer-info">
-          <div class="footer-logo">
-            <img
-              src="/assets/images/Collection logo branca.png"
-              alt="CollectionHub Logo"
-            />
-          </div>
           <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
         </div>
         <div class="footer-section footer-social"></div>
@@ -173,6 +191,7 @@
       <div class="footer-bottom"></div>
     </footer>
 
+    <script src="/assets/js/config.js"></script>
     <script src="/assets/js/header.js"></script>
     <script src="/assets/js/global-search.js"></script>
     <script src="/assets/js/albums/album-view.js"></script>

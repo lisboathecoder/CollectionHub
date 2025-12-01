@@ -19,8 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-      const response = await fetch(`${apiUrl}api/auth/request-password-reset`, {
+      const apiUrl = window.apiUrl;
+      const response = await fetch(apiUrl("api/auth/request-password-reset"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,11 +40,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 1500);
       } else {
         alert(
-          data.message || "Erro ao enviar o código de verificação. Por favor, tente novamente."
+          data.message ||
+            "Erro ao enviar o código de verificação. Por favor, tente novamente."
         );
       }
     } catch (error) {
-      alert("Ocorreu um erro. Por favor, verifique sua conexão e tente novamente.");
+      alert(
+        "Ocorreu um erro. Por favor, verifique sua conexão e tente novamente."
+      );
     }
   });
 });

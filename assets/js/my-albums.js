@@ -1,5 +1,4 @@
-// My Albums Script
-const API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/";
+const apiUrl = window.apiUrl;
 
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
@@ -16,7 +15,7 @@ async function loadAlbums() {
   const content = document.getElementById("albumsContent");
 
   try {
-    const profileResponse = await fetch(`${API_BASE_URL}api/profile/me`, {
+    const profileResponse = await fetch(apiUrl("api/profile/me"), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,8 +27,7 @@ async function loadAlbums() {
 
     const user = await profileResponse.json();
 
-    // Then fetch albums
-    const response = await fetch(`${API_BASE_URL}api/albums/user/${user.id}`, {
+    const response = await fetch(apiUrl(`api/albums/user/${user.id}`), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -132,5 +130,4 @@ function goToAlbum(albumId) {
   window.location.href = `/pages/app/album-view.html?id=${albumId}`;
 }
 
-// Make goToAlbum available globally
 window.goToAlbum = goToAlbum;

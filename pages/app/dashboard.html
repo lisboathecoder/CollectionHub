@@ -140,16 +140,40 @@
         </div>
 
         <div class="profile-nav">
-          <a href="#" class="profile-nav-link active">Atividades</a>
-          <a href="collection.html" class="profile-nav-link">Minha Coleção</a>
-          <a href="#" class="profile-nav-link">Favoritos</a>
+          <a href="#" class="profile-nav-link active" data-tab="atividades"
+            >Atividades</a
+          >
+          <a href="#" class="profile-nav-link" data-tab="colecao"
+            >Minha Coleção</a
+          >
+          <a href="#" class="profile-nav-link" data-tab="favoritos"
+            >Favoritos</a
+          >
         </div>
 
         <div class="profile-content">
-          <div class="activity-feed" id="activity-feed">
+          <div class="tab-content active" id="tab-atividades">
+            <div class="activity-feed" id="activity-feed">
+              <div class="empty-state">
+                <i class="fa-solid fa-ghost"></i>
+                <p>Nenhuma atividade recente.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-colecao" style="display: none">
+            <div class="albums-grid" id="albums-grid">
+              <div class="empty-state">
+                <i class="fa-solid fa-ghost"></i>
+                <p>Carregando álbuns...</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-favoritos" style="display: none">
             <div class="empty-state">
-              <i class="fa-solid fa-ghost"></i>
-              <p>Nenhuma atividade recente.</p>
+              <i class="fa-solid fa-heart"></i>
+              <p>Nenhum favorito ainda.</p>
             </div>
           </div>
         </div>
@@ -323,8 +347,8 @@
     </footer>
 
     <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/notifications.js"></script>
     <script src="/assets/js/header.js"></script>
     <script src="/assets/js/dashboard.js"></script>
+    <script src="/assets/js/global-search.js"></script>
   </body>
 </html>

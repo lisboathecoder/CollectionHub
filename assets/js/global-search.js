@@ -144,47 +144,76 @@ function startPlaceholderAnimation(input) {
 }
 
 async function showSuggestions(query, dropdown) {
-  const staticMatches = sampleSuggestions.filter((item) =>
-    item.toLowerCase().includes(query.toLowerCase())
-  );
+  const isUserSearch = query.startsWith("@");
+  const searchQuery = isUserSearch ? query.substring(1) : query;
 
-  let userMatches = [];
-  try {
-    const response = await fetch(
-      `/api/users/search?q=${encodeURIComponent(query)}`
-    );
-    if (response.ok) {
-      userMatches = await response.json();
-    }
-  } catch (error) {
-    console.error("Error fetching user suggestions:", error);
+  if (isUserSearch && searchQuery.length < 2) {
+    hideSuggestions(dropdown);
+    return;
   }
 
   const allMatches = [];
 
-  userMatches.slice(0, 3).forEach((user) => {
-    allMatches.push({
-      type: "user",
-      value: user.username,
-      displayName: user.name || user.username,
-      id: user.id,
-    });
-  });
+  if (isUserSearch) {
+    try {
+      const response = await fetch(
+        apiUrl(`api/users/search?q=${encodeURIComponent(searchQuery)}`)
+      );
+      if (response.ok) {
+        const users = await response.json();
+        users.slice(0, 8).forEach((user) => {
+          allMatches.push({
+            type: "user",
+            value: user.username || user.email,
+            displayName: user.username || user.name || user.email,
+            avatar: user.avatarUrl,
+            id: user.id,
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  } else {
+    const staticMatches = sampleSuggestions.filter((item) =>
+      item.toLowerCase().includes(query.toLowerCase())
+    );
 
-  const collections = [
-    "Genetic Apex",
-    "Mythical Island",
-    "Space-Time Smackdown",
-  ];
+    const collections = [
+      "Genetic Apex",
+      "Mythical Island",
+      "Space-Time Smackdown",
+    ];
 
-  staticMatches.slice(0, 6).forEach((match) => {
-    const isCollection = collections.includes(match);
-    allMatches.push({
-      type: isCollection ? "collection" : "card",
-      value: match,
-      displayName: match,
+    staticMatches.slice(0, 6).forEach((match) => {
+      const isCollection = collections.includes(match);
+      allMatches.push({
+        type: isCollection ? "collection" : "card",
+        value: match,
+        displayName: match,
+      });
     });
-  });
+
+    try {
+      const response = await fetch(
+        apiUrl(`api/users/search?q=${encodeURIComponent(query)}`)
+      );
+      if (response.ok) {
+        const users = await response.json();
+        users.slice(0, 2).forEach((user) => {
+          allMatches.push({
+            type: "user",
+            value: user.username || user.email,
+            displayName: user.username || user.name || user.email,
+            avatar: user.avatarUrl,
+            id: user.id,
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching user suggestions:", error);
+    }
+  }
 
   if (allMatches.length === 0) {
     hideSuggestions(dropdown);
@@ -196,7 +225,9 @@ async function showSuggestions(query, dropdown) {
       let icon = "",
         typeLabel = "";
       if (match.type === "user") {
-        icon = '<i class="fa-solid fa-user"></i>';
+        icon = match.avatar
+          ? `<img src="${match.avatar}" alt="${match.displayName}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">`
+          : '<i class="fa-solid fa-user"></i>';
         typeLabel = '<span class="suggestion-type">Usuário</span>';
       } else if (match.type === "collection") {
         icon = '<i class="fa-solid fa-folder"></i>';
@@ -212,7 +243,7 @@ async function showSuggestions(query, dropdown) {
           ${icon}
           <span class="suggestion-text">${highlightMatch(
             match.displayName,
-            query
+            searchQuery
           )}</span>
           ${typeLabel}
         </div>
@@ -229,9 +260,8 @@ async function showSuggestions(query, dropdown) {
       const id = item.getAttribute("data-id");
 
       if (type === "user") {
-        window.location.href = `/pages/app/profile.html?id=${id}`;
+        window.location.href = `/pages/app/user-profile.html?id=${id}`;
       } else {
-        s;
         document.querySelector(".search-input").value = value;
         performSearch(value);
       }
@@ -267,11 +297,11 @@ async function searchUsersAPI(query, dropdown) {
   }
 
   try {
-    const apiUrl = window.API_BASE_URL || "http://localhost:3000";
+    const apiUrl = window.apiUrl;
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-      `${apiUrl}api/users/search?q=${encodeURIComponent(query)}`,
+      apiUrl(`api/users/search?q=${encodeURIComponent(query)}`),
       {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",

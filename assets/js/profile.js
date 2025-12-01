@@ -16,7 +16,7 @@ async function loadCurrentUser() {
   }
 
   try {
-    const response = await fetch(`${window.API_BASE_URL}api/users/me`, {
+    const response = await fetch(apiUrl("api/profile/me"), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -46,14 +46,11 @@ async function loadProfile() {
   }
 
   try {
-    const userResponse = await fetch(
-      `${window.API_BASE_URL}api/users/${userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const userResponse = await fetch(apiUrl(`api/users/${userId}`), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!userResponse.ok) {
       throw new Error("Usuário não encontrado");
@@ -93,14 +90,11 @@ async function loadProfile() {
 const noAlbums = document.getElementById("noAlbums");
 
 try {
-  const response = await fetch(
-    `${window.API_BASE_URL}api/albums/user/${userId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await fetch(apiUrl(`api/albums/user/${userId}`), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   if (response.ok) {
     const albums = await response.json();
