@@ -1,3 +1,4 @@
+const API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/";
 const urlParams = new URLSearchParams(window.location.search);
 const albumId = urlParams.get("id");
 let album = null;
@@ -212,7 +213,7 @@ async function removeItem(itemId, itemName) {
 
   try {
     const response = await fetch(
-      `${API_BASE}/api/albums/${albumId}/cards/${itemId}`,
+  `${API_BASE}/api/albums/${albumId}/cards/${itemId}`,
       {
         method: "DELETE",
         headers: {

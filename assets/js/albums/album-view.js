@@ -622,7 +622,7 @@ function showToast(message, type = "info") {
     setTimeout(() => {
       document.body.removeChild(toast);
     }, 300);
-  }, 4500); // Aumentado de 3000 para 4500ms (4.5 segundos)
+  }, 5000); // Aumentado de 3000 para 4500ms (4.5 segundos)
 }
 
 const style = document.createElement("style");
