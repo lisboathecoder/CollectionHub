@@ -1677,3 +1677,173 @@
   margin-bottom: 10px;
   color: #ff3e6c;
 }
+
+/* Modal de Edição de Álbum */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.edit-album-modal {
+  background: #1a1a1a;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .edit-album-modal {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid #333;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #fff;
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 24px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.btn-close-modal:hover {
+  background: #333;
+  color: #fff;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.edit-album-modal .form-group {
+  margin-bottom: 20px;
+}
+
+.edit-album-modal .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ccc;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.edit-album-modal .form-input {
+  width: 100%;
+  padding: 12px;
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.2s;
+}
+
+.edit-album-modal .form-input:focus {
+  outline: none;
+  border-color: #ff3e6c;
+  box-shadow: 0 0 0 3px rgba(255, 62, 108, 0.1);
+}
+
+.edit-album-modal textarea.form-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.edit-album-modal select.form-input {
+  cursor: pointer;
+}
+
+.edit-album-modal .form-group label:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.edit-album-modal input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #ff3e6c;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #333;
+}
+
+.btn-cancel,
+.btn-primary {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-cancel {
+  background: #333;
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background: #444;
+}
+
+.btn-primary {
+  background: #ff3e6c;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #e6365f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 62, 108, 0.3);
+}

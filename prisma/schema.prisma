@@ -56,9 +56,9 @@ model Card {
 }
 
 model User {
-  id               Int            @id @default(autoincrement())
-  username         String         @unique
-  email            String         @unique
+  id               Int        @id @default(autoincrement())
+  username         String     @unique
+  email            String     @unique
   password         String
   nickname         String?
   bio              String?
@@ -69,9 +69,10 @@ model User {
   twoFactorExpires DateTime?
   resetCode        String?
   resetCodeExpires DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
   albums           Album[]
+  activities       Activity[]
 }
 
 model Album {
@@ -79,7 +80,7 @@ model Album {
   userId      Int
   name        String
   description String?
-  gameType    String      @default("pokemon") 
+  gameType    String      @default("pokemon")
   isPublic    Boolean     @default(false)
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   items       AlbumItem[]
@@ -97,4 +98,19 @@ model AlbumItem {
   customImage String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Activity {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String // ALBUM_CREATED, ALBUM_UPDATED, CARD_ADDED, CARD_REMOVED
+  albumId   Int?
+  albumName String?
+  cardName  String?
+  cardImage String?
+  metadata  String? // JSON string com dados extras
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
 }

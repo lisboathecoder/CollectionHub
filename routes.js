@@ -5,9 +5,10 @@ import AuthRoutes from "./src/routes/Users/authRoutes.js";
 import ProfileRoutes from "./src/routes/Users/profileRoutes.js";
 import AlbumRoutes from "./src/routes/Albums/albumRoutes.js";
 import UploadRoutes from "./src/routes/Upload/uploadRoutes.js";
+import { authenticateToken } from "./src/middleware/auth.js";
+import * as activityController from "./src/controllers/Users/activityController.js";
 
 const router = express.Router();
-
 
 router.use("/pokemon", PokemonRoutes);
 router.use("/users", UsersRoutes);
@@ -15,11 +16,14 @@ router.use("/auth", AuthRoutes);
 router.use("/profile", ProfileRoutes);
 router.use("/albums", AlbumRoutes);
 router.use("/upload", UploadRoutes);
-
+router.get(
+  "/activities",
+  authenticateToken,
+  activityController.getUserActivities
+);
 
 router.get("/health", (req, res) =>
   res.json({ ok: true, ts: new Date().toISOString() })
 );
-
 
 export default router;

@@ -381,7 +381,7 @@ window.removeCard = async function (itemId) {
 
   try {
     const response = await fetch(
-      `${API_BASE}/api/albums/${currentAlbum.id}/items/${itemId}`,
+      `${API_BASE}/api/albums/${currentAlbum.id}/cards/${itemId}`,
       {
         method: "DELETE",
         headers: {
@@ -411,7 +411,132 @@ window.removeCard = async function (itemId) {
 };
 
 window.editAlbum = function (albumId) {
-  alert("Funcionalidade de edição em desenvolvimento");
+  if (!currentAlbum) return;
+
+  // Cria modal de edição
+  const modal = document.createElement("div");
+  modal.className = "modal-overlay";
+  modal.id = "editAlbumModal";
+  modal.innerHTML = `
+    <div class="modal-content edit-album-modal">
+      <div class="modal-header">
+        <h2>Editar Álbum</h2>
+        <button class="btn-close-modal" onclick="closeEditModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editAlbumForm">
+          <div class="form-group">
+            <label for="editAlbumName">Nome do Álbum *</label>
+            <input 
+              type="text" 
+              id="editAlbumName" 
+              class="form-input" 
+              value="${currentAlbum.name || ""}" 
+              required 
+              maxlength="100"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="editAlbumDescription">Descrição</label>
+            <textarea 
+              id="editAlbumDescription" 
+              class="form-input" 
+              rows="4" 
+              maxlength="500"
+            >${currentAlbum.description || ""}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="editAlbumGameType">Tipo de Jogo *</label>
+            <select id="editAlbumGameType" class="form-input" required>
+              <option value="pokemon" ${
+                currentAlbum.gameType === "pokemon" ||
+                currentAlbum.gameType === "pokemon-tcg-pocket"
+                  ? "selected"
+                  : ""
+              }>Pokémon TCG Pocket</option>
+              <option value="custom" ${
+                currentAlbum.gameType === "custom" ? "selected" : ""
+              }>Personalizado</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input 
+                type="checkbox" 
+                id="editAlbumPublic" 
+                ${currentAlbum.isPublic ? "checked" : ""}
+              />
+              Tornar álbum público
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
+            <button type="submit" class="btn-primary">Salvar Alterações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  setTimeout(() => modal.classList.add("active"), 10);
+
+  // Handler do form
+  document
+    .getElementById("editAlbumForm")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("editAlbumName").value.trim();
+      const description = document
+        .getElementById("editAlbumDescription")
+        .value.trim();
+      const gameType = document.getElementById("editAlbumGameType").value;
+      const isPublic = document.getElementById("editAlbumPublic").checked;
+
+      if (!name) {
+        showToast("Nome do álbum é obrigatório", "error");
+        return;
+      }
+
+      const token = localStorage.getItem("token");
+
+      try {
+        const response = await fetch(`${API_BASE}/api/albums/${albumId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name,
+            description,
+            gameType,
+            isPublic,
+          }),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || "Erro ao atualizar álbum");
+        }
+
+        showToast("Álbum atualizado com sucesso!", "success");
+        closeEditModal();
+
+        // Recarrega o álbum
+        await loadAlbum(albumId);
+      } catch (error) {
+        console.error("Error updating album:", error);
+        showToast(error.message || "Erro ao atualizar álbum", "error");
+      }
+    });
 };
 
 window.shareAlbum = function (albumId) {
@@ -497,7 +622,7 @@ function showToast(message, type = "info") {
     setTimeout(() => {
       document.body.removeChild(toast);
     }, 300);
-  }, 3000);
+  }, 4500); // Aumentado de 3000 para 4500ms (4.5 segundos)
 }
 
 const style = document.createElement("style");
@@ -527,6 +652,15 @@ style.textContent = `
 document.head.appendChild(style);
 
 window.removeCard = removeCard;
+
+// Função para fechar modal de edição
+window.closeEditModal = function () {
+  const modal = document.getElementById("editAlbumModal");
+  if (modal) {
+    modal.classList.remove("active");
+    setTimeout(() => modal.remove(), 300);
+  }
+};
 
 // Helper to get current user ID
 async function getCurrentUserId() {

@@ -93,13 +93,29 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       albumsGrid.innerHTML = albums
-        .map(
-          (album) => `
+        .map((album) => {
+          // Define ícone baseado no gameType
+          let gameIcon = "fa-layer-group";
+          if (
+            album.gameType === "pokemon" ||
+            album.gameType === "pokemon-tcg-pocket"
+          ) {
+            gameIcon = "fa-gamepad";
+          } else if (album.gameType === "custom") {
+            gameIcon = "fa-palette";
+          }
+
+          // Usa coverImage se disponível, senão mostra ícone
+          const coverContent = album.coverImage
+            ? `<img src="${album.coverImage}" alt="${album.name}" class="album-cover-img" />`
+            : `<i class="fa-solid ${gameIcon}"></i>`;
+
+          return `
         <a href="/pages/albums/album-view.html?id=${
           album.id
         }" class="album-card">
           <div class="album-cover">
-            <i class="fa-solid fa-layer-group"></i>
+            ${coverContent}
           </div>
           <div class="album-info">
             <h3>${album.name}</h3>
@@ -107,8 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
             <span class="album-count">${album._count?.items || 0} cartas</span>
           </div>
         </a>
-      `
-        )
+      `;
+        })
         .join("");
     } catch (error) {
       console.error("❌ Erro ao carregar álbuns:", error);
@@ -122,8 +138,119 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function loadUserActivities() {
-    // TODO: Implementar carregamento de atividades
-    console.log("Carregando atividades...");
+    try {
+      const token = localStorage.getItem("token");
+      const apiUrl = window.apiUrl;
+
+      const response = await fetch(apiUrl("api/activities?limit=20"), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Erro ao carregar atividades");
+
+      const activities = await response.json();
+      const activityFeed = document.getElementById("activity-feed");
+
+      if (activities.length === 0) {
+        activityFeed.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-solid fa-ghost"></i>
+            <p>Nenhuma atividade recente.</p>
+          </div>
+        `;
+        return;
+      }
+
+      activityFeed.innerHTML = activities
+        .map((activity) => {
+          const { icon, text, color } = getActivityDisplay(activity);
+          const timeAgo = formatTimeAgo(activity.createdAt);
+
+          return `
+            <div class="activity-item">
+              <div class="activity-icon" style="background: ${color}20; color: ${color}">
+                <i class="fa-solid ${icon}"></i>
+              </div>
+              <div class="activity-content">
+                <p class="activity-text">${text}</p>
+                <span class="activity-time">${timeAgo}</span>
+              </div>
+              ${
+                activity.cardImage
+                  ? `
+                <div class="activity-thumbnail">
+                  <img src="${activity.cardImage}" alt="${
+                      activity.cardName || "Carta"
+                    }" />
+                </div>
+              `
+                  : ""
+              }
+            </div>
+          `;
+        })
+        .join("");
+    } catch (error) {
+      console.error("❌ Erro ao carregar atividades:", error);
+      document.getElementById("activity-feed").innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <p>Erro ao carregar atividades.</p>
+        </div>
+      `;
+    }
+  }
+
+  function getActivityDisplay(activity) {
+    const displays = {
+      ALBUM_CREATED: {
+        icon: "fa-folder-plus",
+        text: `Criou o álbum <strong>${activity.albumName}</strong>`,
+        color: "#00d4aa",
+      },
+      ALBUM_UPDATED: {
+        icon: "fa-pen-to-square",
+        text: `Editou o álbum <strong>${activity.albumName}</strong>`,
+        color: "#ffa726",
+      },
+      CARD_ADDED: {
+        icon: "fa-plus-circle",
+        text: `Adicionou <strong>${activity.cardName}</strong> ao álbum <strong>${activity.albumName}</strong>`,
+        color: "#00d4aa",
+      },
+      CARD_REMOVED: {
+        icon: "fa-minus-circle",
+        text: `Removeu <strong>${activity.cardName}</strong> do álbum <strong>${activity.albumName}</strong>`,
+        color: "#ff3e6c",
+      },
+    };
+
+    return (
+      displays[activity.type] || {
+        icon: "fa-circle",
+        text: "Atividade desconhecida",
+        color: "#666",
+      }
+    );
+  }
+
+  function formatTimeAgo(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffSecs = Math.floor(diffMs / 1000);
+    const diffMins = Math.floor(diffSecs / 60);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffSecs < 60) return "Agora mesmo";
+    if (diffMins < 60) return `${diffMins} min atrás`;
+    if (diffHours < 24) return `${diffHours}h atrás`;
+    if (diffDays < 7) return `${diffDays}d atrás`;
+
+    return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
   }
 
   function renderProfile(user) {
@@ -172,6 +299,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   loadUserData();
+
+  // Carrega atividades inicialmente (tab ativa por padrão)
+  loadUserActivities();
 
   async function resizeImage(file, maxWidth, maxHeight) {
     return new Promise((resolve) => {
