@@ -1,17 +1,14 @@
-// Album View Script
 const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
 let currentAlbum = null;
 let albumCards = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if user is logged in
     const token = localStorage.getItem('token');
     if (!token) {
         window.location.href = '/pages/userLogin/login.html';
         return;
     }
 
-    // Get album ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const albumId = urlParams.get('id');
 
@@ -21,10 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Load album data
     loadAlbum(albumId);
 
-    // Event listeners
     document.getElementById('searchCardsBtn').addEventListener('click', searchCards);
     document.getElementById('cardSearchInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') searchCards();
@@ -34,12 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('shareBtn').addEventListener('click', () => shareAlbum(albumId));
     document.getElementById('deleteBtn').addEventListener('click', () => deleteAlbum(albumId));
 
-    // View toggle
     document.querySelectorAll('.view-toggle button').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            // TODO: Implement list view
         });
     });
 });
@@ -48,7 +41,7 @@ async function loadAlbum(albumId) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/albums/${albumId}`, {
+        const response = await fetch(`${API_BASE_URL}api/albums/${albumId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -60,7 +53,6 @@ async function loadAlbum(albumId) {
 
         currentAlbum = await response.json();
 
-        // Update UI
         document.getElementById('albumName').textContent = currentAlbum.name;
         document.getElementById('albumDescription').textContent = currentAlbum.description || 'Sem descrição';
         
@@ -71,7 +63,6 @@ async function loadAlbum(albumId) {
         const createdDate = new Date(currentAlbum.createdAt).toLocaleDateString('pt-BR');
         document.getElementById('createdDate').textContent = createdDate;
 
-        // Load cards
         if (currentAlbum.items && currentAlbum.items.length > 0) {
             albumCards = currentAlbum.items;
             renderCards();
@@ -125,7 +116,6 @@ async function searchCards() {
         return;
     }
 
-    // Redirect to search results with album context
     window.location.href = `/pages/explore/searchResults.html?q=${encodeURIComponent(query)}&album=${currentAlbum.id}`;
 }
 
@@ -137,7 +127,7 @@ async function removeCard(itemId) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/albums/${currentAlbum.id}/items/${itemId}`, {
+        const response = await fetch(`${API_BASE_URL}api/albums/${currentAlbum.id}/items/${itemId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -148,14 +138,11 @@ async function removeCard(itemId) {
             throw new Error('Erro ao remover carta');
         }
 
-        // Remove from local array
         albumCards = albumCards.filter(item => item.id !== itemId);
 
-        // Update counts
         document.getElementById('cardCount').textContent = `${albumCards.length} ${albumCards.length === 1 ? 'carta' : 'cartas'}`;
         document.getElementById('totalCards').textContent = albumCards.length;
 
-        // Re-render
         renderCards();
 
         showToast('Carta removida com sucesso', 'success');
@@ -167,7 +154,6 @@ async function removeCard(itemId) {
 }
 
 function editAlbum(albumId) {
-    // TODO: Implement edit album modal
     alert('Funcionalidade de edição em desenvolvimento');
 }
 
@@ -188,7 +174,7 @@ async function deleteAlbum(albumId) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/albums/${albumId}`, {
+        const response = await fetch(`${API_BASE_URL}api/albums/${albumId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -212,7 +198,6 @@ async function deleteAlbum(albumId) {
 }
 
 function showToast(message, type = 'info') {
-    // Create toast element
     const toast = document.createElement('div');
     toast.className = 'toast toast-' + type;
     toast.textContent = message;
@@ -239,7 +224,6 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-// Add CSS animations
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideIn {
@@ -266,5 +250,4 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Make removeCard available globally
 window.removeCard = removeCard;

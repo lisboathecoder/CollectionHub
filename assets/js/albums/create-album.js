@@ -4,21 +4,17 @@ if (typeof window.API_BASE_URL === "undefined") {
 const API_BASE_URL = window.API_BASE_URL;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if user is logged in
     const token = localStorage.getItem('token');
     if (!token) {
         window.location.href = '/pages/userLogin/login.html';
         return;
     }
 
-    // Get album type from URL
     const urlParams = new URLSearchParams(window.location.search);
     const albumType = urlParams.get('type') || 'pokemon-tcg-pocket';
 
-    // Update UI based on type
     updateAlbumTypeDisplay(albumType);
 
-    // Form elements
     const form = document.getElementById('createAlbumForm');
     const nameInput = document.getElementById('albumName');
     const descInput = document.getElementById('albumDescription');
@@ -28,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = document.getElementById('submitBtn');
     const errorMessage = document.getElementById('errorMessage');
 
-    // Character counters
     nameInput.addEventListener('input', () => {
         nameCount.textContent = nameInput.value.length;
     });
@@ -37,14 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
         descCount.textContent = descInput.value.length;
     });
 
-    // Cancel button
     cancelBtn.addEventListener('click', () => {
         if (confirm('Deseja cancelar a criação do álbum?')) {
             window.history.back();
         }
     });
 
-    // Form submission
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -60,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
 
-            const response = await fetch(`${API_BASE_URL}/api/albums`, {
+            const response = await fetch(`${API_BASE_URL}api/albums`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,10 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const album = await response.json();
 
-            // Show success message
             showSuccess('Álbum criado com sucesso!');
 
-            // Redirect to album page after a short delay
             setTimeout(() => {
                 window.location.href = `/pages/app/album-view.html?id=${album.id}`;
             }, 1000);

@@ -57,7 +57,6 @@ const SET_INFO = {
   },
 };
 
-// Mapeamento de imagens dos packs
 const PACK_IMAGES = {
   "Charizard": "https://i.ibb.co/DDHw39kH/Genetic-Apex-Charizard.jpg",
   "Mewtwo": "https://i.ibb.co/wZ2cMYtN/Genetic-Apex-Mewtwo.jpg",

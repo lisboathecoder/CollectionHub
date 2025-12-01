@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     if (response.ok) {
       const notifications = await response.json();
-      // Exiba notificações em modal ou dropdown
       alert(notifications.map(n => n.mensagem).join('\n'));
     }
   });

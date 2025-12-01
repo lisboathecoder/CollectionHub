@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
   const list = document.getElementById('albumsList');
   try {
-    const response = await fetch(`${window.API_BASE_URL}/api/albums/me`, {
+    const response = await fetch(`${window.API_BASE_URL}api/albums/me`, {
       headers: { 'Authorization': token ? `Bearer ${token}` : '' }
     });
     if (response.ok) {
