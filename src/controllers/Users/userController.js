@@ -14,7 +14,7 @@ export const listarUsuarios = async (req, res) => {
 export const searchUsers = async (req, res) => {
   const { q } = req.query;
 
-  if (!q || q.trim() === '') {
+  if (!q || q.trim() === "") {
     return res.status(400).json({ error: "Query de busca é obrigatória" });
   }
 
@@ -44,20 +44,20 @@ export const getUsuarioPorId = async (req, res) => {
           select: {
             albums: true,
             friendsInitiated: {
-              where: { status: 'accepted' }
+              where: { status: "accepted" },
             },
             friendsReceived: {
-              where: { status: 'accepted' }
-            }
-          }
-        }
-      }
+              where: { status: "accepted" },
+            },
+          },
+        },
+      },
     });
-    
+
     if (!user) {
       return res.status(404).json({ error: "Usuário não encontrado" });
     }
-    
+
     res.json(user);
   } catch (error) {
     console.error("Error fetching user by ID:", error);
