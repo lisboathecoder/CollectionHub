@@ -1,49 +1,49 @@
 const SET_INFO = {
-  "A1": {
+  A1: {
     name: "Genetic Apex",
     logo: "https://i.ibb.co/JFH2gxzL/LOGO-expansion-A1-en-US.webp",
   },
-  "A1A": {
+  A1A: {
     name: "Mythical Island",
     logo: "https://i.ibb.co/Mx4LF0Bj/LOGO-expansion-A1-A-en-US.webp",
   },
-  "A2": {
+  A2: {
     name: "Space-Time Smackdown",
     logo: "https://i.ibb.co/7tsrnh7F/LOGO-expansion-A2-en-US.webp",
   },
-  "A2A": {
+  A2A: {
     name: "Triumphant Light",
     logo: "https://i.ibb.co/HDJKYY9B/LOGO-expansion-A2-A-en-US.webp",
   },
-  "A2B": {
+  A2B: {
     name: "Shining Revelry",
     logo: "https://i.ibb.co/8DpYB66d/LOGO-expansion-A2-B-en-US.webp",
   },
-  "A3": {
+  A3: {
     name: "Celestial Guardians",
     logo: "https://i.ibb.co/Ng9Z8NtS/LOGO-expansion-A3-en-US.webp",
   },
-  "A3A": {
+  A3A: {
     name: "Extradimensional Crisis",
     logo: "https://i.ibb.co/WNfxg3W4/LOGO-expansion-A3-A-en-US.webp",
   },
-  "A3B": {
+  A3B: {
     name: "Eevee Grove",
     logo: "https://i.ibb.co/F4cbCqbN/LOGO-expansion-A3-B-en-US.webp",
   },
-  "A4": {
+  A4: {
     name: "Wisdom of Sea and Sky",
     logo: "https://i.ibb.co/9mNDC3Ct/LOGO-expansion-A4-en-US.webp",
   },
-  "A4A": {
+  A4A: {
     name: "Secluded Springs",
     logo: "https://i.ibb.co/wDXnz9K/LOGO-expansion-A4-A-en-US.webp",
   },
-  "A4B": {
+  A4B: {
     name: "Deluxe Pack: ex",
     logo: "https://i.ibb.co/Pv18yXWk/LOGO-expansion-A4-B-en-US.webp",
   },
-  "B1": {
+  B1: {
     name: "Mega Rising",
     logo: "https://i.ibb.co/1cBjRxD/LOGO-expansion-B1-en-US.webp",
   },
@@ -58,20 +58,21 @@ const SET_INFO = {
 };
 
 const PACK_IMAGES = {
-  "Charizard": "https://i.ibb.co/DDHw39kH/Genetic-Apex-Charizard.jpg",
-  "Mewtwo": "https://i.ibb.co/wZ2cMYtN/Genetic-Apex-Mewtwo.jpg",
-  "Pikachu": "https://i.ibb.co/jvw2c0x7/Genetic-Apex-Pikachu.jpg",
-  "Mew": "https://i.ibb.co/zhvftLyp/Mythical-Island.jpg",
-  "Dialga": "https://i.ibb.co/cSZZ4q8S/Space-Time-Smackdown-Dialga.jpg",
-  "Palkia": "https://i.ibb.co/Rp9R9YZS/Space-Time-Smackdown-Palkia.jpg",
-  "Arceus": "https://i.ibb.co/Lh8YXp2Q/Triumphant-Light.png",
+  Charizard: "https://i.ibb.co/DDHw39kH/Genetic-Apex-Charizard.jpg",
+  Mewtwo: "https://i.ibb.co/wZ2cMYtN/Genetic-Apex-Mewtwo.jpg",
+  Pikachu: "https://i.ibb.co/jvw2c0x7/Genetic-Apex-Pikachu.jpg",
+  Mew: "https://i.ibb.co/zhvftLyp/Mythical-Island.jpg",
+  Dialga: "https://i.ibb.co/cSZZ4q8S/Space-Time-Smackdown-Dialga.jpg",
+  Palkia: "https://i.ibb.co/Rp9R9YZS/Space-Time-Smackdown-Palkia.jpg",
+  Arceus: "https://i.ibb.co/Lh8YXp2Q/Triumphant-Light.png",
   "Shining Revelry": "https://i.ibb.co/CGbPrHF/Shining-Revelry.jpg",
-  "Lunala": "https://i.ibb.co/v6N1RBxv/Celestial-Guardians-Lunala.jpg",
-  "Solgaleo": "https://i.ibb.co/ZzS9F16n/Celestial-Guardians-Solgaleo.jpg",
-  "Extradimensional Crisis": "https://i.ibb.co/ZpJm2m4R/Extradimensional-Crisis.jpg",
+  Lunala: "https://i.ibb.co/v6N1RBxv/Celestial-Guardians-Lunala.jpg",
+  Solgaleo: "https://i.ibb.co/ZzS9F16n/Celestial-Guardians-Solgaleo.jpg",
+  "Extradimensional Crisis":
+    "https://i.ibb.co/ZpJm2m4R/Extradimensional-Crisis.jpg",
   "Eevee Grove": "https://i.ibb.co/chKM3sP1/Eevee-Grove.jpg",
   "Ho-Oh": "https://i.ibb.co/J83t3ND/Wisdom-of-Sea-and-Sky-Ho-Oh.jpg",
-  "Lugia": "https://i.ibb.co/pj0S8Nv4/Wisdom-of-Sea-and-Sky-Lugia.jpg",
+  Lugia: "https://i.ibb.co/pj0S8Nv4/Wisdom-of-Sea-and-Sky-Lugia.jpg",
   "Secluded Springs": "https://i.ibb.co/S4hYrPML/Secluded-Springs.jpg",
   "Deluxe Pack": "https://i.ibb.co/XZBT1ZD5/Deluxe-Pack.jpg",
   "Mega Blaziken": "https://i.ibb.co/C5tW8vtW/Mega-Rising-Mega-Blaziken.jpg",
@@ -108,19 +109,19 @@ async function loadCards() {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
-    const apiUrl = window.API_BASE_URL || 'http://localhost:3000/';
-    console.log('🔍 Buscando cartas do pack:', packName, 'no set:', setCode);
-    console.log('🌐 API URL:', `${apiUrl}api/pokemon/cards?set=${setCode}`);
-    
+    const apiUrl = window.API_BASE_URL || "http://localhost:3000/";
+    console.log("🔍 Buscando cartas do pack:", packName, "no set:", setCode);
+    console.log("🌐 API URL:", `${apiUrl}api/pokemon/cards?set=${setCode}`);
+
     const response = await fetch(
       `${apiUrl}api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`
     );
 
-    console.log('📡 Status da resposta:', response.status);
+    console.log("📡 Status da resposta:", response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('❌ Erro na resposta:', errorText);
+      console.error("❌ Erro na resposta:", errorText);
       throw new Error("Failed to fetch cards");
     }
 
@@ -269,7 +270,9 @@ function openCardModal(card) {
       <div class="card-detail-modal__image-wrapper">
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image" onerror="this.src='/assets/images/placeholder-card.png'">
       </div>
-      <button class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(card).replace(/"/g, '&quot;')})">
+      <button class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(
+        card
+      ).replace(/"/g, "&quot;")})">
         <i class="fa-solid fa-plus"></i> Add to Album
       </button>
     </div>
@@ -304,10 +307,10 @@ function openCardModal(card) {
 }
 
 function openAddToAlbumModalWithCard(card) {
-  if (typeof openAddToAlbumModal === 'function') {
+  if (typeof openAddToAlbumModal === "function") {
     openAddToAlbumModal(card);
   } else {
-    console.error('openAddToAlbumModal function not found');
+    console.error("openAddToAlbumModal function not found");
   }
 }
 
@@ -341,7 +344,6 @@ function renderPagination(totalPages) {
     </button>
   `;
 
-  // Event listeners para paginação
   document.getElementById("prev-page")?.addEventListener("click", () => {
     if (currentPage > 1) {
       currentPage--;
@@ -374,7 +376,7 @@ function applyFilters() {
     return matchesRarity && matchesSearch;
   });
 
-  currentPage = 1; 
+  currentPage = 1;
   applySorting();
   renderCards();
 }

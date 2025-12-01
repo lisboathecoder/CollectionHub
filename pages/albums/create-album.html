@@ -72,12 +72,7 @@
           alt="icone do shopbag"
           class="icone-imagem"
         />
-        <img
-          src="/assets/images/sino.png"
-          alt="icone do sino"
-          class="icone-imagem"
-          id="notificationBell"
-        />
+
         <a
           href="/pages/userLogin/login.html"
           class="nav-item user-profile"
@@ -121,7 +116,9 @@
                 required
                 maxlength="50"
               />
-              <span class="form-hint">Máximo 50 caracteres</span>
+              <span class="form-hint"
+                ><span id="nameCount">0</span>/50 caracteres</span
+              >
             </div>
 
             <div class="form-group">
@@ -149,11 +146,7 @@
               <span class="form-hint">Escolha a categoria do seu álbum</span>
             </div>
 
-            <div
-              class="form-group"
-              id="customCategoryGroup"
-              style="display: none"
-            >
+            <div class="form-group hidden" id="customCategoryGroup">
               <label for="customCategory" class="form-label"
                 >Nome da Categoria Personalizada</label
               >
@@ -179,14 +172,14 @@
               <span class="form-hint"
                 >Adicione uma imagem personalizada para o álbum</span
               >
-              <div id="coverPreview" style="margin-top: 10px; display: none">
+              <div id="coverPreview" class="cover-preview hidden">
                 <img
                   id="coverPreviewImg"
-                  style="max-width: 200px; border-radius: 8px"
+                  class="cover-preview-img"
+                  alt="Preview da capa"
                 />
               </div>
             </div>
-
             <div class="form-group">
               <label class="form-checkbox-label">
                 <input
@@ -204,31 +197,15 @@
 
             <div class="form-actions">
               <button type="button" class="btn-cancel" id="cancelBtn">
-                Cancelar
+                <i class="fa-solid fa-times"></i> Cancelar
               </button>
-              <button type="submit" class="btn-create" id="submitBtn">
+              <button type="submit" class="btn-primary" id="submitBtn">
                 <i class="fa-solid fa-plus"></i> Criar Álbum
               </button>
             </div>
 
-            <div
-              id="errorMessage"
-              style="
-                display: none;
-                color: #ff3e6c;
-                margin-top: 10px;
-                text-align: center;
-              "
-            ></div>
-            <div
-              id="successMessage"
-              style="
-                display: none;
-                color: #10b981;
-                margin-top: 10px;
-                text-align: center;
-              "
-            ></div>
+            <div id="errorMessage" class="message-box message-error"></div>
+            <div id="successMessage" class="message-box message-success"></div>
           </form>
         </div>
       </div>

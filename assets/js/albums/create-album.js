@@ -1,19 +1,16 @@
-if (typeof window.API_BASE_URL === "undefined") {
-    window.API_BASE_URL = 'http://localhost:3000';
-}
-const API_BASE_URL = window.API_BASE_URL;
+window.API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/";
 
-document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        window.location.href = '/pages/userLogin/login.html';
-        return;
-    }
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/pages/userLogin/login.html";
+    return;
+  }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const albumType = urlParams.get('type') || 'pokemon-tcg-pocket';
+  const urlParams = new URLSearchParams(window.location.search);
+  const albumType = urlParams.get("type") || "pokemon-tcg-pocket";
 
-    updateAlbumTypeDisplay(albumType);
+  updateAlbumTypeDisplay(albumType);
 
   const form = document.getElementById("createAlbumForm");
   const nameInput = document.getElementById("albumName");
@@ -31,48 +28,46 @@ document.addEventListener('DOMContentLoaded', () => {
   const errorMessage = document.getElementById("errorMessage");
   const successMessage = document.getElementById("successMessage");
 
-    nameInput.addEventListener('input', () => {
-        nameCount.textContent = nameInput.value.length;
-    });
+  nameInput.addEventListener("input", () => {
+    nameCount.textContent = nameInput.value.length;
+  });
 
   descInput.addEventListener("input", () => {
     descCount.textContent = descInput.value.length;
   });
 
-  // Mostrar/ocultar campo de categoria personalizada
   categorySelect.addEventListener("change", () => {
     if (categorySelect.value === "custom") {
-      customCategoryGroup.style.display = "block";
+      customCategoryGroup.classList.remove("hidden");
       customCategoryInput.required = true;
     } else {
-      customCategoryGroup.style.display = "none";
+      customCategoryGroup.classList.add("hidden");
       customCategoryInput.required = false;
     }
   });
 
-  // Preview da imagem de capa
   coverInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         coverPreviewImg.src = e.target.result;
-        coverPreview.style.display = "block";
+        coverPreview.classList.remove("hidden");
       };
       reader.readAsDataURL(file);
     } else {
-      coverPreview.style.display = "none";
+      coverPreview.classList.add("hidden");
     }
   });
 
-    cancelBtn.addEventListener('click', () => {
-        if (confirm('Deseja cancelar a criação do álbum?')) {
-            window.history.back();
-        }
-    });
+  cancelBtn.addEventListener("click", () => {
+    if (confirm("Deseja cancelar a criação do álbum?")) {
+      window.history.back();
+    }
+  });
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
     const name = nameInput.value.trim();
     const description = descInput.value.trim();
@@ -90,13 +85,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-        try {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
+    try {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
 
       let coverUrl = null;
 
-      // Upload da imagem de capa se fornecida
       if (coverInput.files && coverInput.files[0]) {
         const file = coverInput.files[0];
         const reader = new FileReader();
@@ -105,26 +100,26 @@ document.addEventListener('DOMContentLoaded', () => {
           reader.onload = async (e) => {
             try {
               const base64Image = e.target.result;
-              const uploadResponse = await fetch(
-                `${API_BASE_URL}api/profile/upload-image`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                  },
-                  body: JSON.stringify({
-                    image: base64Image,
-                    type: "album-cover",
-                  }),
-                }
-              );
+              const uploadResponse = await fetch(`${API_BASE_URL}api/upload`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                  image: base64Image,
+                  type: "album-cover",
+                }),
+              });
 
               if (uploadResponse.ok) {
                 const uploadData = await uploadResponse.json();
                 resolve(uploadData.url);
               } else {
-                reject(new Error("Erro ao fazer upload da imagem"));
+                const errorData = await uploadResponse.json();
+                reject(
+                  new Error(errorData.error || "Erro ao fazer upload da imagem")
+                );
               }
             } catch (error) {
               reject(error);
@@ -155,14 +150,14 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify(albumData),
       });
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Erro ao criar álbum');
-            }
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Erro ao criar álbum");
+      }
 
-            const album = await response.json();
+      const album = await response.json();
 
-            showSuccess('Álbum criado com sucesso!');
+      showSuccess("Álbum criado com sucesso!");
 
       setTimeout(() => {
         window.location.href = `/pages/albums/album-view.html?id=${album.id}`;
@@ -177,54 +172,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showError(message) {
     errorMessage.textContent = message;
-    errorMessage.style.display = "block";
-    successMessage.style.display = "none";
+    errorMessage.classList.add("active");
+    successMessage.classList.remove("active");
     setTimeout(() => {
-      errorMessage.style.display = "none";
+      errorMessage.classList.remove("active");
     }, 5000);
   }
 
   function showSuccess(message) {
     successMessage.textContent = message;
-    successMessage.style.display = "block";
-    errorMessage.style.display = "none";
+    successMessage.classList.add("active");
+    errorMessage.classList.remove("active");
   }
 });
 
 function updateAlbumTypeDisplay(type) {
-    const typeDisplay = document.getElementById('albumTypeDisplay');
-    const typeName = document.getElementById('albumTypeName');
+  const gameTypeIcon = document.getElementById("gameTypeIcon");
+  const gameTypeText = document.getElementById("gameTypeText");
 
-    if (type === 'pokemon-tcg-pocket') {
-        typeDisplay.innerHTML = `
-            <img src="/assets/images/pokemon-tcg-pocket-logo.png" alt="Pokemon TCG Pocket" 
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fa-solid fa-cards-blank" style="display: none;"></i>
-            <span>Pokémon TCG Pocket</span>
-        `;
-    } else {
-        typeDisplay.innerHTML = `
-            <i class="fa-solid fa-star"></i>
-            <span>Personalizado</span>
-        `;
-    }
-}
+  const typeMapping = {
+    "pokemon-tcg-pocket": {
+      icon: "fa-cards-blank",
+      text: "Pokémon TCG Pocket",
+    },
+    pokemon: { icon: "fa-cards-blank", text: "Pokémon TCG" },
+    magic: { icon: "fa-hat-wizard", text: "Magic: The Gathering" },
+    yugioh: { icon: "fa-dragon", text: "Yu-Gi-Oh!" },
+    onepiece: { icon: "fa-ship", text: "One Piece Card Game" },
+    custom: { icon: "fa-star", text: "Personalizado" },
+  };
 
-function showError(message) {
-    const errorEl = document.getElementById('errorMessage');
-    errorEl.textContent = message;
-    errorEl.style.display = 'block';
+  const config = typeMapping[type] || typeMapping["custom"];
 
-    setTimeout(() => {
-        errorEl.style.display = 'none';
-    }, 5000);
-}
-
-function showSuccess(message) {
-    const errorEl = document.getElementById('errorMessage');
-    errorEl.style.background = 'rgba(76, 175, 80, 0.1)';
-    errorEl.style.borderColor = 'rgba(76, 175, 80, 0.3)';
-    errorEl.style.color = '#4caf50';
-    errorEl.textContent = message;
-    errorEl.style.display = 'block';
+  if (gameTypeIcon) {
+    gameTypeIcon.className = `fa-solid ${config.icon} game-type-icon`;
+  }
+  if (gameTypeText) {
+    gameTypeText.textContent = config.text;
+  }
 }

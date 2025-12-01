@@ -1,10 +1,25 @@
 import { prisma } from "../../lib/prisma.js";
 export const getUserAlbums = async (req, res) => {
   try {
-    const userId = req.user.sub;
+    const userId = req.user?.sub;
+    const { userId: targetUserId, isPublic } = req.query;
+
+    const whereClause = {};
+
+    if (targetUserId) {
+      whereClause.userId = parseInt(targetUserId);
+
+      if (isPublic === "true" || isPublic === true) {
+        whereClause.isPublic = true;
+      }
+    } else if (userId) {
+      whereClause.userId = parseInt(userId);
+    } else {
+      return res.status(401).json({ message: "Não autorizado" });
+    }
 
     const albums = await prisma.album.findMany({
-      where: { userId: parseInt(userId) },
+      where: whereClause,
       include: {
         _count: {
           select: { items: true },
