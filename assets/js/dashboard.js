@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const apiUrl = window.API_BASE_URL || 'http://localhost:3000';
-            const response = await fetch(`${apiUrl}api/profile/me`, {
+            const response = await fetch(`${apiUrl}/api/profile/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -29,21 +29,23 @@ document.addEventListener('DOMContentLoaded', () => {
             renderProfile(user);
 
         } catch (error) {
-            console.error('❌ Erro ao carregar perfil:', error);
+            console.error(error);
             document.getElementById('profile-name').innerText = "Erro ao carregar.";
         }
     }
 
     function renderProfile(user) {
-        document.getElementById('profile-name').innerText = user.username;
+        document.getElementById('profile-name').innerText = user.username || user.name || "Usuário";
         document.getElementById('profile-nickname').innerText = user.nickname || `@${user.username}`;
         document.getElementById('profile-bio').innerText = user.bio || "Sem biografia.";
         
-        const locationSpan = document.getElementById('meta-location')?.querySelector('span');
+        const locationSpan = document.getElementById('meta-location').querySelector('span');
         if (locationSpan) locationSpan.innerText = user.location || "Brasil";
         
-        document.getElementById('stat-items-count').innerText = user.stats.items;
-        document.getElementById('stat-collections-count').innerText = user.stats.sets;
+        if (user.stats) {
+            document.getElementById('stat-items-count').innerText = user.stats.items || 0;
+            document.getElementById('stat-collections-count').innerText = user.stats.sets || 0;
+        }
 
         if (user.avatarUrl) {
             document.getElementById('profile-pic-large').src = user.avatarUrl;
@@ -181,11 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 let avatarUrl = null;
                 const avatarInput = document.getElementById('avatar-upload');
                 if (avatarInput.files && avatarInput.files[0]) {
-                    console.log('🖼️ Avatar detectado:', avatarInput.files[0].name);
                     const resizedAvatar = await resizeImage(avatarInput.files[0], 400, 400);
-                    console.log('✂️ Avatar redimensionado, tamanho:', resizedAvatar.length, 'chars');
-
-                    const uploadResponse = await fetch(`${apiUrl}api/profile/upload-image`, {
+                    const uploadResponse = await fetch(`${apiUrl}/api/profile/upload-image`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -194,26 +193,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ image: resizedAvatar, type: 'avatar' })
                     });
 
-                    console.log('📡 Upload avatar status:', uploadResponse.status);
-
                     if (uploadResponse.ok) {
                         const uploadData = await uploadResponse.json();
                         avatarUrl = uploadData.url;
-                        console.log('✅ Avatar URL:', avatarUrl);
-                    } else {
-                        const error = await uploadResponse.json();
-                        console.error('❌ Erro upload avatar:', error);
                     }
                 }
 
                 let coverUrl = null;
                 const coverInput = document.getElementById('cover-upload');
                 if (coverInput.files && coverInput.files[0]) {
-                    console.log('🖼️ Cover detectado:', coverInput.files[0].name);
                     const resizedCover = await resizeImage(coverInput.files[0], 1500, 500);
-                    console.log('✂️ Cover redimensionado, tamanho:', resizedCover.length, 'chars');
-
-                    const uploadResponse = await fetch(`${apiUrl}api/profile/upload-image`, {
+                    const uploadResponse = await fetch(`${apiUrl}/api/profile/upload-image`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -222,15 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ image: resizedCover, type: 'cover' })
                     });
 
-                    console.log('📡 Upload cover status:', uploadResponse.status);
-
                     if (uploadResponse.ok) {
                         const uploadData = await uploadResponse.json();
                         coverUrl = uploadData.url;
-                        console.log('✅ Cover URL:', coverUrl);
-                    } else {
-                        const error = await uploadResponse.json();
-                        console.error('❌ Erro upload cover:', error);
                     }
                 }
 
@@ -243,9 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (avatarUrl) profileData.avatarUrl = avatarUrl;
                 if (coverUrl) profileData.coverUrl = coverUrl;
 
-                console.log('📤 Enviando dados do perfil:', profileData);
-
-                const response = await fetch(`${apiUrl}api/profile/me`, {
+                const response = await fetch(`${apiUrl}/api/profile/me`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -254,21 +236,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(profileData)
                 });
 
-                console.log('📥 Status da resposta:', response.status);
-
                 if (response.ok) {
-                    const data = await response.json();
-                    console.log('✅ Resposta do servidor:', data);
                     alert('Perfil atualizado com sucesso!');
                     closeModal();
                     loadUserData();
                 } else {
                     const error = await response.json();
-                    console.error('❌ Erro do servidor:', error);
                     alert(error.error || 'Erro ao atualizar perfil');
                 }
             } catch (error) {
-                console.error('❌ Erro ao salvar:', error);
+                console.error(error);
                 alert('Erro ao salvar perfil. Tente novamente.');
             } finally {
                 const submitBtn = document.querySelector('.btn-save-mini');
