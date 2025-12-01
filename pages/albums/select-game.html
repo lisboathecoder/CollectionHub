@@ -38,24 +38,24 @@
 
   <body>
     <header class="navbar">
-      <div class="navbar-left">
-        <a href="/index.html">
-          <img
-            src="/assets/images/shop.png"
-            alt="icone da loja"
-            class="icone-imagem"
-          />
-        </a>
-        <div class="search-box">
-          <input
-            type="text"
-            placeholder="Buscar coleção..."
-            class="search-input"
-            id="searchInput"
-          />
-          <button class="search-btn">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
+        <div class="navbar-left">
+            <a href="/index.html">
+                <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
+            </a>
+            <div class="search-box">
+                <input type="text" placeholder="Buscar coleção..." class="search-input" id="searchInput" />
+                <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+        <div class="logo">
+            <a href="/index.html">
+                <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
+            </a>
+        </div>
+        <div class="navbar-right">
+            <a href="/pages/userLogin/login.html" class="nav-item user-profile" id="profileLink">
+                <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
+            </a>
         </div>
       </div>
       <div class="logo">
@@ -99,20 +99,15 @@
           Selecione qual tipo de coleção você deseja criar
         </p>
 
-        <div class="game-cards-container">
-          <div class="game-card" data-game="pokemon">
-            <div class="game-card-icon">
-              <img
-                src="https://i.ibb.co/sddF276B/pokemon-trading-card-game-official-logo-2667150991.png"
-                alt="Pokemon TCG Pocket"
-                class="game-logo"
-              />
-            </div>
-            <h3 class="game-card-title">Pokemon TCG Pocket</h3>
-            <p class="game-card-description">
-              Crie álbuns com cartas do jogo Pokemon TCG Pocket
-            </p>
-          </div>
+            <div class="game-cards-container">
+                <div class="game-card" data-game="pokemon">
+                    <div class="game-card-icon">
+                        <img src="https://i.ibb.co/sddF276B/pokemon-trading-card-game-official-logo-2667150991.png"
+                            alt="Pokemon TCG Pocket" class="game-logo" />
+                    </div>
+                    <h3 class="game-card-title">Pokemon TCG Pocket</h3>
+                    <p class="game-card-description">Crie álbuns com cartas do jogo Pokemon TCG Pocket</p>
+                </div>
 
           <div class="game-card" data-game="custom">
             <div class="game-card-icon">
@@ -157,5 +152,7 @@
     <script src="/assets/js/header.js"></script>
     <script src="/assets/js/global-search.js"></script>
     <script src="/assets/js/albums/select-game.js"></script>
-  </body>
+
+</body>
+
 </html>
