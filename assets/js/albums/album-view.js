@@ -79,6 +79,13 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("deleteBtn not found");
   }
 
+  const addCustomItemBtn = document.getElementById("addCustomItemBtn");
+  if (addCustomItemBtn) {
+    addCustomItemBtn.addEventListener("click", openCustomItemModal);
+  } else {
+    console.error("addCustomItemBtn not found");
+  }
+
   document.querySelectorAll(".view-toggle button").forEach((btn) => {
     btn.addEventListener("click", () => {
       document
@@ -204,18 +211,34 @@ function renderCards() {
   grid.innerHTML = albumCards
     .map((item) => {
       const card = item.card || {};
-      const imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
+      const isCustomItem = !item.cardId && item.customName;
+      const imageUrl =
+        item.customImage ||
+        card.imageUrl ||
+        "/assets/images/placeholder-card.png";
       const name = item.customName || card.nameEn || "Unknown";
       const number = card.number || "-";
+      const displayNumber = isCustomItem
+        ? "<i class='fa-solid fa-star'></i> Personalizado"
+        : `#${number}`;
 
       return `
-            <div class="card-item" data-item-id="${item.id}">
-                <button class="remove-card-btn" onclick="window.removeCard(${item.id})">
+            <div class="card-item ${
+              isCustomItem ? "custom-item" : ""
+            }" data-item-id="${item.id}">
+                <button class="remove-card-btn" onclick="window.removeCard(${
+                  item.id
+                })">
                     <i class="fa-solid fa-times"></i>
                 </button>
                 <img src="${imageUrl}" alt="${name}" onerror="this.src='/assets/images/placeholder-card.png'">
                 <div class="card-item-name">${name}</div>
-                <div class="card-item-number">#${number}</div>
+                <div class="card-item-number">${displayNumber}</div>
+                ${
+                  item.notes
+                    ? `<div class="card-item-notes" title="${item.notes}"><i class="fa-solid fa-note-sticky"></i></div>`
+                    : ""
+                }
             </div>
         `;
     })
@@ -679,3 +702,300 @@ async function getCurrentUserId() {
   }
   return null;
 }
+
+// ===== CUSTOM ITEM FUNCTIONALITY =====
+
+function openCustomItemModal() {
+  const modal = document.createElement("div");
+  modal.className = "modal-overlay";
+  modal.id = "customItemModal";
+  modal.innerHTML = `
+    <div class="modal-content custom-item-modal">
+      <div class="modal-header">
+        <h2><i class="fa-solid fa-image"></i> Adicionar Item Personalizado</h2>
+        <button class="btn-close-modal" onclick="closeCustomItemModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="color: #9aa7b0; margin-bottom: 20px;">
+          <i class="fa-solid fa-circle-info"></i> 
+          Adicione qualquer colecionável: figuras, moedas, selos, quadrinhos, etc.
+        </p>
+        <form id="customItemForm">
+          <div class="form-group">
+            <label for="customItemName">Nome do Item *</label>
+            <input 
+              type="text" 
+              id="customItemName" 
+              class="form-input" 
+              placeholder="Ex: Figura de Ação do Batman"
+              required 
+              maxlength="100"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="customItemNotes">Descrição/Notas</label>
+            <textarea 
+              id="customItemNotes" 
+              class="form-input" 
+              rows="3" 
+              placeholder="Adicione detalhes sobre este item..."
+              maxlength="500"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="customItemImage">Imagem do Item *</label>
+            <div class="image-upload-area" id="imageUploadArea">
+              <input 
+                type="file" 
+                id="customItemImage" 
+                accept="image/*" 
+                style="display: none;"
+                required
+              />
+              <div class="upload-placeholder" id="uploadPlaceholder">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <p>Clique para selecionar uma imagem</p>
+                <span>PNG, JPG ou WEBP (máx. 5MB)</span>
+              </div>
+              <div class="image-preview" id="imagePreview" style="display: none;">
+                <img src="" alt="Preview" id="previewImg" />
+                <button type="button" class="btn-change-image" onclick="document.getElementById('customItemImage').click()">
+                  <i class="fa-solid fa-rotate"></i> Trocar Imagem
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="closeCustomItemModal()">Cancelar</button>
+            <button type="submit" class="btn-primary" id="submitCustomItemBtn">
+              <i class="fa-solid fa-plus"></i> Adicionar Item
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  setTimeout(() => modal.classList.add("active"), 10);
+
+  // Event listeners
+  const imageInput = document.getElementById("customItemImage");
+  const uploadArea = document.getElementById("imageUploadArea");
+  const uploadPlaceholder = document.getElementById("uploadPlaceholder");
+  const imagePreview = document.getElementById("imagePreview");
+  const previewImg = document.getElementById("previewImg");
+
+  // Click na área de upload
+  uploadPlaceholder.addEventListener("click", () => imageInput.click());
+
+  // Drag & Drop
+  uploadArea.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    uploadArea.classList.add("drag-over");
+  });
+
+  uploadArea.addEventListener("dragleave", () => {
+    uploadArea.classList.remove("drag-over");
+  });
+
+  uploadArea.addEventListener("drop", (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove("drag-over");
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith("image/")) {
+      handleImageSelect(file, previewImg, uploadPlaceholder, imagePreview);
+    }
+  });
+
+  // File input change
+  imageInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      handleImageSelect(file, previewImg, uploadPlaceholder, imagePreview);
+    }
+  });
+
+  // Form submit
+  document
+    .getElementById("customItemForm")
+    .addEventListener("submit", handleCustomItemSubmit);
+}
+
+function handleImageSelect(file, previewImg, uploadPlaceholder, imagePreview) {
+  // Valida tamanho (5MB)
+  if (file.size > 5 * 1024 * 1024) {
+    showToast("Imagem muito grande! Máximo 5MB", "error");
+    return;
+  }
+
+  // Preview
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    previewImg.src = e.target.result;
+    uploadPlaceholder.style.display = "none";
+    imagePreview.style.display = "flex";
+  };
+  reader.readAsDataURL(file);
+}
+
+async function handleCustomItemSubmit(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("customItemName").value.trim();
+  const notes = document.getElementById("customItemNotes").value.trim();
+  const imageInput = document.getElementById("customItemImage");
+  const submitBtn = document.getElementById("submitCustomItemBtn");
+
+  if (!name) {
+    showToast("Nome do item é obrigatório", "error");
+    return;
+  }
+
+  if (!imageInput.files[0]) {
+    showToast("Imagem é obrigatória", "error");
+    return;
+  }
+
+  // Disable button
+  submitBtn.disabled = true;
+  submitBtn.innerHTML =
+    '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
+
+  try {
+    // 1. Resize e upload da imagem
+    const imageUrl = await uploadCustomImage(imageInput.files[0]);
+
+    // 2. Adiciona item ao álbum
+    const token = localStorage.getItem("token");
+    const response = await fetch(
+      `${API_BASE}/api/albums/${currentAlbum.id}/cards`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          customName: name,
+          customImage: imageUrl,
+          notes: notes || null,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Erro ao adicionar item");
+    }
+
+    const newItem = await response.json();
+    console.log("✅ Item personalizado criado:", newItem);
+
+    // Atualiza lista
+    albumCards.push(newItem);
+
+    // Atualiza contadores
+    const cardCount = albumCards.length;
+    document.getElementById("cardCount").textContent = `${cardCount} ${
+      cardCount === 1 ? "carta" : "cartas"
+    }`;
+    document.getElementById("totalCards").textContent = cardCount;
+
+    // Re-renderiza
+    renderCards();
+
+    showToast("Item personalizado adicionado com sucesso!", "success");
+    closeCustomItemModal();
+  } catch (error) {
+    console.error("❌ Erro ao criar item:", error);
+    showToast(error.message || "Erro ao adicionar item", "error");
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Adicionar Item';
+  }
+}
+
+async function uploadCustomImage(file) {
+  try {
+    // Resize para 600x600
+    const resizedBase64 = await resizeImage(file, 600, 600);
+
+    // Upload para ImgBB
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE}/api/upload`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        image: resizedBase64,
+        type: "custom-item",
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao fazer upload da imagem");
+    }
+
+    const data = await response.json();
+    return data.url;
+  } catch (error) {
+    console.error("❌ Erro no upload:", error);
+    throw new Error("Erro ao fazer upload da imagem");
+  }
+}
+
+function resizeImage(file, maxWidth, maxHeight) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        // Calcula proporções
+        if (width > height) {
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Converte para base64 (remove data:image/png;base64,)
+        const base64 = canvas.toDataURL("image/jpeg", 0.9).split(",")[1];
+        resolve(base64);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+window.closeCustomItemModal = function () {
+  const modal = document.getElementById("customItemModal");
+  if (modal) {
+    modal.classList.remove("active");
+    setTimeout(() => modal.remove(), 300);
+  }
+};

@@ -61,7 +61,7 @@ export const searchByName = async (query) => {
           },
         },
         {
-          name: {
+          nickname: {
             contains: cleanQuery,
             mode: "insensitive",
           },
@@ -77,7 +77,7 @@ export const searchByName = async (query) => {
     select: {
       id: true,
       username: true,
-      name: true,
+      nickname: true,
       email: true,
       avatarUrl: true,
       createdAt: true,

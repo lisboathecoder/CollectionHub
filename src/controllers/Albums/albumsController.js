@@ -229,7 +229,7 @@ export const addCardToAlbum = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id || req.user.sub;
-    const { cardId, customName, customImage } = req.body;
+    const { cardId, customName, customImage, notes } = req.body;
 
     console.log("📝 addCardToAlbum chamado:", {
       albumId: id,
@@ -237,6 +237,7 @@ export const addCardToAlbum = async (req, res) => {
       cardId,
       customName,
       customImage,
+      notes,
     });
 
     const album = await prisma.album.findUnique({
@@ -263,6 +264,7 @@ export const addCardToAlbum = async (req, res) => {
         cardId: cardId ? parseInt(cardId) : null,
         customName: customName || null,
         customImage: customImage || null,
+        notes: notes || null,
       },
       include: {
         card: {

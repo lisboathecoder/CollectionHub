@@ -156,20 +156,30 @@ async function showSuggestions(query, dropdown) {
 
   if (isUserSearch) {
     try {
-      const response = await fetch(
-        apiUrl(`api/users/search?q=${encodeURIComponent(searchQuery)}`)
+      const url = apiUrl(
+        `api/users/search?q=${encodeURIComponent(searchQuery)}`
       );
+      console.log("🔍 Searching users:", url);
+      const response = await fetch(url);
+      console.log("📥 Response status:", response.status);
       if (response.ok) {
         const users = await response.json();
+        console.log("👥 Users found:", users.length, users);
         users.slice(0, 8).forEach((user) => {
           allMatches.push({
             type: "user",
             value: user.username || user.email,
-            displayName: user.username || user.name || user.email,
+            displayName: user.nickname || user.username || user.email,
             avatar: user.avatarUrl,
             id: user.id,
           });
         });
+      } else {
+        console.error(
+          "❌ User search failed:",
+          response.status,
+          await response.text()
+        );
       }
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -195,16 +205,18 @@ async function showSuggestions(query, dropdown) {
     });
 
     try {
-      const response = await fetch(
-        apiUrl(`api/users/search?q=${encodeURIComponent(query)}`)
-      );
+      const url = apiUrl(`api/users/search?q=${encodeURIComponent(query)}`);
+      console.log("🔍 Fetching user suggestions:", url);
+      const response = await fetch(url);
+      console.log("📥 User suggestions response:", response.status);
       if (response.ok) {
         const users = await response.json();
+        console.log("👥 User suggestions:", users.length);
         users.slice(0, 2).forEach((user) => {
           allMatches.push({
             type: "user",
             value: user.username || user.email,
-            displayName: user.username || user.name || user.email,
+            displayName: user.nickname || user.username || user.email,
             avatar: user.avatarUrl,
             id: user.id,
           });
@@ -215,11 +227,15 @@ async function showSuggestions(query, dropdown) {
     }
   }
 
+  console.log("📊 Total matches:", allMatches.length, allMatches);
+
   if (allMatches.length === 0) {
+    console.log("⚠️ No matches found, hiding suggestions");
     hideSuggestions(dropdown);
     return;
   }
 
+  console.log("✅ Rendering", allMatches.length, "suggestions");
   dropdown.innerHTML = allMatches
     .map((match) => {
       let icon = "",
@@ -260,7 +276,7 @@ async function showSuggestions(query, dropdown) {
       const id = item.getAttribute("data-id");
 
       if (type === "user") {
-        window.location.href = `/pages/app/user-profile.html?id=${id}`;
+        window.location.href = `/pages/app/dashboard.html?userId=${id}`;
       } else {
         document.querySelector(".search-input").value = value;
         performSearch(value);
@@ -350,7 +366,7 @@ async function searchUsersAPI(query, dropdown) {
       dropdown.querySelectorAll(".user-suggestion").forEach((item) => {
         item.addEventListener("click", () => {
           const userId = item.getAttribute("data-user-id");
-          window.location.href = `/pages/app/profile.html?id=${userId}`;
+          window.location.href = `/pages/app/dashboard.html?userId=${userId}`;
           hideSuggestions(dropdown);
         });
       });

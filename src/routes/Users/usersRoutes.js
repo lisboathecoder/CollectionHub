@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.get("/search", usersController.searchUsers);
 router.get("/", usersController.listarUsuarios);
-router.get("/search", usersController.searchUsers);
 router.get("/:id", usersController.getUsuarioPorId);
 router.put("/:id", usersController.updateUser);
 router.delete("/:id", usersController.deleteUser);

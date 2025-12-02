@@ -96,6 +96,8 @@ model AlbumItem {
   card        Card?    @relation(fields: [cardId], references: [id], onDelete: SetNull)
   customName  String?
   customImage String?
+  quantity    Int      @default(1)
+  notes       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

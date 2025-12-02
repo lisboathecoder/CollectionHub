@@ -33,131 +33,186 @@
   <body>
     <header class="navbar">
       <div class="navbar-left">
-        <a href="/index.html">
-          <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
-        </a>
         <div class="search-box">
-          <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
-          <button class="search-btn">...</button>
+          <input
+            type="text"
+            placeholder="Search Collection..."
+            class="search-input"
+            id="searchInput"
+          />
+          <button class="search-btn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
         </div>
       </div>
-    </div>
+      <div class="logo">
+        <a href="/index.html">
+          <img
+            src="/assets/images/Collection logo branca.png"
+            alt="Hubb Logo"
+          />
+        </a>
+      </div>
+      <div class="navbar-right">
+        <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
+          <img
+            src="/assets/images/icon.png"
+            alt="Login"
+            class="icone-imagem"
+            id="profileImage"
+          />
+        </a>
+      </div>
+    </header>
 
-    <div class="logo">
-      <a href="/index.html">
-        <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
-      </a>
-    </div>
-
-    <div class="navbar-right">
-      <a href="/pages/userLogin/login.html" class="nav-item user-profile" id="profileLink">
-        <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
-      </a>
-    </div>
-  </header>
-
-  <main class="set-details-container">
-    <!-- Search Header -->
-    <div class="search-header">
-      <a href="javascript:history.back()" class="back-button"> ← Back </a>
-      <h1 id="search-title">Search Results</h1>
-      <p id="search-query"></p>
-    </div>
-
-    <!-- Loading State -->
-    <div id="loading" class="loading-state">
-      <div class="spinner"></div>
-      <p>Searching...</p>
-    </div>
-
-    <!-- Error State -->
-    <div id="error" class="error-state" style="display: none">
-      <p>No results found. Try a different search term.</p>
-      <button onclick="location.href='/pages/explore/homeSetPokemon.html'">
-        Browse Collections
-      </button>
-    </div>
-
-    <!-- Collections Results -->
-    <div id="collections-section" style="display: none">
-      <h2 class="results-section-title">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-        </svg>
-        Collections
-      </h2>
-      <div id="collections-grid" class="collections-results-grid"></div>
-    </div>
-
-    <!-- Cards Results -->
-    <div id="cards-section" style="display: none">
-      <h2 class="results-section-title">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2">
-          <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-          <line x1="2" y1="9" x2="22" y2="9"></line>
-        </svg>
-        Cards (<span id="cards-count">0</span>)
-      </h2>
-      <div id="cards-grid" class="cards-grid"></div>
-      <div id="pagination" class="pagination" style="display: none"></div>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section footer-nav">
-        <h4 class="footer-heading">Navegação</h4>
-        <a href="/pages/public/about.html" class="footer-link">Sobre</a>
-        <a href="/pages/public/contact.html" class="footer-link">Contato</a>
-        <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
+    <main class="set-details-container">
+      <!-- Search Header -->
+      <div class="search-header">
+        <a href="javascript:history.back()" class="back-button"> ← Back </a>
+        <h1 id="search-title">Search Results</h1>
+        <p id="search-query"></p>
       </div>
 
-      <div class="footer-section footer-info">
-        <div class="footer-logo">
-          Collection<span class="text-primary">Hub</span>
+      <!-- Loading State -->
+      <div id="loading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Searching...</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="error" class="error-state" style="display: none">
+        <p>No results found. Try a different search term.</p>
+        <button onclick="location.href='/pages/explore/homeSetPokemon.html'">
+          Browse Collections
+        </button>
+      </div>
+
+      <!-- Collections Results -->
+      <div id="collections-section" style="display: none">
+        <h2 class="results-section-title">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path
+              d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+            ></path>
+          </svg>
+          Collections
+        </h2>
+        <div id="collections-grid" class="collections-results-grid"></div>
+      </div>
+
+      <!-- Cards Results -->
+      <div id="cards-section" style="display: none">
+        <h2 class="results-section-title">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+            <line x1="2" y1="9" x2="22" y2="9"></line>
+          </svg>
+          Cards (<span id="cards-count">0</span>)
+        </h2>
+        <div id="cards-grid" class="cards-grid"></div>
+        <div id="pagination" class="pagination" style="display: none"></div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section footer-nav">
+          <h4 class="footer-heading">Navegação</h4>
+          <a href="/pages/public/about.html" class="footer-link">Sobre</a>
+          <a href="/pages/public/contact.html" class="footer-link">Contato</a>
+          <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
         </div>
-        <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
-      </div>
 
-      <div class="footer-section footer-social">
-        <h4 class="footer-heading">Siga-nos</h4>
-        <div class="social-icons">
-          <a href="https://www.instagram.com/collectionhub.co/" target="_blank" class="social-link"
-            aria-label="Instagram">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="feather feather-instagram">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-          </a>
-          <a href="mailto:collectionhub2025@gmail.com" class="social-link" aria-label="Email">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="feather feather-mail">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-              <polyline points="22,6 12,13 2,6"></polyline>
-            </svg>
-          </a>
+        <div class="footer-section footer-info">
+          <div class="footer-logo">
+            Collection<span class="text-primary">Hub</span>
+          </div>
+          <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
+        </div>
+
+        <div class="footer-section footer-social">
+          <h4 class="footer-heading">Siga-nos</h4>
+          <div class="social-icons">
+            <a
+              href="https://www.instagram.com/collectionhub.co/"
+              target="_blank"
+              class="social-link"
+              aria-label="Instagram"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-instagram"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path
+                  d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                ></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a
+              href="mailto:collectionhub2025@gmail.com"
+              class="social-link"
+              aria-label="Email"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-mail"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                ></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <p class="small-print">
-        Design inspirado em comunidades de colecionáveis digitais.
-      </p>
-    </div>
-  </footer>
+      <div class="footer-bottom">
+        <p class="small-print">
+          Design inspirado em comunidades de colecionáveis digitais.
+        </p>
+      </div>
+    </footer>
 
-  <script src="/assets/js/config.js"></script>
-  <script src="/assets/js/search-results.js?v=3"></script>
-  <script src="/assets/js/global-search.js?v=2"></script>
-  <script src="/assets/js/header.js"></script>
-
-</body>
-
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/album-modal-loader.js"></script>
+    <script src="/assets/js/albums/album-modal.js"></script>
+    <script src="/assets/js/search-results.js?v=3"></script>
+    <script src="/assets/js/global-search.js?v=2"></script>
+    <script src="/assets/js/header.js"></script>
+  </body>
 </html>

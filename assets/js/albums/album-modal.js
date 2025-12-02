@@ -1,19 +1,33 @@
-let selectedCardId = null;
+let selectedCard = null;
 
-function openAlbumModal(cardId) {
-  selectedCardId = cardId;
+function openAlbumModal(cardIdOrCard) {
+  // Support both old (ID only) and new (full card object) formats
+  if (typeof cardIdOrCard === "object") {
+    selectedCard = cardIdOrCard;
+  } else {
+    selectedCard = { id: cardIdOrCard };
+  }
+
   const modal = document.getElementById("albumModal");
-  if (!modal) return;
+  if (!modal) {
+    console.error("❌ Album modal not found in DOM");
+    return;
+  }
   modal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
   loadUserAlbums();
+}
+
+// Alias for compatibility
+function openAddToAlbumModal(card) {
+  openAlbumModal(card);
 }
 
 function closeAlbumModal() {
   const modal = document.getElementById("albumModal");
   if (modal) modal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-open");
-  selectedCardId = null;
+  selectedCard = null;
 }
 
 async function loadUserAlbums() {
@@ -32,11 +46,8 @@ async function loadUserAlbums() {
   }
 
   try {
-    const apiBase = (window.API_BASE_URL || "http://localhost:3000").replace(
-      /\/+$/g,
-      ""
-    );
-    const response = await fetch(`${apiBase}/api/albums`, {
+    const apiUrl = window.apiUrl;
+    const response = await fetch(apiUrl("api/albums"), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -63,7 +74,9 @@ async function loadUserAlbums() {
         <div class="album-card" onclick="addCardToAlbum(${album.id})">
           <div class="album-card__icon">📁</div>
           <div class="album-card__name">${album.name}</div>
-          <div class="album-card__count">${album.cardCount || 0} cards</div>
+          <div class="album-card__count">${
+            album._count?.items || album.items?.length || 0
+          } items</div>
         </div>
       `
       )
@@ -81,34 +94,75 @@ async function loadUserAlbums() {
 async function addCardToAlbum(albumId) {
   const token = localStorage.getItem("token");
 
-  if (!token || !selectedCardId) {
+  if (!token || !selectedCard) {
+    console.error("❌ Missing token or selected card");
     return;
   }
 
   try {
-    const response = await fetch(`/api/albums/${albumId}/cards`, {
+    const apiUrl = window.apiUrl;
+    let cardId = selectedCard.id || selectedCard;
+
+    // Ensure cardId is a string (API might expect string)
+    if (typeof cardId === "number") {
+      cardId = String(cardId);
+    }
+
+    console.log("📤 Adding card to album:", { albumId, cardId, selectedCard });
+
+    const requestBody = {
+      cardId: cardId,
+      quantity: 1,
+    };
+
+    console.log("📦 Request body:", requestBody);
+
+    const response = await fetch(apiUrl(`api/albums/${albumId}/items`), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ cardId: selectedCardId }),
+      body: JSON.stringify(requestBody),
     });
 
+    console.log("📥 Response status:", response.status);
+
     if (!response.ok) {
-      throw new Error("Failed to add card");
+      const errorText = await response.text();
+      console.error("❌ Response error:", errorText);
+      let error;
+      try {
+        error = JSON.parse(errorText);
+      } catch {
+        error = { error: errorText };
+      }
+      throw new Error(
+        error.error || error.erro || error.detalhes || "Failed to add card"
+      );
     }
+
+    const result = await response.json();
+    console.log("✅ Card added successfully:", result);
 
     closeAlbumModal();
     showNotification("Card added to album successfully!");
   } catch (error) {
-    console.error("Error adding card:", error);
-    showNotification("Failed to add card. Please try again.", true);
+    console.error("❌ Error adding card:", error);
+    showNotification(
+      error.message || "Failed to add card. Please try again.",
+      true
+    );
   }
 }
 
 function goToCreateAlbum() {
-  window.location.href = "/albums/index.html";
+  // Save selected card to localStorage so we can add it after album creation
+  if (selectedCard) {
+    localStorage.setItem("pendingCard", JSON.stringify(selectedCard));
+    console.log("💾 Saved pending card:", selectedCard);
+  }
+  window.location.href = "/pages/albums/select-game.html";
 }
 
 function showNotification(message, isError = false) {

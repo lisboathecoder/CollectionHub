@@ -159,6 +159,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
       showSuccess("Álbum criado com sucesso!");
 
+      // Check if there's a pending card to add
+      const pendingCard = localStorage.getItem("pendingCard");
+      if (pendingCard) {
+        try {
+          const card = JSON.parse(pendingCard);
+          console.log("📦 Found pending card to add:", card);
+
+          // Add the card to the newly created album
+          const addCardResponse = await fetch(
+            apiUrl(`api/albums/${album.id}/items`),
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                cardId: String(card.id || card),
+                quantity: 1,
+              }),
+            }
+          );
+
+          if (addCardResponse.ok) {
+            console.log("✅ Card added to new album successfully");
+            localStorage.removeItem("pendingCard");
+          } else {
+            console.error(
+              "❌ Failed to add card to new album:",
+              await addCardResponse.text()
+            );
+          }
+        } catch (err) {
+          console.error("❌ Error adding pending card:", err);
+        }
+      }
+
       setTimeout(() => {
         window.location.href = `/pages/albums/album-view.html?id=${album.id}`;
       }, 1500);

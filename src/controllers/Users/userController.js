@@ -14,15 +14,23 @@ export const listarUsuarios = async (req, res) => {
 export const searchUsers = async (req, res) => {
   const { q } = req.query;
 
+  console.log("🔍 Search users request:", { query: q });
+
   if (!q || q.trim() === "") {
+    console.log("❌ Empty query");
     return res.status(400).json({ error: "Query de busca é obrigatória" });
   }
 
   try {
     const users = await userModel.searchByName(q.trim());
+    console.log(
+      "✅ Users found:",
+      users.length,
+      users.map((u) => u.username)
+    );
     res.json(users);
   } catch (error) {
-    console.error("Error searching users:", error);
+    console.error("❌ Error searching users:", error);
     res.status(500).json({ error: "Erro interno do servidor" });
   }
 };
@@ -35,20 +43,16 @@ export const getUsuarioPorId = async (req, res) => {
       select: {
         id: true,
         username: true,
-        name: true,
+        nickname: true,
         email: true,
         avatarUrl: true,
+        coverUrl: true,
         bio: true,
+        location: true,
         createdAt: true,
         _count: {
           select: {
             albums: true,
-            friendsInitiated: {
-              where: { status: "accepted" },
-            },
-            friendsReceived: {
-              where: { status: "accepted" },
-            },
           },
         },
       },
