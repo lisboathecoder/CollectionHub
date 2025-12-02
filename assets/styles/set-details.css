@@ -693,3 +693,76 @@
     opacity: 0;
   }
 }
+
+/* Users Grid */
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #ff3e6c;
+  transform: translateY(-2px);
+}
+
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-username {
+  font-size: 14px;
+  color: #999;
+  margin: 0 0 8px 0;
+}
+
+.user-bio {
+  font-size: 13px;
+  color: #ccc;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+@media (max-width: 768px) {
+  .users-grid {
+    grid-template-columns: 1fr;
+  }
+}

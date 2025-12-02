@@ -28,28 +28,58 @@ async function performSearch(query) {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
-    const response = await fetch(
-      `/api/pokemon/cards/search?q=${encodeURIComponent(query)}`
-    );
+    // Check if it's a user search (starts with @)
+    const isUserSearch = query.startsWith("@");
+    const searchTerm = isUserSearch ? query.substring(1) : query;
 
-    if (!response.ok) {
-      throw new Error("Search failed");
+    if (isUserSearch) {
+      // Search for users
+      console.log("🔍 Searching users:", searchTerm);
+      const response = await fetch(
+        `/api/users/search?q=${encodeURIComponent(searchTerm)}`
+      );
+
+      if (!response.ok) {
+        throw new Error("User search failed");
+      }
+
+      const users = await response.json();
+      console.log("👥 Found users:", users.length, users);
+
+      loadingEl.style.display = "none";
+
+      if (users.length === 0) {
+        showError("No users found");
+        return;
+      }
+
+      // Display users
+      displayUsers(users);
+    } else {
+      // Search for cards
+      const response = await fetch(
+        `/api/pokemon/cards/search?q=${encodeURIComponent(query)}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Search failed");
+      }
+
+      const data = await response.json();
+
+      loadingEl.style.display = "none";
+
+      if (
+        (!data.cards || data.cards.length === 0) &&
+        (!data.collections || data.collections.length === 0)
+      ) {
+        showError("No results found");
+        return;
+      }
+
+      displayCollections(data.collections || []);
+      displayCards(data.cards || []);
     }
-
-    const data = await response.json();
-
-    loadingEl.style.display = "none";
-
-    if (
-      (!data.cards || data.cards.length === 0) &&
-      (!data.collections || data.collections.length === 0)
-    ) {
-      showError("No results found");
-      return;
-    }
-
-    displayCollections(data.collections || []);
-    displayCards(data.cards || []);
   } catch (error) {
     console.error("Search error:", error);
     loadingEl.style.display = "none";
@@ -85,6 +115,52 @@ function displayCollections(collections) {
 
     collectionsGrid.appendChild(collectionCard);
   });
+}
+
+function displayUsers(users) {
+  // Hide cards and collections sections
+  cardsSection.style.display = "none";
+  collectionsSection.style.display = "none";
+
+  // Show users section
+  let usersSection = document.getElementById("users-section");
+  if (!usersSection) {
+    usersSection = document.createElement("div");
+    usersSection.id = "users-section";
+    usersSection.innerHTML = `
+      <h2 class="results-section-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        Users (<span id="users-count">0</span>)
+      </h2>
+      <div id="users-grid" class="users-grid"></div>
+    `;
+    document.querySelector(".set-details-container").appendChild(usersSection);
+  }
+
+  usersSection.style.display = "block";
+  const usersGrid = document.getElementById("users-grid");
+  const usersCount = document.getElementById("users-count");
+  usersCount.textContent = users.length;
+
+  usersGrid.innerHTML = users
+    .map(
+      (user) => `
+    <a href="/pages/app/dashboard.html?userId=${user.id}" class="user-card">
+      <img src="${user.avatarUrl || "/assets/images/icon.png"}" alt="${
+        user.username
+      }" class="user-avatar">
+      <div class="user-info">
+        <h3 class="user-name">${user.nickname || user.username}</h3>
+        <p class="user-username">@${user.username}</p>
+        ${user.bio ? `<p class="user-bio">${user.bio}</p>` : ""}
+      </div>
+    </a>
+  `
+    )
+    .join("");
 }
 
 function displayCards(cards) {

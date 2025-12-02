@@ -2,12 +2,17 @@ import { prisma } from "../../lib/prisma.js";
 
 export const getUserActivities = async (req, res) => {
   try {
-    const userId = req.user.id || req.user.sub;
-    const { limit = 20 } = req.query;
+    const authenticatedUserId = req.user.id || req.user.sub;
+    const { limit = 20, userId: targetUserId } = req.query;
+
+    // If targetUserId is provided, use it; otherwise use authenticated user's ID
+    const userId = targetUserId
+      ? parseInt(targetUserId)
+      : parseInt(authenticatedUserId);
 
     const activities = await prisma.activity.findMany({
       where: {
-        userId: parseInt(userId),
+        userId: userId,
       },
       orderBy: {
         createdAt: "desc",

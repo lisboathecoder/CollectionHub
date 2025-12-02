@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Check if viewing another user's profile
+  const urlParams = new URLSearchParams(window.location.search);
+  const viewingUserId = urlParams.get("userId");
+
   async function loadUserData() {
     try {
       const token = localStorage.getItem("token");
@@ -9,6 +13,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const apiUrl = window.apiUrl;
+
+      // If viewing another user's profile
+      if (viewingUserId) {
+        const response = await fetch(apiUrl(`api/users/${viewingUserId}`), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Usuário não encontrado");
+        }
+
+        const user = await response.json();
+        renderProfile(user, false); // false = not own profile
+        return;
+      }
+
+      // Load own profile
       const response = await fetch(apiUrl("api/profile/me"), {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -25,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const user = await response.json();
-      renderProfile(user);
+      renderProfile(user, true); // true = own profile
     } catch (error) {
       console.error("❌ Erro ao carregar perfil:", error);
       document.getElementById("profile-name").innerText = "Erro ao carregar.";
@@ -70,11 +93,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const token = localStorage.getItem("token");
       const apiUrl = window.apiUrl;
 
-      const response = await fetch(apiUrl("api/albums"), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // If viewing another user, load their albums (only public ones)
+      let response;
+      if (viewingUserId) {
+        response = await fetch(apiUrl(`api/albums?userId=${viewingUserId}`), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } else {
+        // Load own albums
+        response = await fetch(apiUrl("api/albums"), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
 
       if (!response.ok) throw new Error("Erro ao carregar álbuns");
 
@@ -142,7 +176,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const token = localStorage.getItem("token");
       const apiUrl = window.apiUrl;
 
-      const response = await fetch(apiUrl("api/activities?limit=20"), {
+      // If viewing another user, load their activities
+      let url = "api/activities?limit=20";
+      if (viewingUserId) {
+        url = `api/activities?userId=${viewingUserId}&limit=20`;
+      }
+
+      const response = await fetch(apiUrl(url), {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -253,10 +293,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
   }
 
-  function renderProfile(user) {
-    document.getElementById("profile-name").innerText = user.username;
+  function renderProfile(user, isOwnProfile = true) {
+    document.getElementById("profile-name").innerText =
+      user.username || user.name || "Usuário";
     document.getElementById("profile-nickname").innerText =
-      user.nickname || `@${user.username}`;
+      user.nickname || `@${user.username || "user"}`;
     document.getElementById("profile-bio").innerText =
       user.bio || "Sem biografia.";
 
@@ -265,9 +306,12 @@ document.addEventListener("DOMContentLoaded", () => {
       ?.querySelector("span");
     if (locationSpan) locationSpan.innerText = user.location || "Brasil";
 
-    document.getElementById("stat-items-count").innerText = user.stats.items;
-    document.getElementById("stat-collections-count").innerText =
-      user.stats.sets;
+    // Stats - handle both API formats
+    const itemsCount = user.stats?.items || user._count?.albums || 0;
+    const setsCount = user.stats?.sets || 0;
+
+    document.getElementById("stat-items-count").innerText = itemsCount;
+    document.getElementById("stat-collections-count").innerText = setsCount;
 
     if (user.avatarUrl) {
       document.getElementById("profile-pic-large").src = user.avatarUrl;
@@ -287,15 +331,30 @@ document.addEventListener("DOMContentLoaded", () => {
       if (editCoverEl) editCoverEl.style.backgroundColor = "#333";
     }
 
-    const inputName = document.getElementById("input-full-name");
-    const inputNick = document.getElementById("input-nick-name");
-    const inputBio = document.getElementById("input-bio");
-    const inputLoc = document.getElementById("input-location");
+    // Only show edit button if viewing own profile
+    const editBtn = document.getElementById("btn-edit-profile");
+    if (editBtn) {
+      editBtn.style.display = isOwnProfile ? "block" : "none";
+    }
 
-    if (inputName) inputName.value = user.nickname || user.username || "";
-    if (inputNick) inputNick.value = user.username || "";
-    if (inputBio) inputBio.value = user.bio || "";
-    if (inputLoc) inputLoc.value = user.location || "";
+    // Hide profile picture edit overlay for other users
+    const picOverlay = document.querySelector(".profile-pic-overlay");
+    if (picOverlay) {
+      picOverlay.style.display = isOwnProfile ? "flex" : "none";
+    }
+
+    // Populate form fields only for own profile
+    if (isOwnProfile) {
+      const inputName = document.getElementById("input-full-name");
+      const inputNick = document.getElementById("input-nick-name");
+      const inputBio = document.getElementById("input-bio");
+      const inputLoc = document.getElementById("input-location");
+
+      if (inputName) inputName.value = user.nickname || user.username || "";
+      if (inputNick) inputNick.value = user.username || "";
+      if (inputBio) inputBio.value = user.bio || "";
+      if (inputLoc) inputLoc.value = user.location || "";
+    }
   }
 
   loadUserData();

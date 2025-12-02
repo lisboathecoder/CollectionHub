@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test User Search</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #1a1a1a;
+        color: #fff;
+      }
+      input {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+        border: 2px solid #333;
+        background: #2a2a2a;
+        color: #fff;
+        border-radius: 8px;
+      }
+      button {
+        margin-top: 10px;
+        padding: 12px 24px;
+        font-size: 16px;
+        background: #ff3e6c;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      #results {
+        margin-top: 20px;
+        padding: 20px;
+        background: #2a2a2a;
+        border-radius: 8px;
+        min-height: 100px;
+      }
+      .user-item {
+        padding: 12px;
+        margin: 8px 0;
+        background: #333;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #555;
+      }
+      pre {
+        background: #000;
+        padding: 15px;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔍 Test User Search</h1>
+
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Digite @username para buscar usuários..."
+    />
+    <button onclick="testSearch()">Buscar</button>
+
+    <div id="results"></div>
+
+    <script src="/assets/js/config.js"></script>
+    <script>
+      async function testSearch() {
+        const query = document.getElementById("searchInput").value.trim();
+        const resultsDiv = document.getElementById("results");
+
+        if (!query) {
+          resultsDiv.innerHTML = "<p>❌ Digite algo para buscar</p>";
+          return;
+        }
+
+        const searchQuery = query.startsWith("@") ? query.substring(1) : query;
+        const url = apiUrl(
+          `api/users/search?q=${encodeURIComponent(searchQuery)}`
+        );
+
+        resultsDiv.innerHTML = `
+                <p>🔍 Buscando: <strong>${searchQuery}</strong></p>
+                <p>📡 URL: <code>${url}</code></p>
+                <p>⏳ Aguarde...</p>
+            `;
+
+        try {
+          console.log("🔍 Fetching:", url);
+          const response = await fetch(url);
+          console.log("📥 Response:", response.status, response.statusText);
+
+          const data = await response.json();
+          console.log("📦 Data:", data);
+
+          if (response.ok) {
+            if (data.length === 0) {
+              resultsDiv.innerHTML = "<p>😕 Nenhum usuário encontrado</p>";
+            } else {
+              resultsDiv.innerHTML = `
+                            <p>✅ ${data.length} usuário(s) encontrado(s):</p>
+                            ${data
+                              .map(
+                                (user) => `
+                                <div class="user-item">
+                                    <img class="user-avatar" src="${
+                                      user.avatarUrl ||
+                                      "/assets/images/icon.png"
+                                    }" alt="${user.username}">
+                                    <div>
+                                        <strong>${
+                                          user.nickname || user.username
+                                        }</strong><br>
+                                        <small>@${user.username} • ${
+                                  user.email
+                                }</small>
+                                    </div>
+                                </div>
+                            `
+                              )
+                              .join("")}
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        `;
+            }
+          } else {
+            resultsDiv.innerHTML = `
+                        <p>❌ Erro ${response.status}: ${
+              response.statusText
+            }</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+          }
+        } catch (error) {
+          console.error("❌ Error:", error);
+          resultsDiv.innerHTML = `
+                    <p>❌ Erro: ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
+        }
+      }
+
+      document
+        .getElementById("searchInput")
+        .addEventListener("keypress", (e) => {
+          if (e.key === "Enter") testSearch();
+        });
+    </script>
+  </body>
+</html>
