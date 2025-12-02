@@ -1848,3 +1848,236 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 62, 108, 0.3);
 }
+
+/* ===== CUSTOM ITEM MODAL STYLES ===== */
+
+.btn-custom-item {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #6b46c1 0%, #9333ea 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.btn-custom-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(147, 51, 234, 0.4);
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+}
+
+.btn-custom-item i {
+  font-size: 16px;
+}
+
+.custom-item-modal {
+  max-width: 600px;
+  width: 90%;
+}
+
+.image-upload-area {
+  border: 2px dashed #444;
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.02);
+  position: relative;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-upload-area:hover {
+  border-color: #ff3e6c;
+  background: rgba(255, 62, 108, 0.05);
+}
+
+.image-upload-area.drag-over {
+  border-color: #ff3e6c;
+  background: rgba(255, 62, 108, 0.1);
+  transform: scale(1.02);
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #9aa7b0;
+}
+
+.upload-placeholder i {
+  font-size: 48px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.upload-placeholder p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.upload-placeholder span {
+  font-size: 13px;
+  color: #888;
+}
+
+.image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-change-image {
+  padding: 8px 16px;
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-change-image:hover {
+  background: #444;
+  border-color: #ff3e6c;
+}
+
+/* Custom item card styling */
+.card-item.custom-item {
+  border: 2px solid #9333ea;
+  background: linear-gradient(
+    135deg,
+    rgba(147, 51, 234, 0.1) 0%,
+    rgba(168, 85, 247, 0.05) 100%
+  );
+}
+
+.card-item.custom-item:hover {
+  border-color: #a855f7;
+  box-shadow: 0 8px 20px rgba(147, 51, 234, 0.3);
+}
+
+.card-item-notes {
+  position: absolute;
+  top: 35px;
+  right: 35px;
+  background: rgba(255, 62, 108, 0.9);
+  color: white;
+  padding: 6px;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: help;
+  z-index: 2;
+}
+
+.card-item-notes:hover {
+  background: #ff3e6c;
+  transform: scale(1.1);
+}
+
+/* Modal overlay improvements */
+.modal-overlay.active .custom-item-modal {
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form input improvements for file upload */
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #ff3e6c;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.form-input::placeholder {
+  color: #666;
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .btn-custom-item {
+    margin-left: 0;
+    margin-top: 12px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .search-box-albums {
+    flex-direction: column;
+  }
+
+  .custom-item-modal {
+    max-width: 95%;
+  }
+
+  .image-upload-area {
+    padding: 30px 15px;
+    min-height: 150px;
+  }
+}
