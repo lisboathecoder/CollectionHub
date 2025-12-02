@@ -1,40 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Criar Álbum - CollectionHub</title>
 
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/assets/images/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/assets/images/favicon-16x16.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/assets/images/favicon-32x32.png"
-    />
-    <link rel="manifest" href="/assets/images/site.webmanifest" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Criar Álbum - CollectionHub</title>
 
-    <link rel="stylesheet" href="/assets/styles/style.css" />
-    <link rel="stylesheet" href="/assets/styles/albums.css" />
-  </head>
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-32x32.png" />
+  <link rel="manifest" href="/assets/images/site.webmanifest" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="/assets/styles/style.css" />
+  <link rel="stylesheet" href="/assets/styles/albums.css" />
+</head>
 
   <body>
     <header class="navbar">
@@ -75,158 +56,82 @@
       </div>
     </header>
 
-    <main class="albums-create-main">
-      <div class="albums-create-container">
-        <a href="/pages/albums/select-game.html" class="back-link">
-          <i class="fa-solid fa-arrow-left"></i> Voltar
-        </a>
+  <main class="albums-create-main">
+    <div class="albums-create-container">
+      <a href="/pages/albums/select-game.html" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i> Voltar
+      </a>
 
-        <div class="create-album-card">
-          <div class="create-album-header">
-            <i class="fa-solid fa-book game-type-icon" id="gameTypeIcon"></i>
-            <div>
-              <h1 class="create-album-title">Criar novo álbum</h1>
-              <p class="create-album-subtitle" id="gameTypeText">
-                Pokemon TCG Pocket
-              </p>
-            </div>
+      <div class="create-album-card">
+        <div class="create-album-header">
+          <i class="fa-solid fa-book game-type-icon" id="gameTypeIcon"></i>
+          <div>
+            <h1 class="create-album-title">Criar novo álbum</h1>
+            <p class="create-album-subtitle" id="gameTypeText">
+              Pokemon TCG Pocket
+            </p>
+          </div>
+        </div>
+
+        <form id="createAlbumForm" class="create-album-form">
+          <div class="form-group">
+            <label for="albumName" class="form-label">Nome do álbum</label>
+            <input type="text" id="albumName" class="form-input" placeholder="Ex: Minha Coleção de Pokemon" required
+              maxlength="50" />
+            <span class="form-hint">Máximo 50 caracteres</span>
           </div>
 
-          <form id="createAlbumForm" class="create-album-form">
-            <div class="form-group">
-              <label for="albumName" class="form-label">Nome do álbum</label>
-              <input
-                type="text"
-                id="albumName"
-                class="form-input"
-                placeholder="Ex: Minha Coleção de Pokemon"
-                required
-                maxlength="50"
-              />
-              <span class="form-hint"
-                ><span id="nameCount">0</span>/50 caracteres</span
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="albumDescription" class="form-label"
-                >Descrição (opcional)</label
-              >
-              <textarea
-                id="albumDescription"
-                class="form-input"
-                placeholder="Descreva seu álbum..."
-                rows="4"
-                maxlength="200"
-              ></textarea>
-              <span class="form-hint"
-                ><span id="descCount">0</span>/200 caracteres</span
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="albumCategory" class="form-label">Categoria</label>
-              <select id="albumCategory" class="form-input" required>
-                <option value="pokemon">Pokemon TCG</option>
-                <option value="custom">Personalizado</option>
-              </select>
-              <span class="form-hint">Escolha a categoria do seu álbum</span>
-            </div>
-
-            <div class="form-group hidden" id="customCategoryGroup">
-              <label for="customCategory" class="form-label"
-                >Nome da Categoria Personalizada</label
-              >
-              <input
-                type="text"
-                id="customCategory"
-                class="form-input"
-                placeholder="Ex: Coleção de Figurinhas"
-                maxlength="30"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="albumCover" class="form-label"
-                >Imagem de Capa (opcional)</label
-              >
-              <input
-                type="file"
-                id="albumCover"
-                class="form-input"
-                accept="image/*"
-              />
-              <span class="form-hint"
-                >Adicione uma imagem personalizada para o álbum</span
-              >
-              <div id="coverPreview" class="cover-preview hidden">
-                <img
-                  id="coverPreviewImg"
-                  class="cover-preview-img"
-                  alt="Preview da capa"
-                />
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-checkbox-label">
-                <input
-                  type="checkbox"
-                  id="isPublic"
-                  class="form-checkbox"
-                  checked
-                />
-                <span>Tornar álbum público</span>
-              </label>
-              <span class="form-hint"
-                >Outros usuários poderão visualizar seu álbum</span
-              >
-            </div>
-
-            <div class="form-actions">
-              <button type="button" class="btn-cancel" id="cancelBtn">
-                <i class="fa-solid fa-times"></i> Cancelar
-              </button>
-              <button type="submit" class="btn-primary" id="submitBtn">
-                <i class="fa-solid fa-plus"></i> Criar Álbum
-              </button>
-            </div>
-
-            <div id="errorMessage" class="message-box message-error"></div>
-            <div id="successMessage" class="message-box message-success"></div>
-          </form>
-        </div>
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-section footer-nav">
-          <h4 class="footer-heading">Navegação</h4>
-          <a href="/pages/public/about.html" class="footer-link">Sobre</a>
-          <a href="/pages/public/contact.html" class="footer-link">Contato</a>
-          <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
-        </div>
-        <div class="footer-section footer-info">
-          <div class="footer-logo">
-            Collection<span class="text-primary">Hub</span>
+          <div class="form-group">
+            <label class="form-checkbox-label">
+              <input type="checkbox" id="isPublic" class="form-checkbox" />
+              <span>Tornar álbum público</span>
+            </label>
+            <span class="form-hint">Outros usuários poderão visualizar seu álbum</span>
           </div>
-          <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
-        </div>
-        <div class="footer-section footer-social">
-          <h4 class="footer-heading">Siga-nos</h4>
-          <div class="social-icons"></div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p class="small-print">
-          Design inspirado em comunidades de colecionáveis digitais.
-        </p>
-      </div>
-    </footer>
 
-    <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/header.js"></script>
-    <script src="/assets/js/global-search.js"></script>
-    <script src="/assets/js/albums/create-album.js"></script>
-  </body>
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="history.back()">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-create" formaction="/pages/albums/album-view.html">
+              <i class="fa-solid fa-plus"></i> Criar Álbum
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section footer-nav">
+        <h4 class="footer-heading">Navegação</h4>
+        <a href="/pages/public/about.html" class="footer-link">Sobre</a>
+        <a href="/pages/public/contact.html" class="footer-link">Contato</a>
+        <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
+      </div>
+      <div class="footer-section footer-info">
+        <div class="footer-logo">
+          Collection<span class="text-primary">Hub</span>
+        </div>
+        <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
+      </div>
+      <div class="footer-section footer-social">
+        <h4 class="footer-heading">Siga-nos</h4>
+        <div class="social-icons"></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="small-print">
+        Design inspirado em comunidades de colecionáveis digitais.
+      </p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/header.js"></script>
+  <script src="/assets/js/global-search.js"></script>
+  <script src="/assets/js/albums/create-album.js"></script>
+</body>
+
 </html>
