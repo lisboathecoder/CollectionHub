@@ -125,18 +125,18 @@ function renderCards() {
     const setName = card.set?.nameEn || "";
 
     const setLogos = {
-      "A1": "https://i.ibb.co/JFH2gxzL/LOGO-expansion-A1-en-US.webp",
-      "A1A": "https://i.ibb.co/Mx4LF0Bj/LOGO-expansion-A1-A-en-US.webp",
-      "A2": "https://i.ibb.co/7tsrnh7F/LOGO-expansion-A2-en-US.webp",
-      "A2A": "https://i.ibb.co/HDJKYY9B/LOGO-expansion-A2-A-en-US.webp",
-      "A2B": "https://i.ibb.co/8DpYB66d/LOGO-expansion-A2-B-en-US.webp",
-      "A3": "https://i.ibb.co/Ng9Z8NtS/LOGO-expansion-A3-en-US.webp",
-      "A3A": "https://i.ibb.co/WNfxg3W4/LOGO-expansion-A3-A-en-US.webp",
-      "A3B": "https://i.ibb.co/F4cbCqbN/LOGO-expansion-A3-B-en-US.webp",
-      "A4": "https://i.ibb.co/9mNDC3Ct/LOGO-expansion-A4-en-US.webp",
-      "A4A": "https://i.ibb.co/wDXnz9K/LOGO-expansion-A4-A-en-US.webp",
-      "A4B": "https://i.ibb.co/Pv18yXWk/LOGO-expansion-A4-B-en-US.webp",
-      "B1": "https://i.ibb.co/1cBjRxD/LOGO-expansion-B1-en-US.webp",
+      A1: "https://i.ibb.co/JFH2gxzL/LOGO-expansion-A1-en-US.webp",
+      A1A: "https://i.ibb.co/Mx4LF0Bj/LOGO-expansion-A1-A-en-US.webp",
+      A2: "https://i.ibb.co/7tsrnh7F/LOGO-expansion-A2-en-US.webp",
+      A2A: "https://i.ibb.co/HDJKYY9B/LOGO-expansion-A2-A-en-US.webp",
+      A2B: "https://i.ibb.co/8DpYB66d/LOGO-expansion-A2-B-en-US.webp",
+      A3: "https://i.ibb.co/Ng9Z8NtS/LOGO-expansion-A3-en-US.webp",
+      A3A: "https://i.ibb.co/WNfxg3W4/LOGO-expansion-A3-A-en-US.webp",
+      A3B: "https://i.ibb.co/F4cbCqbN/LOGO-expansion-A3-B-en-US.webp",
+      A4: "https://i.ibb.co/9mNDC3Ct/LOGO-expansion-A4-en-US.webp",
+      A4A: "https://i.ibb.co/wDXnz9K/LOGO-expansion-A4-A-en-US.webp",
+      A4B: "https://i.ibb.co/Pv18yXWk/LOGO-expansion-A4-B-en-US.webp",
+      B1: "https://i.ibb.co/1cBjRxD/LOGO-expansion-B1-en-US.webp",
       "PROMO-A": "https://i.ibb.co/Xx8FWqrk/LOGO-expansion-PROMO-A-en-US.webp",
       "PROMO-B": "https://i.ibb.co/sd9sWXZN/LOGO-expansion-PROMO-B-en-US.webp",
     };
@@ -154,14 +154,18 @@ function renderCards() {
           <span class="card-rarity rarity-${rarityName
             .toLowerCase()
             .replace(/\s+/g, "-")}">${rarityName}</span>
-          ${setLogo ? `
+          ${
+            setLogo
+              ? `
             <a href="/pages/explore/detalheSetPokemon.html?set=${setCode}" 
                class="card-set-link" 
                title="${setName}"
                onclick="event.stopPropagation()">
               <img src="${setLogo}" alt="${setName}" class="card-set-logo">
             </a>
-          ` : ''}
+          `
+              : ""
+          }
         </div>
       </div>
     `;
@@ -231,8 +235,10 @@ function openCardModal(card) {
       <div class="card-detail-modal__image-wrapper">
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image" onerror="this.src='/assets/images/placeholder-card.png'">
       </div>
-      <button class="card-detail-modal__add-btn" onclick="openAlbumModal('${card.id}')">
-        Add to your collection
+      <button class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(
+        card
+      ).replace(/"/g, "&quot;")})">
+        <i class="fa-solid fa-plus"></i> Add to Album
       </button>
     </div>
   `;
@@ -290,8 +296,10 @@ function getCollectionLogo(code) {
   return logos[code] || "/assets/images/Collection logo branca.png";
 }
 
-function openAlbumModal(cardId) {
-  alert(
-    "Please navigate to the set details page to add cards to your collection."
-  );
+function openAddToAlbumModalWithCard(card) {
+  if (typeof openAddToAlbumModal === "function") {
+    openAddToAlbumModal(card);
+  } else {
+    console.error("openAddToAlbumModal function not found");
+  }
 }

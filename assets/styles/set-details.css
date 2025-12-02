@@ -504,7 +504,6 @@
   justify-content: center;
   opacity: 1;
   transition: opacity 0.2s ease;
-  background-color: #00000083;
 }
 
 .card-detail-modal[aria-hidden="true"] {
