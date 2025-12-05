@@ -80,6 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
         loadUserAlbums();
       } else if (tabName === "atividades") {
         loadUserActivities();
+      } else if (tabName === "favoritos") {
+        loadUserFavorites();
       }
     });
   });
@@ -239,22 +241,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const displays = {
       ALBUM_CREATED: {
         icon: "fa-folder-plus",
-        text: `Criou o álbum <strong>${activity.albumName}</strong>`,
+        text: `Criou o álbum <strong>${
+          activity.albumName || "Álbum deletado"
+        }</strong>`,
         color: "#00d4aa",
       },
       ALBUM_UPDATED: {
         icon: "fa-pen-to-square",
-        text: `Editou o álbum <strong>${activity.albumName}</strong>`,
+        text: `Editou o álbum <strong>${
+          activity.albumName || "Álbum deletado"
+        }</strong>`,
         color: "#ffa726",
+      },
+      ALBUM_DELETED: {
+        icon: "fa-trash",
+        text: `Deletou o álbum <strong>${
+          activity.albumName || "Álbum"
+        }</strong>`,
+        color: "#ff3e6c",
       },
       CARD_ADDED: {
         icon: "fa-plus-circle",
-        text: `Adicionou <strong>${activity.cardName}</strong> ao álbum <strong>${activity.albumName}</strong>`,
+        text: `Adicionou <strong>${
+          activity.cardName
+        }</strong> ao álbum <strong>${
+          activity.albumName || "Álbum deletado"
+        }</strong>`,
         color: "#00d4aa",
       },
       CARD_REMOVED: {
         icon: "fa-minus-circle",
-        text: `Removeu <strong>${activity.cardName}</strong> do álbum <strong>${activity.albumName}</strong>`,
+        text: `Removeu <strong>${activity.cardName}</strong> do álbum <strong>${
+          activity.albumName || "Álbum deletado"
+        }</strong>`,
         color: "#ff3e6c",
       },
     };
@@ -612,5 +631,61 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("edit-cover-preview")
       );
     });
+  }
+
+  // Função para carregar favoritos do usuário
+  async function loadUserFavorites() {
+    try {
+      const token = localStorage.getItem("token");
+      const apiUrl = window.apiUrl;
+
+      const response = await fetch(apiUrl("api/favorites"), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Erro ao carregar favoritos");
+
+      const favorites = await response.json();
+      const favoritesGrid = document.getElementById("favorites-grid");
+
+      if (favorites.length === 0) {
+        favoritesGrid.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-solid fa-heart"></i>
+            <p>Você ainda não adicionou nenhuma carta aos favoritos.</p>
+          </div>
+        `;
+        return;
+      }
+
+      favoritesGrid.innerHTML = favorites
+        .map((favorite) => {
+          const card = favorite.card;
+          return `
+            <div class="favorite-card" onclick="window.location.href='/pages/explore/card-details.html?id=${
+              card.id
+            }'">
+              <img src="${
+                card.imageUrl || "/assets/images/placeholder-card.png"
+              }" alt="${card.nameEn}" />
+              <div class="favorite-card-info">
+                <h4>${card.nameEn}</h4>
+                <p>${card.set?.nameEn || ""} - #${card.number}</p>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    } catch (error) {
+      console.error("Erro ao carregar favoritos:", error);
+      document.getElementById("favorites-grid").innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <p>Erro ao carregar favoritos.</p>
+        </div>
+      `;
+    }
   }
 });

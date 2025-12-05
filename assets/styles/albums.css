@@ -340,10 +340,18 @@
   object-fit: cover;
   border-radius: 8px;
   border: 2px solid #444;
+  flex-shrink: 0;
+}
+
+.card-info-preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .card-info-preview h4 {
-  margin: 0 0 4px 0;
+  margin: 0;
   color: #fff;
   font-size: 16px;
 }
@@ -353,6 +361,33 @@
   color: #888;
   font-size: 13px;
 }
+
+.btn-view-details {
+  padding: 8px 16px;
+  background: #ff3e6c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.btn-view-details:hover {
+  background: #e63560;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 62, 108, 0.3);
+}
+
+.btn-view-details i {
+  font-size: 14px;
+}
+
 
 .albums-section {
   padding: 20px;
@@ -897,6 +932,24 @@
   flex-shrink: 0;
 }
 
+.album-cover-img {
+  width: 60px;
+  height: 84px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #1a1a2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.album-cover-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .album-card-info {
   flex: 1;
 }
@@ -1376,9 +1429,38 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  z-index: 10;
 }
 
-.card-item:hover .remove-card-btn {
+.favorite-card-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.favorite-card-btn.favorited {
+  background: rgba(255, 62, 108, 0.9);
+  color: #fff;
+}
+
+.favorite-card-btn:hover {
+  transform: scale(1.1);
+}
+
+.card-item:hover .remove-card-btn,
+.card-item:hover .favorite-card-btn {
   display: flex;
 }
 
@@ -2051,6 +2133,28 @@
 
 .form-input::placeholder {
   color: #666;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 }
 
 textarea.form-input {

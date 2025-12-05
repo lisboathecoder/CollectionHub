@@ -271,12 +271,18 @@ function openCardModal(card) {
       <div class="card-detail-modal__image-wrapper">
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image" onerror="this.src='/assets/images/placeholder-card.png'">
       </div>
-      <button
-        class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(
-          card
-        ).replace(/"/g, "&quot;")})">
-        <i class="fa-solid fa-plus"></i> Adicionar ao Álbum
-      </button>
+      <div class="card-detail-modal__actions">
+        <button
+          class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(
+            card
+          ).replace(/"/g, "&quot;")})">
+          <i class="fa-solid fa-plus"></i> Adicionar ao Álbum
+        </button>
+        <button
+          class="card-detail-modal__details-btn" onclick="window.location.href='/pages/explore/card-details.html?id=${card.id}'">
+          <i class="fa-solid fa-circle-info"></i> Ver Detalhes
+        </button>
+      </div>
     </div>
   `;
 

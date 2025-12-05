@@ -585,8 +585,8 @@ h1 {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   padding: 0 20px;
-  word-wrap: break-word;
   max-width: 100%;
+  white-space: pre-line;
 }
 
 .subtitle {

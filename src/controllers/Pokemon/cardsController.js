@@ -19,7 +19,12 @@ export const listarCards = async (req, res) => {
       });
     }
 
-    res.status(200).json(result.items);
+    res.status(200).json({
+      total: result.total,
+      mensagem: "Lista de cards (cartas)",
+      cards: result.items
+    });
+    
   } catch (e) {
     res.status(500).json({
       error: "Erro interno do servidor.",
@@ -86,13 +91,16 @@ export const listarPorId = async (req, res) => {
       });
     }
 
-    res.status(200).json({
-      mensagem: "Card (carta) encontrado com sucesso.",
-      card: card,
-    });
+    // Retornar card direto para compatibilidade com frontend
+    res.status(200).json(card);
   } catch (e) {
     res.status(500).json({
       error: "Erro interno do servidor.",
+      details: e.message,
+      status: 500,
+    });
+  }
+};
       details: e.message,
       status: 500,
     });

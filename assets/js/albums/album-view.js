@@ -183,6 +183,8 @@ async function loadAlbum(albumId) {
     ) {
       albumCards = currentAlbum.items;
       renderCards();
+      // Verificar status dos favoritos após renderizar
+      setTimeout(() => checkFavoritesStatus(), 500);
     } else {
       console.log("No items to render");
       renderCards();
@@ -225,12 +227,23 @@ function renderCards() {
       return `
             <div class="card-item ${
               isCustomItem ? "custom-item" : ""
-            }" data-item-id="${item.id}">
-                <button class="remove-card-btn" onclick="window.removeCard(${
+            }" data-item-id="${item.id}" ${
+        !isCustomItem && card.id
+          ? `onclick="window.location.href='/pages/explore/card-details.html?id=${card.id}'" style="cursor: pointer;"`
+          : ""
+      }>
+                <button class="remove-card-btn" onclick="event.stopPropagation(); window.removeCard(${
                   item.id
                 })">
                     <i class="fa-solid fa-times"></i>
                 </button>
+                ${
+                  !isCustomItem && card.id
+                    ? `<button class="favorite-card-btn" onclick="event.stopPropagation(); window.toggleFavorite(${card.id}, this)" data-card-id="${card.id}">
+                    <i class="fa-solid fa-heart"></i>
+                </button>`
+                    : ""
+                }
                 <img src="${imageUrl}" alt="${name}" onerror="this.src='/assets/images/placeholder-card.png'">
                 <div class="card-item-name">${name}</div>
                 <div class="card-item-number">${displayNumber}</div>
@@ -999,3 +1012,133 @@ window.closeCustomItemModal = function () {
     setTimeout(() => modal.remove(), 300);
   }
 };
+
+// Função para favoritar/desfavoritar uma carta
+window.toggleFavorite = async function (cardId, button) {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Faça login para adicionar favoritos");
+      return;
+    }
+
+    const apiBase = (window.API_BASE_URL || "http://localhost:3000").replace(
+      /\/+$/g,
+      ""
+    );
+
+    const isFavorited = button.classList.contains("favorited");
+
+    if (isFavorited) {
+      // Remover favorito
+      const response = await fetch(`${apiBase}/api/favorites/${cardId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        button.classList.remove("favorited");
+        showFavoriteToast("Removido dos favoritos", "info");
+      }
+    } else {
+      // Adicionar favorito
+      const response = await fetch(`${apiBase}/api/favorites`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ cardId }),
+      });
+
+      if (response.ok) {
+        button.classList.add("favorited");
+        showFavoriteToast("Adicionado aos favoritos!", "success");
+      } else {
+        const error = await response.json();
+        showFavoriteToast(error.error || "Erro ao favoritar", "error");
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao favoritar:", error);
+    showFavoriteToast("Erro ao favoritar carta", "error");
+  }
+};
+
+function showFavoriteToast(message, type = "info") {
+  const toast = document.createElement("div");
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `
+    <i class="fa-solid ${
+      type === "success"
+        ? "fa-check-circle"
+        : type === "error"
+        ? "fa-exclamation-circle"
+        : "fa-info-circle"
+    }"></i>
+    <span>${message}</span>
+  `;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: ${type === "success" ? "#00d4aa" : type === "error" ? "#ff3e6c" : "#3b82f6"};
+    color: white;
+    padding: 16px 24px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 10000;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+  `;
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.animation = "fadeOut 0.3s ease forwards";
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// Verificar status dos favoritos
+async function checkFavoritesStatus() {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const apiBase = (window.API_BASE_URL || "http://localhost:3000").replace(
+      /\/+$/g,
+      ""
+    );
+
+    const favoriteButtons = document.querySelectorAll(".favorite-card-btn");
+
+    for (const button of favoriteButtons) {
+      const cardId = button.getAttribute("data-card-id");
+      if (!cardId) continue;
+
+      const response = await fetch(
+        `${apiBase}/api/favorites/check/${cardId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.isFavorite) {
+          button.classList.add("favorited");
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao verificar favoritos:", error);
+  }
+}

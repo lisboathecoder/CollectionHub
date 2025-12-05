@@ -49,7 +49,6 @@ svg {
   max-width: 100%;
 }
 
-/* Utility Classes */
 .modal-open {
   overflow: hidden !important;
 }

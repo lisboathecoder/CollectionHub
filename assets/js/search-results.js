@@ -311,11 +311,17 @@ function openCardModal(card) {
       <div class="card-detail-modal__image-wrapper">
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image" onerror="this.src='/assets/images/placeholder-card.png'">
       </div>
-      <button class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(
-        card
-      ).replace(/"/g, "&quot;")})">
-        <i class="fa-solid fa-plus"></i> Add to Album
-      </button>
+      <div class="card-detail-modal__actions">
+        <button class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(
+          card
+        ).replace(/"/g, "&quot;")})">
+          <i class="fa-solid fa-plus"></i> Add to Album
+        </button>
+        <button
+          class="card-detail-modal__details-btn" onclick="window.location.href='/pages/explore/card-details.html?id=${card.id}'">
+          <i class="fa-solid fa-circle-info"></i> View Details
+        </button>
+      </div>
     </div>
   `;
 

@@ -48,6 +48,7 @@ model Card {
 
   packs      Pack[]
   albumItems AlbumItem[]
+  favorites  Favorite[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -73,6 +74,7 @@ model User {
   updatedAt        DateTime   @updatedAt
   albums           Album[]
   activities       Activity[]
+  favorites        Favorite[]
 }
 
 model Album {
@@ -80,6 +82,7 @@ model Album {
   userId      Int
   name        String
   description String?
+  coverUrl    String?
   gameType    String      @default("pokemon")
   isPublic    Boolean     @default(false)
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -106,13 +109,25 @@ model Activity {
   id        Int      @id @default(autoincrement())
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type      String // ALBUM_CREATED, ALBUM_UPDATED, CARD_ADDED, CARD_REMOVED
+  type      String
   albumId   Int?
   albumName String?
   cardName  String?
   cardImage String?
-  metadata  String? // JSON string com dados extras
+  metadata  String?
   createdAt DateTime @default(now())
 
   @@index([userId, createdAt])
+}
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cardId    Int
+  card      Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, cardId])
+  @@index([userId])
 }

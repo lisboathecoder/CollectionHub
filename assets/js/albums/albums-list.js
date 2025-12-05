@@ -61,9 +61,15 @@ function displayAlbums(albums) {
           album.id
         }'">
             <div class="album-card-header">
-                <div class="album-icon-large">
-                    <i class="fa-solid fa-book"></i>
-                </div>
+                ${
+                  album.coverImage
+                    ? `<div class="album-cover-img">
+                        <img src="${album.coverImage}" alt="${album.name}" />
+                      </div>`
+                    : `<div class="album-icon-large">
+                        <i class="fa-solid fa-book"></i>
+                      </div>`
+                }
                 <div class="album-card-info">
                     <h3>${album.name}</h3>
                     <p class="album-game-type">

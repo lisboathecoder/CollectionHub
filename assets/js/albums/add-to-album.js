@@ -56,6 +56,10 @@ async function openAddToAlbumModal(card) {
         <div class="card-info-preview">
             <h4>${card.nameEn}</h4>
             <p>${card.set?.nameEn || ""} - #${card.number}</p>
+            <button class="btn-view-details" onclick="viewCardDetails(${card.id})">
+                <i class="fa-solid fa-circle-info"></i>
+                Ver Detalhes
+            </button>
         </div>
     `;
 
@@ -213,6 +217,11 @@ function showSuccessMessage() {
     toast.classList.remove("show");
     setTimeout(() => toast.remove(), 300);
   }, 3000);
+}
+
+// Função para visualizar detalhes da carta
+function viewCardDetails(cardId) {
+  window.location.href = `/pages/explore/card-details.html?id=${cardId}`;
 }
 
 document.addEventListener("click", (e) => {

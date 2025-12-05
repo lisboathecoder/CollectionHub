@@ -511,14 +511,6 @@
   pointer-events: none;
 }
 
-.card-detail-modal__backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(4px);
-  z-index: 1;
-}
-
 .card-detail-modal__content {
   position: relative;
   z-index: 2;
@@ -586,19 +578,39 @@
   fill: currentColor;
 }
 
-.card-detail-modal__add-btn {
+.card-detail-modal__actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.card-detail-modal__add-btn,
+.card-detail-modal__details-btn {
   background: #00000096;
   color: #ff3e6c;
   border: 3px solid #ff3e6c;
   border-radius: 50px;
-  padding: 16px 52px;
-  font-size: 18px;
+  padding: 16px 32px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 0 20px rgba(255, 62, 108, 0.3);
   text-transform: none;
   letter-spacing: 0.3px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.card-detail-modal__details-btn {
+  background: #000000c7;
+  color: #3b82f6;
+  border-color: #3b82f6;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
 }
 
 .card-detail-modal__info {
@@ -641,6 +653,13 @@
   box-shadow: 0 0 30px rgba(255, 62, 108, 0.6);
 }
 
+.card-detail-modal__details-btn:hover {
+  background: #3b82f6;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+}
+
 @media (max-width: 768px) {
   .card-detail-modal__content {
     padding: 10px;
@@ -666,9 +685,15 @@
     height: 40px;
   }
 
-  .card-detail-modal__add-btn {
-    padding: 14px 40px;
-    font-size: 16px;
+  .card-detail-modal__actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card-detail-modal__add-btn,
+  .card-detail-modal__details-btn {
+    padding: 14px 24px;
+    font-size: 15px;
   }
 }
 
@@ -757,7 +782,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 

@@ -60,10 +60,10 @@ export const getUserAlbums = async (req, res) => {
       orderBy: { createdAt: "desc" },
     });
 
-    // Formata response com coverImage
+    // Formata response com coverImage (usa coverUrl ou primeira carta)
     const formattedAlbums = albums.map((album) => ({
       ...album,
-      coverImage: album.items[0]?.card?.imageUrl || null,
+      coverImage: album.coverUrl || album.items[0]?.card?.imageUrl || null,
     }));
 
     res.json(formattedAlbums);
@@ -121,7 +121,7 @@ export const getAlbumById = async (req, res) => {
 export const createAlbum = async (req, res) => {
   try {
     const userId = req.user.sub;
-    const { name, gameType, isPublic } = req.body;
+    const { name, gameType, isPublic, coverUrl } = req.body;
 
     if (!name || name.trim().length === 0) {
       return res.status(400).json({ message: "Nome do álbum é obrigatório" });
@@ -132,6 +132,7 @@ export const createAlbum = async (req, res) => {
         name: name.trim(),
         gameType: gameType || "pokemon",
         isPublic: isPublic || false,
+        coverUrl: coverUrl || null,
         userId: parseInt(userId),
       },
     });
@@ -154,7 +155,7 @@ export const updateAlbum = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.sub;
-    const { name, description, gameType, isPublic } = req.body;
+    const { name, description, gameType, isPublic, coverUrl } = req.body;
 
     const album = await prisma.album.findUnique({
       where: { id: parseInt(id) },
@@ -175,6 +176,7 @@ export const updateAlbum = async (req, res) => {
     if (description !== undefined) updateData.description = description;
     if (gameType) updateData.gameType = gameType;
     if (typeof isPublic === "boolean") updateData.isPublic = isPublic;
+    if (coverUrl !== undefined) updateData.coverUrl = coverUrl;
 
     const updatedAlbum = await prisma.album.update({
       where: { id: parseInt(id) },
@@ -213,6 +215,16 @@ export const deleteAlbum = async (req, res) => {
         .status(403)
         .json({ message: "Sem permissão para deletar este álbum" });
     }
+
+    // Registrar atividade de álbum deletado
+    await prisma.activity.create({
+      data: {
+        userId: parseInt(userId),
+        type: "ALBUM_DELETED",
+        albumId: parseInt(id),
+        albumName: album.name,
+      },
+    });
 
     await prisma.album.delete({
       where: { id: parseInt(id) },

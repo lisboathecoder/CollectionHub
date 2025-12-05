@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalhes da Carta - CollectionHub</title>
+    <link rel="stylesheet" href="/assets/styles/global.css" />
+    <link rel="stylesheet" href="/assets/styles/style.css">
+    <link rel="stylesheet" href="/assets/styles/card-details.css" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/images/favicon-16x16.png"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="navbar-left">
+        <div class="search-box">
+          <input
+            type="text"
+            placeholder="Buscar cartas..."
+            class="search-input"
+            id="searchInput"
+          />
+          <button class="search-btn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+      <div class="logo">
+        <a href="/index.html">
+          <img
+            src="/assets/images/Collection logo branca.png"
+            alt="CollectionHub Logo"
+          />
+        </a>
+      </div>
+      <div class="navbar-right">
+        <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
+          <img
+            src="/assets/images/icon.png"
+            alt="Profile"
+            class="icone-imagem"
+            id="profileImage"
+          />
+        </a>
+      </div>
+    </header>
+
+    <main class="card-details-container">
+
+      <div id="loadingState" class="loading-state">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <p>Carregando detalhes da carta...</p>
+      </div>
+
+      <div id="errorState" class="error-state" style="display: none">
+        <i class="fa-solid fa-exclamation-triangle"></i>
+        <h2>Carta não encontrada</h2>
+        <p>A carta que você está procurando não foi encontrada.</p>
+        <button class="btn-back" onclick="history.back()">
+          <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+      </div>
+
+      <div id="cardDetailsContent" class="card-details-content" style="display: none">
+        <button class="btn-back" onclick="history.back()">
+          <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+
+        <div class="card-details-grid">
+          <div class="card-image-section">
+            <div class="card-image-wrapper">
+              <img id="cardImage" src="" alt="Card Image" class="card-main-image" />
+            </div>
+            <div class="card-actions">
+              <button class="btn-primary btn-add-album" id="addToAlbumBtn">
+                <i class="fa-solid fa-plus"></i>
+                Adicionar ao Álbum
+              </button>
+              <button class="btn-secondary btn-share" id="shareBtn">
+                <i class="fa-solid fa-share-nodes"></i>
+                Compartilhar
+              </button>
+            </div>
+          </div>
+          <div class="card-info-section">
+            <div class="card-header-info">
+              <h1 id="cardName" class="card-name">Nome da Carta</h1>
+              <span id="cardRarity" class="card-rarity-badge">Rarity</span>
+            </div>
+
+            <div class="card-meta">
+              <div class="meta-item">
+                <span class="meta-label">
+                  <i class="fa-solid fa-hashtag"></i> Número
+                </span>
+                <span class="meta-value" id="cardNumber">#000</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">
+                  <i class="fa-solid fa-layer-group"></i> Set
+                </span>
+                <span class="meta-value" id="cardSet">Set Name</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">
+                  <i class="fa-solid fa-barcode"></i> Código do Set
+                </span>
+                <span class="meta-value" id="cardSetCode">SET-CODE</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">
+                  <i class="fa-solid fa-calendar"></i> Data de Lançamento
+                </span>
+                <span class="meta-value" id="cardReleaseDate">N/A</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">
+                  <i class="fa-solid fa-star"></i> Raridade
+                </span>
+                <span class="meta-value" id="cardRarityName">N/A</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">
+                  <i class="fa-solid fa-key"></i> ID da Carta
+                </span>
+                <span class="meta-value meta-id" id="cardId">0</span>
+              </div>
+            </div>
+
+            <div class="card-additional-info">
+              <h3><i class="fa-solid fa-info-circle"></i> Informações Adicionais</h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <strong>Slug:</strong>
+                  <span id="cardSlug">-</span>
+                </div>
+                <div class="info-item">
+                  <strong>Nome da Imagem:</strong>
+                  <span id="cardImageName">-</span>
+                </div>
+                <div class="info-item">
+                  <strong>Data de Criação:</strong>
+                  <span id="cardCreatedAt">-</span>
+                </div>
+                <div class="info-item">
+                  <strong>Última Atualização:</strong>
+                  <span id="cardUpdatedAt">-</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-set-info">
+              <h3><i class="fa-solid fa-box"></i> Sobre o Set</h3>
+              <div class="set-info-content">
+                <p id="setDescription">
+                  Este set faz parte da coleção Pokémon TCG.
+                </p>
+                <div class="set-stats">
+                  <div class="stat-item">
+                    <i class="fa-solid fa-cards-blank"></i>
+                    <span id="setCardCount">0</span>
+                    <small>Cartas no Set</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Navegação</h4>
+          <a href="/pages/public/about.html">Sobre</a>
+          <a href="/pages/public/contact.html">Contato</a>
+          <a href="/pages/public/faq.html">FAQ</a>
+        </div>
+        <div class="footer-section">
+          <h4>CollectionHub</h4>
+          <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Siga-nos</h4>
+          <a href="https://www.instagram.com/collectionhub.co/" target="_blank">Instagram</a>
+          <a href="mailto:collectionhub2025@gmail.com">Email</a>
+        </div>
+      </div>
+    </footer>
+    
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/token-handler.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/global-search.js"></script>
+    <script src="/assets/js/albums/add-to-album.js"></script>
+    <script src="/assets/js/card-details.js"></script>
+  </body>
+</html>
