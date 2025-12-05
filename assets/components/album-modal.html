@@ -1,13 +1,12 @@
     <!-- Global Album Modal - Add to any page that needs "Add to Album" functionality -->
-<div id="albumModal" class="album-modal" aria-hidden="true">
+<div id="albumModal" class="album-modal">
   <div class="modal__backdrop" onclick="closeAlbumModal()"></div>
   <div class="modal__content">
     <div class="modal__header">
-      <h2><i class="fa-solid fa-book"></i> Add to Album</h2>
+      <h2><i class="fa-solid fa-book"></i> Adicionar ao Álbum</h2>
       <button
         class="modal__close"
         onclick="closeAlbumModal()"
-        aria-label="Close"
       >
         <i class="fa-solid fa-times"></i>
       </button>
@@ -16,11 +15,11 @@
       <div id="albumsList" class="albums-list">
         <div class="albums-loading">
           <i class="fa-solid fa-spinner fa-spin"></i>
-          <p>Loading albums...</p>
+          <p>Carregando álbuns...</p>
         </div>
       </div>
       <button class="btn-create-album" onclick="goToCreateAlbum()">
-        <i class="fa-solid fa-plus"></i> Create New Album
+        <i class="fa-solid fa-plus"></i> Criar Novo Álbum
       </button>
     </div>
   </div>

@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Check if viewing another user's profile
   const urlParams = new URLSearchParams(window.location.search);
   const viewingUserId = urlParams.get("userId");
 
@@ -14,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const apiUrl = window.apiUrl;
 
-      // If viewing another user's profile
+      // se ta vendo outro perfil
       if (viewingUserId) {
         const response = await fetch(apiUrl(`api/users/${viewingUserId}`), {
           headers: {
@@ -27,11 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const user = await response.json();
-        renderProfile(user, false); // false = not own profile
+        renderProfile(user, false); 
         return;
       }
 
-      // Load own profile
+      // carrega perfil proprio
       const response = await fetch(apiUrl("api/profile/me"), {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -48,30 +47,27 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const user = await response.json();
-      renderProfile(user, true); // true = own profile
+      renderProfile(user, true); 
     } catch (error) {
       console.error("❌ Erro ao carregar perfil:", error);
       document.getElementById("profile-name").innerText = "Erro ao carregar.";
     }
   }
 
-  // Tab navigation
+  // navegacao das tabs
   const tabLinks = document.querySelectorAll(".profile-nav-link");
   tabLinks.forEach((tab) => {
     tab.addEventListener("click", (e) => {
       e.preventDefault();
 
-      // Remove active de todas as abas
       tabLinks.forEach((t) => t.classList.remove("active"));
       tab.classList.add("active");
 
-      // Esconde todos os conteúdos
       document.querySelectorAll(".tab-content").forEach((content) => {
         content.style.display = "none";
         content.classList.remove("active");
       });
 
-      // Mostra o conteúdo da aba clicada
       const tabName = tab.getAttribute("data-tab");
       const tabContent = document.getElementById(`tab-${tabName}`);
       if (tabContent) {
@@ -79,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tabContent.classList.add("active");
       }
 
-      // Carrega dados específicos da aba
+      // carrega dados
       if (tabName === "colecao") {
         loadUserAlbums();
       } else if (tabName === "atividades") {
@@ -90,10 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function loadUserAlbums() {
     try {
+      console.log('carregando albums...');
       const token = localStorage.getItem("token");
       const apiUrl = window.apiUrl;
 
-      // If viewing another user, load their albums (only public ones)
       let response;
       if (viewingUserId) {
         response = await fetch(apiUrl(`api/albums?userId=${viewingUserId}`), {
@@ -102,7 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
           },
         });
       } else {
-        // Load own albums
         response = await fetch(apiUrl("api/albums"), {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -128,7 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       albumsGrid.innerHTML = albums
         .map((album) => {
-          // Define ícone baseado no gameType
           let gameIcon = "fa-layer-group";
           if (
             album.gameType === "pokemon" ||
@@ -139,7 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
             gameIcon = "fa-palette";
           }
 
-          // Usa coverImage se disponível, senão mostra ícone
           const coverContent = album.coverImage
             ? `<img src="${album.coverImage}" alt="${album.name}" class="album-cover-img" />`
             : `<i class="fa-solid ${gameIcon}"></i>`;
@@ -176,7 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const token = localStorage.getItem("token");
       const apiUrl = window.apiUrl;
 
-      // If viewing another user, load their activities
       let url = "api/activities?limit=20";
       if (viewingUserId) {
         url = `api/activities?userId=${viewingUserId}&limit=20`;
@@ -331,19 +323,18 @@ document.addEventListener("DOMContentLoaded", () => {
       if (editCoverEl) editCoverEl.style.backgroundColor = "#333";
     }
 
-    // Only show edit button if viewing own profile
+    // so mostra edit se for perfil proprio
     const editBtn = document.getElementById("btn-edit-profile");
     if (editBtn) {
       editBtn.style.display = isOwnProfile ? "block" : "none";
     }
 
-    // Hide profile picture edit overlay for other users
     const picOverlay = document.querySelector(".profile-pic-overlay");
     if (picOverlay) {
       picOverlay.style.display = isOwnProfile ? "flex" : "none";
     }
 
-    // Populate form fields only for own profile
+    // popula form só se for perfil proprio
     if (isOwnProfile) {
       const inputName = document.getElementById("input-full-name");
       const inputNick = document.getElementById("input-nick-name");
@@ -359,7 +350,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadUserData();
 
-  // Carrega atividades inicialmente (tab ativa por padrão)
   loadUserActivities();
 
   async function resizeImage(file, maxWidth, maxHeight) {
@@ -425,12 +415,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeModalBtn = document.getElementById("btn-close-modal");
   const editProfileForm = document.getElementById("edit-profile-form");
 
-  function openModal() {
+  const openModal = () => {
     editProfileModal.classList.add("active");
     document.body.style.overflow = "hidden";
   }
 
-  function closeModal() {
+  const closeModal = () => {
     editProfileModal.classList.remove("active");
     document.body.style.overflow = "";
   }

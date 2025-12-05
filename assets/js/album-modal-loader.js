@@ -1,20 +1,15 @@
-// Global Album Modal Loader
-// Include this script on any page that needs "Add to Album" functionality
-
 document.addEventListener("DOMContentLoaded", () => {
-  // Check if modal already exists
   if (document.getElementById("albumModal")) {
     return;
   }
 
-  // Create modal HTML
   const modalHTML = `
     <div id="albumModal" class="album-modal" aria-hidden="true">
       <div class="modal__backdrop" onclick="closeAlbumModal()"></div>
       <div class="modal__content">
         <div class="modal__header">
-          <h2><i class="fa-solid fa-book"></i> Add to Album</h2>
-          <button class="modal__close" onclick="closeAlbumModal()" aria-label="Close">
+          <h2><i class="fa-solid fa-book"></i> Adicionar ao Álbum</h2>
+          <button class="modal__close" onclick="closeAlbumModal()">
             <i class="fa-solid fa-times"></i>
           </button>
         </div>
@@ -22,21 +17,19 @@ document.addEventListener("DOMContentLoaded", () => {
           <div id="albumsList" class="albums-list">
             <div class="albums-loading">
               <i class="fa-solid fa-spinner fa-spin"></i>
-              <p>Loading albums...</p>
+              <p>Carregando álbuns...</p>
             </div>
           </div>
           <button class="btn-create-album" onclick="goToCreateAlbum()">
-            <i class="fa-solid fa-plus"></i> Create New Album
+            <i class="fa-solid fa-plus"></i> Criar Novo Álbum
           </button>
         </div>
       </div>
     </div>
   `;
 
-  // Append modal to body
   document.body.insertAdjacentHTML("beforeend", modalHTML);
 
-  // Create styles
   const styleElement = document.createElement("style");
   styleElement.textContent = `
     .album-modal {

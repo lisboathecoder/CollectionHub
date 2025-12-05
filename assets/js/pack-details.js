@@ -92,37 +92,38 @@ const loadingEl = document.getElementById("loading");
 const errorEl = document.getElementById("error");
 const packHeaderEl = document.getElementById("pack-header");
 const filtersEl = document.getElementById("filters");
-const cardsGridEl = document.getElementById("cards-grid");
+const cardsGrid = document.getElementById("cards-grid");
 const packNameEl = document.getElementById("pack-name");
 const packInfoEl = document.getElementById("pack-info");
-const rarityFilterEl = document.getElementById("rarity-filter");
-const sortFilterEl = document.getElementById("sort-filter");
-const searchInputEl = document.getElementById("search-input");
+const rarityFilter = document.getElementById("rarity-filter");
+const sortFilter = document.getElementById("sort-filter");
+const searchInput = document.getElementById("search-input");
 
-async function loadCards() {
+const loadCards = async () => {
   if (!setCode || !packName) {
-    showError("No set or pack specified");
+    showError("Nenhum set ou pack especificado");
     return;
   }
 
   try {
+    console.log('carregando...');
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
     const apiUrl = window.apiUrl;
     console.log("🔍 Buscando cartas do pack:", packName, "no set:", setCode);
-    console.log("🌐 API URL:", apiUrl(`api/pokemon/cards?set=${setCode}`));
+    // console.log("🌐 API URL:", apiUrl(`api/pokemon/cards?set=${setCode}`));
 
     const response = await fetch(
       apiUrl(`api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`)
     );
 
-    console.log("📡 Status da resposta:", response.status);
+    // console.log("📡 Status da resposta:", response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error("❌ Erro na resposta:", errorText);
-      throw new Error("Failed to fetch cards");
+      throw new Error("Erro ao carregar");
     }
 
     const data = await response.json();
@@ -135,9 +136,9 @@ async function loadCards() {
     );
 
     if (packCards.length === 0) {
-      console.log(
-        `Pack ${decodedPackName} não encontrado, mostrando todas as cartas do set`
-      );
+      // console.log(
+      //   `Pack ${decodedPackName} não encontrado, mostrando todas as cartas do set`
+      // );
       packCards = data;
     }
 
@@ -145,7 +146,7 @@ async function loadCards() {
     filteredCards = [...allCards];
 
     if (allCards.length === 0) {
-      showError(`No cards found for ${decodedPackName} pack`);
+      showError(`Nenhuma carta encontrada para o pack ${decodedPackName}`);
       return;
     }
 
@@ -177,12 +178,12 @@ async function loadCards() {
     loadingEl.style.display = "none";
     packHeaderEl.style.display = "block";
     filtersEl.style.display = "flex";
-    cardsGridEl.style.display = "grid";
+    cardsGrid.style.display = "grid";
 
     renderCards();
   } catch (error) {
-    console.error("Error loading cards:", error);
-    showError("Failed to load cards. Please try again.");
+    console.error("Erro ao carregar:", error);
+    showError("Deu ruim ao carregar. Tente novamente.");
   }
 }
 
@@ -193,11 +194,11 @@ function showError(message) {
 }
 
 function populateRarityFilter() {
-  rarityFilterEl.innerHTML = "";
+  rarityFilter.innerHTML = "";
   const allOption = document.createElement("option");
   allOption.value = "";
-  allOption.textContent = "All";
-  rarityFilterEl.appendChild(allOption);
+  allOption.textContent = "Todas";
+  rarityFilter.appendChild(allOption);
 
   const rarities = [
     ...new Set(allCards.map((card) => card.rarity?.name).filter(Boolean)),
@@ -207,15 +208,15 @@ function populateRarityFilter() {
     const option = document.createElement("option");
     option.value = rarity;
     option.textContent = rarity;
-    rarityFilterEl.appendChild(option);
+    rarityFilter.appendChild(option);
   });
 }
 
 function renderCards() {
-  cardsGridEl.innerHTML = "";
+  cardsGrid.innerHTML = "";
 
   if (filteredCards.length === 0) {
-    cardsGridEl.innerHTML = '<p class="no-results">No cards found</p>';
+    cardsGrid.innerHTML = '<p class="no-results">Nenhuma carta encontrada</p>';
     return;
   }
 
@@ -248,7 +249,7 @@ function renderCards() {
       openCardModal(card);
     });
 
-    cardsGridEl.appendChild(cardEl);
+    cardsGrid.appendChild(cardEl);
   });
 
   renderPagination(totalPages);
@@ -270,10 +271,11 @@ function openCardModal(card) {
       <div class="card-detail-modal__image-wrapper">
         <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image" onerror="this.src='/assets/images/placeholder-card.png'">
       </div>
-      <button class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(
-        card
-      ).replace(/"/g, "&quot;")})">
-        <i class="fa-solid fa-plus"></i> Add to Album
+      <button
+        class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(
+          card
+        ).replace(/"/g, "&quot;")})">
+        <i class="fa-solid fa-plus"></i> Adicionar ao Álbum
       </button>
     </div>
   `;
@@ -321,7 +323,7 @@ function renderPagination(totalPages) {
     paginationEl = document.createElement("div");
     paginationEl.id = "pagination";
     paginationEl.className = "pagination";
-    cardsGridEl.parentNode.appendChild(paginationEl);
+    cardsGrid.parentNode.appendChild(paginationEl);
   }
 
   if (totalPages <= 1) {
@@ -362,8 +364,8 @@ function renderPagination(totalPages) {
 }
 
 function applyFilters() {
-  const selectedRarity = rarityFilterEl.value;
-  const searchTerm = searchInputEl.value.toLowerCase();
+  const selectedRarity = rarityFilter.value;
+  const searchTerm = searchInput.value.toLowerCase();
 
   filteredCards = allCards.filter((card) => {
     const matchesRarity =
@@ -382,7 +384,7 @@ function applyFilters() {
 }
 
 function applySorting() {
-  const sortBy = sortFilterEl.value;
+  const sortBy = sortFilter.value;
 
   filteredCards.sort((a, b) => {
     switch (sortBy) {
@@ -397,11 +399,11 @@ function applySorting() {
   });
 }
 
-rarityFilterEl.addEventListener("change", applyFilters);
-sortFilterEl.addEventListener("change", () => {
+rarityFilter.addEventListener("change", applyFilters);
+sortFilter.addEventListener("change", () => {
   applySorting();
   renderCards();
 });
-searchInputEl.addEventListener("input", applyFilters);
+searchInput.addEventListener("input", applyFilters);
 
 loadCards();
