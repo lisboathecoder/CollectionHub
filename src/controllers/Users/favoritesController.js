@@ -11,6 +11,10 @@ export const addFavorite = async (req, res) => {
 
     const card = await prisma.card.findUnique({
       where: { id: parseInt(cardId) },
+      include: {
+        set: true,
+        rarity: true,
+      },
     });
 
     if (!card) {
@@ -42,6 +46,20 @@ export const addFavorite = async (req, res) => {
             rarity: true,
           },
         },
+      },
+    });
+
+    // Criar atividade de favorito
+    await prisma.activity.create({
+      data: {
+        userId: userId,
+        type: "CARD_FAVORITED",
+        cardName: card.nameEn,
+        cardImage: card.imageUrl,
+        metadata: JSON.stringify({
+          cardId: card.id,
+          setName: card.set?.nameEn,
+        }),
       },
     });
 

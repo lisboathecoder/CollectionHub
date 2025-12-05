@@ -5,9 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
         card.addEventListener('click', () => {
             const gameType = card.getAttribute('data-game');
 
-            sessionStorage.setItem('albumGameType', gameType);
-
-            window.location.href = '/pages/albums/create-album.html';
+            // Redirecionar com parâmetro na URL
+            if (gameType === 'pokemon') {
+                window.location.href = '/pages/albums/create-album.html?type=pokemon-tcg-pocket';
+            } else {
+                window.location.href = `/pages/albums/create-album.html?type=${gameType}`;
+            }
         });
     });
 });

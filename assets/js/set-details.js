@@ -77,7 +77,6 @@ const sortFilter = document.getElementById("sort-filter");
 const searchInput = document.getElementById("search-input");
 
 async function loadCards() {
-  // console.log("🚀 Iniciando carregamento de cards...");
   console.log("📋 Set code:", setCode);
 
   if (!setCode) {
@@ -89,18 +88,10 @@ async function loadCards() {
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
-    const apiUrl =
-      window.API_BASE_URL ||
-      "http://localhost:3000/" ||
-      "https://collectionhub.up.railway.app";
-    // console.log("🔍 Buscando cartas do set:", setCode);
-    // console.log("🌐 API URL:", `${apiUrl}api/pokemon/cards?set=${setCode}`);
-
+    // pega a URL base da API configurada no config.js
     const response = await fetch(
-      `${apiUrl}api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`
+      window.apiUrl(`api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`)
     );
-
-    // console.log("📡 Status da resposta:", response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -109,10 +100,9 @@ async function loadCards() {
     }
 
     const data = await response.json();
-    allCards = data;
+    // a API retorna { cards: [...], total: X } entao precisamos extrair o array
+    allCards = data.cards || data;
     filteredCards = [...allCards];
-
-    // console.log("✅ Cards carregados:", allCards.length);
 
     if (allCards.length === 0) {
       showError("Nenhuma carta encontrada neste set");
@@ -121,9 +111,10 @@ async function loadCards() {
 
     populateRarityFilter();
 
+    // exibe o logo do set se tiver, senao mostra so o nome
     const setInfo = SET_INFO[setCode] || { name: setCode, logo: null };
     setNameEl.innerHTML = setInfo.logo
-      ? `<img src="${setInfo.logo}" alt="${setInfo.name}" style="max-width: 300px; height: auto; margin-bottom: 20px;">`
+      ? `<img src="${setInfo.logo}" alt="${setInfo.name}" style="max-width: 400px; max-height: 120px; height: auto; margin-bottom: 10px;">`
       : setInfo.name;
     setInfoEl.textContent = `${allCards.length} cards`;
     document.getElementById(
@@ -136,7 +127,6 @@ async function loadCards() {
     cardsGrid.style.display = "grid";
 
     renderCards();
-    // console.log("🎨 Cards renderizados na tela");
   } catch (error) {
     console.error("Erro ao carregar:", error);
     showError("Deu ruim ao carregar. Tente novamente.");
@@ -149,6 +139,7 @@ function showError(message) {
   errorEl.querySelector("p").textContent = message;
 }
 
+// preenche o dropdown de filtro de raridade com as raridades encontradas nas cartas
 function populateRarityFilter() {
   rarityFilter.innerHTML = '<option value="">Todas as raridades</option>';
 
@@ -165,7 +156,7 @@ function populateRarityFilter() {
 }
 
 function renderCards() {
-  // console.log("🎯 Renderizando", filteredCards.length, "cards...");
+
   cardsGrid.innerHTML = "";
 
   if (filteredCards.length === 0) {
@@ -180,13 +171,14 @@ function renderCards() {
 
   // console.log("📄 Mostrando cards", startIndex, "a", endIndex);
 
+  // renderiza cada carta no grid
   cardsToShow.forEach((card) => {
     const cardEl = document.createElement("div");
     cardEl.className = "card-item";
 
     const imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
-    const cardName = card.nameEn || "Unknown";
-    const rarityName = card.rarity?.name || "Unknown";
+    const cardName = card.nameEn || "Desconhecido";
+    const rarityName = card.rarity?.name || "Desconhecido";
 
     cardEl.innerHTML = `
       <div class="card-image-container">
@@ -201,11 +193,11 @@ function renderCards() {
       </div>
     `;
 
+    // ao clicar na carta abre a pagina de detalhes
     cardEl.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      // console.log("🖱️ Carta clicada:", card.nameEn);
-      openCardModal(card);
+      window.location.href = `/pages/explore/card-details.html?id=${card.id}`;
     });
 
     cardsGrid.appendChild(cardEl);
@@ -261,6 +253,7 @@ function renderPagination(totalPages) {
   });
 }
 
+// filtra as cartas por raridade e termo de busca
 function applyFilters() {
   const selectedRarity = rarityFilter.value;
   const searchTerm = searchInput.value.toLowerCase();
@@ -281,6 +274,7 @@ function applyFilters() {
   renderCards();
 }
 
+// ordena as cartas pelo criterio selecionado
 function applySorting() {
   const sortBy = sortFilter.value;
 
@@ -297,64 +291,7 @@ function applySorting() {
   });
 }
 
-function openCardModal(card) {
-  // console.log("🔵 Abrindo modal para carta:", card);
-
-  const imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
-  const cardName = card.nameEn || "Unknown";
-
-  const modal = document.createElement("div");
-  modal.className = "card-detail-modal";
-  modal.setAttribute("aria-hidden", "false");
-
-  modal.innerHTML = `
-    <div class="card-detail-modal__backdrop"></div>
-    <div class="card-detail-modal__content">
-      <button class="card-detail-modal__close">✕</button>
-      <div class="card-detail-modal__image-wrapper">
-        <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image">
-      </div>
-      <div class="card-detail-modal__actions">
-        <button class="card-detail-modal__add-btn" onclick="event.stopPropagation(); openAddToAlbumModalWithCard(${JSON.stringify(
-          card
-        ).replace(/"/g, "&quot;")})">
-          <i class="fa-solid fa-plus"></i> Adicionar ao Álbum
-        </button>
-        <button
-          class="card-detail-modal__details-btn" onclick="window.location.href='/pages/explore/card-details.html?id=${card.id}'">
-          <i class="fa-solid fa-circle-info"></i> Ver Detalhes
-        </button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-  document.body.classList.add("modal-open");
-
-  // console.log("✅ Modal adicionado ao DOM");
-
-  const closeBtn = modal.querySelector(".card-detail-modal__close");
-  const backdrop = modal.querySelector(".card-detail-modal__backdrop");
-
-  const closeModal = () => {
-    // console.log("🔴 Fechando modal");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("modal-open");
-    setTimeout(() => modal.remove(), 200);
-  };
-
-  closeBtn.addEventListener("click", closeModal);
-  backdrop.addEventListener("click", closeModal);
-}
-
-function openAddToAlbumModalWithCard(card) {
-  if (typeof openAddToAlbumModal === "function") {
-    openAddToAlbumModal(card);
-  } else {
-    console.error("openAddToAlbumModal function not found");
-  }
-}
-
+// eventos dos filtros
 rarityFilter.addEventListener("change", applyFilters);
 sortFilter.addEventListener("change", () => {
   applySorting();
@@ -362,4 +299,5 @@ sortFilter.addEventListener("change", () => {
 });
 searchInput.addEventListener("input", applyFilters);
 
+// carrega as cartas quando a pagina iniciar
 loadCards();

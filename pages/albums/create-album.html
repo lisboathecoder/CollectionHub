@@ -78,7 +78,39 @@
             <label for="albumName" class="form-label">Nome do álbum</label>
             <input type="text" id="albumName" class="form-input" placeholder="Ex: Minha Coleção de Pokemon" required
               maxlength="50" />
-            <span class="form-hint">Máximo 50 caracteres</span>
+            <span class="form-hint" id="nameCount">0/50</span>
+          </div>
+          
+          <div class="form-group" id="customCategoryGroup" style="display: none;">
+            <label for="customCategory" class="form-label">Categoria Personalizada *</label>
+            <input type="text" id="customCategory" class="form-input" placeholder="Ex: Figuras de Ação, Selos, Moedas, etc." 
+              maxlength="50" />
+            <span class="form-hint">Defina o tipo de colecionável do seu álbum</span>
+          </div>
+          
+          <div class="form-group">
+            <label for="albumDescription" class="form-label">Descrição (opcional)</label>
+            <textarea id="albumDescription" class="form-input" placeholder="Descreva seu álbum..." rows="3"
+              maxlength="500"></textarea>
+            <span class="form-hint" id="descriptionCount">0/500</span>
+          </div>
+
+          <div class="form-group">
+            <label for="coverImage" class="form-label">Capa do Álbum (opcional)</label>
+            <div class="image-upload-area">
+              <input type="file" id="coverImage" class="file-input" accept="image/*" />
+              <label for="coverImage" class="file-label">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Clique para selecionar ou arraste a imagem</span>
+              </label>
+              <div id="coverPreview" class="image-preview" style="display: none;">
+                <img id="coverPreviewImg" src="" alt="Preview" />
+                <button type="button" class="btn-remove-image" onclick="removeCoverImage()">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+            <span class="form-hint">Se não informada, será usada a primeira carta do álbum</span>
           </div>
 
           <div class="form-group">
@@ -89,11 +121,14 @@
             <span class="form-hint">Outros usuários poderão visualizar seu álbum</span>
           </div>
 
+          <div id="errorMessage" class="error-message"></div>
+          <div id="successMessage" class="success-message"></div>
+
           <div class="form-actions">
-            <button type="button" class="btn-cancel" onclick="history.back()">
+            <button type="button" class="btn-cancel" id="cancelBtn">
               Cancelar
             </button>
-            <button type="submit" class="btn-create" formaction="/pages/albums/album-view.html">
+            <button type="submit" class="btn-create" id="submitBtn">
               <i class="fa-solid fa-plus"></i> Criar Álbum
             </button>
           </div>
@@ -129,6 +164,7 @@
   </footer>
 
   <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/toast.js"></script>
   <script src="/assets/js/header.js"></script>
   <script src="/assets/js/global-search.js"></script>
   <script src="/assets/js/albums/create-album.js"></script>

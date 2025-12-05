@@ -46,17 +46,17 @@
   <main class="set-details-container">
     <div id="loading" class="loading-state">
       <div class="spinner"></div>
-      <p>Loading cards...</p>
+      <p>Carregando cartas...</p>
     </div>
 
     <div id="error" class="error-state" style="display: none">
-      <p>Failed to load cards. Please try again.</p>
-      <button onclick="location.reload()">Retry</button>
+      <p>Falha ao carregar cartas. Tente novamente.</p>
+      <button onclick="location.reload()">Tentar Novamente</button>
     </div>
 
     <div id="pack-header" class="set-header" style="display: none">
       <a href="/pages/explore/homeSetPokemon.html" class="back-button">
-        ← Back to Sets
+        ← Voltar aos Sets
       </a>
       <h1 id="pack-name"></h1>
       <p id="pack-info"></p>
@@ -64,20 +64,20 @@
 
     <div id="filters" class="filters" style="display: none">
       <div class="filter-group">
-        <input type="text" id="search-input" placeholder="Search cards..." class="search-input-filter" />
+        <input type="text" id="search-input" placeholder="Buscar cartas..." class="search-input-filter" />
       </div>
       <div class="filter-group">
-        <label for="rarity-filter">Rarity:</label>
+        <label for="rarity-filter">Raridade:</label>
         <select id="rarity-filter">
-          <option value="">All</option>
+          <option value="">Todas</option>
         </select>
       </div>
       <div class="filter-group">
-        <label for="sort-filter">Sort by:</label>
+        <label for="sort-filter">Ordenar por:</label>
         <select id="sort-filter">
-          <option value="number">Number</option>
-          <option value="rarity">Rarity</option>
-          <option value="name">Name</option>
+          <option value="number">Número</option>
+          <option value="rarity">Raridade</option>
+          <option value="name">Nome</option>
         </select>
       </div>
     </div>
@@ -85,9 +85,9 @@
     <div id="cards-grid" class="cards-grid" style="display: none"></div>
 
     <div id="pagination" class="pagination" style="display: none">
-      <button id="prev-page" disabled>← Previous</button>
-      <span id="page-info">Page 1</span>
-      <button id="next-page">Next →</button>
+      <button id="prev-page" disabled>← Anterior</button>
+      <span id="page-info">Página 1</span>
+      <button id="next-page">Próxima →</button>
     </div>
   </main>
 
@@ -136,10 +136,9 @@
       </div>
   </footer>
 
-    <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/album-modal-loader.js"></script>
-    <script src="/assets/js/albums/album-modal.js"></script>
-    <script src="/assets/js/pack-details.js?v=3"></script>
+    <script src="/assets/js/config.js?v=4"></script>
+    <script src="/assets/js/albums/add-to-album.js"></script>
+    <script src="/assets/js/pack-details.js?v=4"></script>
     <script src="/assets/js/global-search.js?v=2"></script>
     <script src="/assets/js/header.js?v=2"></script>
     

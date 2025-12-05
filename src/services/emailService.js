@@ -1,3 +1,5 @@
+// esse arquivo serve para gerenciar o serviço de email, como envio de códigos 2FA, utilizei o resend.com pra isso
+
 import { Resend } from "resend";
 const apiKey = process.env.RESEND_API_KEY;
 const resend = apiKey ? new Resend(apiKey) : null;
@@ -29,7 +31,7 @@ export const send2FACode = async (email, code, username) => {
 
     const expiresIn = parseInt(process.env.TWO_FACTOR_CODE_EXPIRES_IN) || 5;
 
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({ // essa parte envia o email, eu fiz primeiro um html e depois coloquei ele aqui
       from: FROM_EMAIL,
       to: email,
       subject: `Código de Verificação - CollectionHub`,

@@ -1935,7 +1935,7 @@
 
 .btn-custom-item {
   padding: 12px 24px;
-  background: linear-gradient(135deg, #6b46c1 0%, #9333ea 100%);
+  background: #ff3e6c;
   color: white;
   border: none;
   border-radius: 8px;
@@ -2161,6 +2161,278 @@ textarea.form-input {
   resize: vertical;
   min-height: 80px;
   font-family: inherit;
+}
+
+/* Estilos para upload de imagem */
+.image-upload-area {
+  position: relative;
+  min-height: 200px;
+  border: 2px dashed #444;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s ease;
+}
+
+.image-upload-area:hover {
+  border-color: #ff3e6c;
+  background: rgba(255, 62, 108, 0.05);
+}
+
+.file-input {
+  display: none;
+}
+
+.file-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 20px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.file-label:hover {
+  color: #ff3e6c;
+}
+
+.file-label i {
+  font-size: 48px;
+  opacity: 0.6;
+}
+
+.file-label span {
+  font-size: 14px;
+  text-align: center;
+}
+
+.image-preview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.btn-remove-image {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 62, 108, 0.9);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.btn-remove-image:hover {
+  background: #ff3e6c;
+  transform: scale(1.1);
+}
+
+.btn-remove-image i {
+  font-size: 16px;
+}
+
+.custom-card-form {
+  width: 100%;
+}
+
+.custom-card-form .form-group {
+  margin-bottom: 20px;
+}
+
+.custom-card-form .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ddd;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.custom-card-form .form-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.custom-card-form .form-input:focus {
+  outline: none;
+  border-color: #ff3e6c;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.custom-card-form .form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.custom-card-form .btn-cancel {
+  flex: 1;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.custom-card-form .btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #666;
+}
+
+.albums-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 20px;
+  color: #888;
+}
+
+.albums-loading i {
+  font-size: 48px;
+  color: #ff3e6c;
+}
+
+.albums-loading p {
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Sistema de Toast Padronizado */
+.toast-notification {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  min-width: 320px;
+  max-width: 500px;
+  background: #1a1a1a;
+  border: 2px solid;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  z-index: 10001;
+  opacity: 0;
+  transform: translateX(400px);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast-notification.toast-success {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0d2818 100%);
+}
+
+.toast-notification.toast-error {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d1414 100%);
+}
+
+.toast-notification.toast-warning {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2314 100%);
+}
+
+.toast-notification.toast-info {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, #1a1a1a 0%, #14202d 100%);
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.toast-success .toast-icon {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.toast-error .toast-icon {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.toast-warning .toast-icon {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.toast-info .toast-icon {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.toast-content {
+  flex: 1;
+}
+
+.toast-message {
+  margin: 0;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.toast-close {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #999;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.toast-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
 
 /* Responsive adjustments */

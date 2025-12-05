@@ -1,8 +1,10 @@
+// pega o ID da carta pela URL
 function getCardIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
   return params.get("id");
 }
 
+// formata data para o formato brasileiro
 function formatDate(dateString) {
   if (!dateString) return "N/A";
   const date = new Date(dateString);
@@ -13,6 +15,7 @@ function formatDate(dateString) {
   });
 }
 
+// formata data e hora para o formato brasileiro
 function formatDateTime(dateString) {
   if (!dateString) return "N/A";
   const date = new Date(dateString);
@@ -25,17 +28,15 @@ function formatDateTime(dateString) {
   });
 }
 
+// busca os detalhes da carta na API
 async function fetchCardDetails(cardId) {
-  const apiBase = (window.API_BASE_URL || "http://localhost:3000").replace(
-    /\/+$/g,
-    ""
-  );
-
   try {
-    const response = await fetch(`${apiBase}/api/pokemon/cards/id/${cardId}`);
-
+    const response = await fetch(window.apiUrl(`api/pokemon/cards/id/${cardId}`));
+    
     if (!response.ok) {
-      throw new Error("Carta não encontrada");
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Erro na resposta:', errorData);
+      throw new Error(errorData.mensagem || "Carta não encontrada");
     }
 
     const data = await response.json();
@@ -46,6 +47,7 @@ async function fetchCardDetails(cardId) {
   }
 }
 
+// retorna a cor da raridade com base no código
 function getRarityColor(rarityCode) {
   const rarityColors = {
     common: "#6b7280",
@@ -59,18 +61,26 @@ function getRarityColor(rarityCode) {
   return rarityColors[rarityCode?.toLowerCase()] || "#6b7280";
 }
 
-function renderCardDetails(card) {
-  const breadcrumbSet = document.getElementById("breadcrumbSet");
-  if (breadcrumbSet && card.set) {
-    breadcrumbSet.textContent = card.set.nameEn;
-  }
-
+// preenche a pagina com as informações da carta
+function displayCardDetails(card) {
   const cardImage = document.getElementById("cardImage");
-  cardImage.src = card.imageUrl || "/assets/images/card-placeholder.png";
-  cardImage.alt = card.nameEn || "Card";
+  // Priorizar imageUrl, depois tentar imageName
+  if (card.imageUrl && card.imageUrl.startsWith('http')) {
+    cardImage.src = card.imageUrl;
+  } else if (card.imageName) {
+    cardImage.src = `/assets/images/cards/${card.imageName}`;
+  } else {
+    cardImage.src = "/assets/images/card-placeholder.png";
+  }
+  cardImage.alt = card.nameEn || card.slug || "Card";
+  
+  // Adicionar handler de erro para imagem
+  cardImage.onerror = function() {
+    this.src = "/assets/images/card-placeholder.png";
+  };
 
   const cardName = document.getElementById("cardName");
-  cardName.textContent = card.nameEn || "Nome não disponível";
+  cardName.textContent = card.nameEn || card.slug || "Nome não disponível";
 
   const cardRarity = document.getElementById("cardRarity");
   if (card.rarity) {
@@ -105,75 +115,164 @@ function renderCardDetails(card) {
   document.getElementById("setCardCount").textContent =
     card.set?.count || "0";
 
-  // Configurar botão de adicionar ao álbum
+  // configura o botao de adicionar ao album - vai direto pro modal de albuns
   const addToAlbumBtn = document.getElementById("addToAlbumBtn");
   addToAlbumBtn.addEventListener("click", () => {
     if (typeof openAddToAlbumModal !== "undefined") {
       openAddToAlbumModal(card);
     } else {
-      alert("Função de adicionar ao álbum não está disponível.");
+      alert("Álbuns não estão disponíveis no momento.");
     }
   });
 
-  // Configurar botão de compartilhar
+  // configura o botao de favoritar
+  const favoriteBtn = document.getElementById("favoriteBtn");
+  checkFavoriteStatus(card.id);
+  favoriteBtn.addEventListener("click", () => toggleFavorite(card));
+
+  // configura o botao de compartilhar
   const shareBtn = document.getElementById("shareBtn");
   shareBtn.addEventListener("click", () => shareCard(card));
 }
 
-// Função para compartilhar carta
-function shareCard(card) {
-  const shareUrl = window.location.href;
-  const shareText = `Confira esta carta: ${card.nameEn} - ${card.set?.nameEn || ""}`;
+// verifica se a carta ja esta nos favoritos
+async function checkFavoriteStatus(cardId) {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-  if (navigator.share) {
-    navigator
-      .share({
-        title: card.nameEn,
-        text: shareText,
-        url: shareUrl,
-      })
-      .catch((error) => console.log("Erro ao compartilhar:", error));
-  } else {
-    // Fallback: copiar para clipboard
-    navigator.clipboard
-      .writeText(shareUrl)
-      .then(() => {
-        alert("Link copiado para a área de transferência!");
-      })
-      .catch((error) => {
-        console.error("Erro ao copiar link:", error);
-        alert("Não foi possível copiar o link.");
-      });
+    const response = await fetch(window.apiUrl(`api/favorites/check/${cardId}`), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const favoriteBtn = document.getElementById("favoriteBtn");
+      const icon = favoriteBtn.querySelector("i");
+      
+      if (data.isFavorite) {
+        icon.classList.remove("fa-regular");
+        icon.classList.add("fa-solid");
+        favoriteBtn.classList.add("favorited");
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao verificar favorito:", error);
   }
 }
 
-// Mostrar estado de loading
+// adiciona ou remove a carta dos favoritos
+async function toggleFavorite(card) {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Você precisa estar logado para favoritar cartas");
+      window.location.href = "/pages/userLogin/login.html";
+      return;
+    }
+
+    const favoriteBtn = document.getElementById("favoriteBtn");
+    const icon = favoriteBtn.querySelector("i");
+    const isFavorited = icon.classList.contains("fa-solid");
+
+    favoriteBtn.disabled = true;
+
+    if (isFavorited) {
+      // Remover dos favoritos
+      const response = await fetch(window.apiUrl(`api/favorites/${card.id}`), {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        icon.classList.remove("fa-solid");
+        icon.classList.add("fa-regular");
+        favoriteBtn.classList.remove("favorited");
+        alert("Carta removida dos favoritos!");
+      } else {
+        throw new Error("Erro ao remover favorito");
+      }
+    } else {
+      // Adicionar aos favoritos
+      const response = await fetch(window.apiUrl("api/favorites"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ cardId: card.id }),
+      });
+
+      if (response.ok) {
+        icon.classList.remove("fa-regular");
+        icon.classList.add("fa-solid");
+        favoriteBtn.classList.add("favorited");
+        alert("Carta adicionada aos favoritos!");
+      } else {
+        throw new Error("Erro ao adicionar favorito");
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao favoritar carta:", error);
+    alert("Erro ao favoritar carta. Tente novamente.");
+  } finally {
+    const favoriteBtn = document.getElementById("favoriteBtn");
+    favoriteBtn.disabled = false;
+  }
+}
+
+// compartilha a carta copiando o link
+function shareCard(card) {
+  const shareUrl = window.location.href;
+  
+  navigator.clipboard
+    .writeText(shareUrl)
+    .then(() => {
+      alert("Link copiado para a área de transferência!");
+    })
+    .catch((error) => {
+      console.error("Erro ao copiar link:", error);
+      alert("Não foi possível copiar o link.");
+    });
+}
+
+// mostra o estado de carregamento
 function showLoading() {
   document.getElementById("loadingState").style.display = "flex";
   document.getElementById("errorState").style.display = "none";
   document.getElementById("cardDetailsContent").style.display = "none";
 }
 
-// Mostrar estado de erro
-function showError() {
+// mostra o estado de erro com uma mensagem
+function showError(message = "A carta que você está procurando não foi encontrada.") {
   document.getElementById("loadingState").style.display = "none";
   document.getElementById("errorState").style.display = "flex";
   document.getElementById("cardDetailsContent").style.display = "none";
+  
+  // Atualizar mensagem de erro se houver
+  const errorMessage = document.querySelector("#errorState p");
+  if (errorMessage) {
+    errorMessage.textContent = message;
+  }
 }
 
-// Mostrar conteúdo da carta
+// mostra o conteúdo da carta
 function showContent() {
   document.getElementById("loadingState").style.display = "none";
   document.getElementById("errorState").style.display = "none";
   document.getElementById("cardDetailsContent").style.display = "block";
 }
 
-// Inicializar página
+// inicializa a pagina carregando os detalhes da carta
 async function initCardDetailsPage() {
   const cardId = getCardIdFromUrl();
 
   if (!cardId) {
-    showError();
+    showError("ID da carta não fornecido na URL.");
     return;
   }
 
@@ -181,12 +280,12 @@ async function initCardDetailsPage() {
 
   try {
     const card = await fetchCardDetails(cardId);
-    renderCardDetails(card);
+    displayCardDetails(card);
     showContent();
   } catch (error) {
-    showError();
+    showError(error.message || "Erro ao carregar detalhes da carta.");
   }
 }
 
-// Carregar detalhes quando a página estiver pronta
+// carrega os detalhes quando a página estiver pronta
 document.addEventListener("DOMContentLoaded", initCardDetailsPage);

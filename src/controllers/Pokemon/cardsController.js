@@ -1,5 +1,5 @@
 import * as CardModel from "../../models/Pokemon/cardModel.js";
-import { prisma } from "../../lib/prisma.js";
+import prisma from "../../lib/prisma.js";
 
 export const listarCards = async (req, res) => {
   try {
@@ -96,11 +96,6 @@ export const listarPorId = async (req, res) => {
   } catch (e) {
     res.status(500).json({
       error: "Erro interno do servidor.",
-      details: e.message,
-      status: 500,
-    });
-  }
-};
       details: e.message,
       status: 500,
     });

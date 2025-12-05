@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/prisma.js";
+import prisma from "../../lib/prisma.js";
 
 // Helper para registrar atividades
 async function createActivity(userId, type, data) {
@@ -121,16 +121,23 @@ export const getAlbumById = async (req, res) => {
 export const createAlbum = async (req, res) => {
   try {
     const userId = req.user.sub;
-    const { name, gameType, isPublic, coverUrl } = req.body;
+    const { name, gameType, isPublic, coverUrl, description, customCategory } = req.body;
 
     if (!name || name.trim().length === 0) {
       return res.status(400).json({ message: "Nome do álbum é obrigatório" });
+    }
+    
+    // Validar categoria personalizada para álbuns custom
+    if (gameType === "custom" && !customCategory) {
+      return res.status(400).json({ message: "Categoria personalizada é obrigatória para álbuns personalizados" });
     }
 
     const album = await prisma.album.create({
       data: {
         name: name.trim(),
+        description: description || null,
         gameType: gameType || "pokemon",
+        customCategory: customCategory || null,
         isPublic: isPublic || false,
         coverUrl: coverUrl || null,
         userId: parseInt(userId),
@@ -141,7 +148,7 @@ export const createAlbum = async (req, res) => {
     await createActivity(userId, "ALBUM_CREATED", {
       albumId: album.id,
       albumName: album.name,
-      metadata: { gameType: album.gameType },
+      metadata: { gameType: album.gameType, customCategory: album.customCategory },
     });
 
     res.status(201).json(album);
@@ -155,7 +162,7 @@ export const updateAlbum = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.sub;
-    const { name, description, gameType, isPublic, coverUrl } = req.body;
+    const { name, description, gameType, isPublic, coverUrl, customCategory } = req.body;
 
     const album = await prisma.album.findUnique({
       where: { id: parseInt(id) },
@@ -177,6 +184,7 @@ export const updateAlbum = async (req, res) => {
     if (gameType) updateData.gameType = gameType;
     if (typeof isPublic === "boolean") updateData.isPublic = isPublic;
     if (coverUrl !== undefined) updateData.coverUrl = coverUrl;
+    if (customCategory !== undefined) updateData.customCategory = customCategory;
 
     const updatedAlbum = await prisma.album.update({
       where: { id: parseInt(id) },

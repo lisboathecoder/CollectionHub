@@ -183,6 +183,15 @@
   transform: translateY(-2px);
 }
 
+.btn-favorite.favorited {
+  background: #ff3e6c;
+  color: #fff;
+}
+
+.btn-favorite.favorited:hover {
+  background: #e63560;
+}
+
 .card-info-section {
   display: flex;
   flex-direction: column;

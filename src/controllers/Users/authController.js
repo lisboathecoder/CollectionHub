@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { prisma } from "../../lib/prisma.js";
+import prisma from "../../lib/prisma.js";
 import {
   send2FACode,
   generate2FACode,

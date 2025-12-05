@@ -1,5 +1,5 @@
 import * as userModel from "../../models/Users/userModel.js";
-import { prisma } from "../../lib/prisma.js";
+import prisma from "../../lib/prisma.js";
 
 export const listarUsuarios = async (req, res) => {
   try {

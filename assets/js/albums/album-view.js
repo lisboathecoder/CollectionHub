@@ -8,6 +8,50 @@ console.log("album-view.js loaded, API_BASE:", API_BASE);
 let currentAlbum = null;
 let albumCards = [];
 
+// Funções auxiliares para upload de imagem
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
+async function uploadImageForEdit(base64Image, token) {
+  const response = await fetch(`${API_BASE}/api/upload`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ image: base64Image })
+  });
+  
+  if (!response.ok) {
+    throw new Error('Erro ao fazer upload da imagem');
+  }
+  
+  const data = await response.json();
+  return data.imageUrl;
+}
+
+// Função para remover imagem de capa no modal de edição
+window.removeEditCoverImage = function() {
+  const fileInput = document.getElementById('editCoverImage');
+  const preview = document.getElementById('editCoverPreview');
+  const label = document.getElementById('editCoverLabel');
+  
+  if (fileInput) fileInput.value = '';
+  if (preview) preview.style.display = 'none';
+  if (label) label.style.display = 'block';
+  
+  // Limpar a coverUrl atual
+  if (currentAlbum) {
+    currentAlbum.coverUrl = null;
+  }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM loaded, API_BASE_URL:", window.API_BASE_URL);
 
@@ -168,12 +212,28 @@ async function loadAlbum(albumId) {
     // Display game type/category
     const gameTypeEl = document.getElementById("albumGameType");
     if (gameTypeEl) {
-      const gameTypeText =
-        currentAlbum.gameType === "pokemon"
-          ? "Pokémon TCG Pocket"
-          : currentAlbum.gameType || "Personalizado";
+      let gameTypeText;
+      
+      if (currentAlbum.gameType === "pokemon" || currentAlbum.gameType === "pokemon-tcg-pocket") {
+        gameTypeText = "Pokémon TCG Pocket";
+      } else if (currentAlbum.gameType === "custom") {
+        gameTypeText = currentAlbum.customCategory || "Personalizado";
+      } else {
+        gameTypeText = currentAlbum.gameType || "Personalizado";
+      }
+      
       gameTypeEl.innerHTML = `<i class="fa-solid fa-tag"></i> ${gameTypeText}`;
       gameTypeEl.style.display = "block";
+    }
+    
+    // Esconder botão de item personalizado para álbuns de pokemon
+    const addCustomItemBtn = document.getElementById("addCustomItemBtn");
+    if (addCustomItemBtn) {
+      if (currentAlbum.gameType === "pokemon" || currentAlbum.gameType === "pokemon-tcg-pocket") {
+        addCustomItemBtn.style.display = "none";
+      } else {
+        addCustomItemBtn.style.display = "flex";
+      }
     }
 
     if (
@@ -486,6 +546,28 @@ window.editAlbum = function (albumId) {
           </div>
 
           <div class="form-group">
+            <label for="editCoverImage">Capa do Álbum (opcional)</label>
+            <div class="image-upload-area">
+              <input type="file" id="editCoverImage" class="file-input" accept="image/*" />
+              <label for="editCoverImage" class="file-label" id="editCoverLabel">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Clique para selecionar ou arraste a imagem</span>
+              </label>
+              <div id="editCoverPreview" class="image-preview" style="display: ${
+                currentAlbum.coverUrl ? "block" : "none"
+              };">
+                <img id="editCoverPreviewImg" src="${
+                  currentAlbum.coverUrl || ""
+                }" alt="Preview" />
+                <button type="button" class="btn-remove-image" onclick="removeEditCoverImage()">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+            <small class="form-hint">Se não informada, será usada a primeira carta do álbum</small>
+          </div>
+
+          <div class="form-group">
             <label for="editAlbumGameType">Tipo de Jogo *</label>
             <select id="editAlbumGameType" class="form-input" required>
               <option value="pokemon" ${
@@ -522,6 +604,43 @@ window.editAlbum = function (albumId) {
 
   document.body.appendChild(modal);
   setTimeout(() => modal.classList.add("active"), 10);
+  
+  // Inicializar preview se já houver coverUrl
+  if (currentAlbum.coverUrl) {
+    const label = document.getElementById('editCoverLabel');
+    if (label) label.style.display = 'none';
+  }
+  
+  // Handler para preview de imagem
+  const editCoverInput = document.getElementById('editCoverImage');
+  if (editCoverInput) {
+    editCoverInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        if (!file.type.startsWith('image/')) {
+          alert('Por favor, selecione uma imagem válida');
+          return;
+        }
+        
+        if (file.size > 5 * 1024 * 1024) {
+          alert('A imagem deve ter no máximo 5MB');
+          return;
+        }
+        
+        const preview = document.getElementById('editCoverPreview');
+        const previewImg = document.getElementById('editCoverPreviewImg');
+        const label = document.getElementById('editCoverLabel');
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewImg.src = e.target.result;
+          preview.style.display = 'block';
+          if (label) label.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
 
   // Handler do form
   document
@@ -535,6 +654,7 @@ window.editAlbum = function (albumId) {
         .value.trim();
       const gameType = document.getElementById("editAlbumGameType").value;
       const isPublic = document.getElementById("editAlbumPublic").checked;
+      const coverInput = document.getElementById("editCoverImage");
 
       if (!name) {
         showToast("Nome do álbum é obrigatório", "error");
@@ -542,8 +662,27 @@ window.editAlbum = function (albumId) {
       }
 
       const token = localStorage.getItem("token");
+      
+      let coverUrl = currentAlbum.coverUrl; // Manter a atual se não houver mudança
 
       try {
+        // Se há nova imagem, fazer upload primeiro
+        if (coverInput && coverInput.files && coverInput.files[0]) {
+          const submitBtn = document.querySelector('.btn-primary');
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando imagem...';
+          }
+          
+          const file = coverInput.files[0];
+          const base64Image = await fileToBase64(file);
+          coverUrl = await uploadImageForEdit(base64Image, token);
+          
+          if (submitBtn) {
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+          }
+        }
+
         const response = await fetch(`${API_BASE}/api/albums/${albumId}`, {
           method: "PUT",
           headers: {
@@ -553,6 +692,7 @@ window.editAlbum = function (albumId) {
           body: JSON.stringify({
             name,
             description,
+            coverUrl,
             gameType,
             isPublic,
           }),

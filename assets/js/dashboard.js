@@ -276,6 +276,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }</strong>`,
         color: "#ff3e6c",
       },
+      CARD_FAVORITED: {
+        icon: "fa-heart",
+        text: `Favoritou a carta <strong>${
+          activity.cardName || "Carta"
+        }</strong>`,
+        color: "#ff3e6c",
+      },
     };
 
     return (

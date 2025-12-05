@@ -99,6 +99,7 @@ const rarityFilter = document.getElementById("rarity-filter");
 const sortFilter = document.getElementById("sort-filter");
 const searchInput = document.getElementById("search-input");
 
+// carrega as cartas do pack selecionado
 const loadCards = async () => {
   if (!setCode || !packName) {
     showError("Nenhum set ou pack especificado");
@@ -106,19 +107,14 @@ const loadCards = async () => {
   }
 
   try {
-    console.log('carregando...');
     loadingEl.style.display = "flex";
     errorEl.style.display = "none";
 
+    // pega URL da API ja configurada
     const apiUrl = window.apiUrl;
-    console.log("🔍 Buscando cartas do pack:", packName, "no set:", setCode);
-    // console.log("🌐 API URL:", apiUrl(`api/pokemon/cards?set=${setCode}`));
+    const fullUrl = apiUrl(`api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`);
 
-    const response = await fetch(
-      apiUrl(`api/pokemon/cards?set=${setCode}&orderBy=number&pageSize=500`)
-    );
-
-    // console.log("📡 Status da resposta:", response.status);
+    const response = await fetch(fullUrl);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -128,18 +124,20 @@ const loadCards = async () => {
 
     const data = await response.json();
 
+    // a API retorna { cards: [...], total: X } então precisamos extrair o array
+    const cards = data.cards || data;
+
     const decodedPackName = decodeURIComponent(packName);
 
-    let packCards = data.filter(
+    // filtra cartas que pertencem ao pack especifico
+    let packCards = cards.filter(
       (card) =>
         card.packs && card.packs.some((pack) => pack.name === decodedPackName)
     );
 
+    // se nao encontrou cartas no pack, mostra todas do set
     if (packCards.length === 0) {
-      // console.log(
-      //   `Pack ${decodedPackName} não encontrado, mostrando todas as cartas do set`
-      // );
-      packCards = data;
+      packCards = cards;
     }
 
     allCards = packCards;
@@ -152,6 +150,7 @@ const loadCards = async () => {
 
     populateRarityFilter();
 
+    // exibe o logo do set e a imagem do pack
     const setInfo = SET_INFO[setCode] || { name: setCode, logo: null };
     const packImage = PACK_IMAGES[decodedPackName];
 
@@ -159,18 +158,18 @@ const loadCards = async () => {
       <div style="display: flex; align-items: center; justify-content: center; gap: 30px; flex-wrap: wrap;">
         ${
           setInfo.logo
-            ? `<img src="${setInfo.logo}" alt="${setInfo.name}" style="max-width: 250px; height: auto;">`
+            ? `<img src="${setInfo.logo}" alt="${setInfo.name}" style="max-width: 300px; max-height: 100px; height: auto;">`
             : ""
         }
         ${
           packImage
-            ? `<img src="${packImage}" alt="${decodedPackName}" style="max-width: 200px; height: auto; border-radius: 12px;">`
+            ? `<img src="${packImage}" alt="${decodedPackName}" style="max-width: 200px; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">`
             : ""
         }
       </div>
       <h2 style="margin-top: 20px;">${decodedPackName} Pack</h2>
     `;
-    packInfoEl.textContent = `${allCards.length} cards from ${setInfo.name}`;
+    packInfoEl.textContent = `${allCards.length} cartas de ${setInfo.name}`;
     document.getElementById(
       "page-title"
     ).textContent = `${decodedPackName} Pack - Collection Hub`;
@@ -193,6 +192,7 @@ function showError(message) {
   errorEl.querySelector("p").textContent = message;
 }
 
+// preenche o dropdown de filtro com as raridades disponiveis
 function populateRarityFilter() {
   rarityFilter.innerHTML = "";
   const allOption = document.createElement("option");
@@ -225,13 +225,14 @@ function renderCards() {
   const endIndex = startIndex + cardsPerPage;
   const cardsToShow = filteredCards.slice(startIndex, endIndex);
 
+  // renderiza cada carta no grid
   cardsToShow.forEach((card) => {
     const cardEl = document.createElement("div");
     cardEl.className = "card-item";
 
     const imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
-    const cardName = card.nameEn || "Unknown";
-    const rarityName = card.rarity?.name || "Unknown";
+    const cardName = card.nameEn || "Desconhecido";
+    const rarityName = card.rarity?.name || "Desconhecido";
 
     cardEl.innerHTML = `
       <div class="card-image-container">
@@ -245,8 +246,9 @@ function renderCards() {
           .replace(/\s+/g, "-")}">${rarityName}</span>
       </div>
     `;
+    // ao clicar abre a pagina de detalhes da carta
     cardEl.addEventListener("click", () => {
-      openCardModal(card);
+      window.location.href = `/pages/explore/card-details.html?id=${card.id}`;
     });
 
     cardsGrid.appendChild(cardEl);
@@ -255,73 +257,7 @@ function renderCards() {
   renderPagination(totalPages);
 }
 
-function openCardModal(card) {
-  const modal = document.createElement("div");
-  modal.className = "card-detail-modal";
-  modal.id = "card-detail-modal";
-
-  const imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
-  const cardName = card.nameEn || "Unknown";
-  const rarityName = card.rarity?.name || "Unknown";
-
-  modal.innerHTML = `
-    <div class="card-detail-modal__overlay"></div>
-    <div class="card-detail-modal__content">
-      <button class="card-detail-modal__close" aria-label="Close">×</button>
-      <div class="card-detail-modal__image-wrapper">
-        <img src="${imageUrl}" alt="${cardName}" class="card-detail-modal__image" onerror="this.src='/assets/images/placeholder-card.png'">
-      </div>
-      <div class="card-detail-modal__actions">
-        <button
-          class="card-detail-modal__add-btn" onclick="openAddToAlbumModalWithCard(${JSON.stringify(
-            card
-          ).replace(/"/g, "&quot;")})">
-          <i class="fa-solid fa-plus"></i> Adicionar ao Álbum
-        </button>
-        <button
-          class="card-detail-modal__details-btn" onclick="window.location.href='/pages/explore/card-details.html?id=${card.id}'">
-          <i class="fa-solid fa-circle-info"></i> Ver Detalhes
-        </button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  const closeBtn = modal.querySelector(".card-detail-modal__close");
-  const overlay = modal.querySelector(".card-detail-modal__overlay");
-
-  const closeModal = () => {
-    modal.classList.add("closing");
-    setTimeout(() => {
-      document.body.removeChild(modal);
-    }, 300);
-  };
-
-  closeBtn.addEventListener("click", closeModal);
-  overlay.addEventListener("click", closeModal);
-
-  const escHandler = (e) => {
-    if (e.key === "Escape") {
-      closeModal();
-      document.removeEventListener("keydown", escHandler);
-    }
-  };
-  document.addEventListener("keydown", escHandler);
-
-  setTimeout(() => {
-    modal.classList.add("active");
-  }, 10);
-}
-
-function openAddToAlbumModalWithCard(card) {
-  if (typeof openAddToAlbumModal === "function") {
-    openAddToAlbumModal(card);
-  } else {
-    console.error("openAddToAlbumModal function not found");
-  }
-}
-
+// renderiza a paginacao
 function renderPagination(totalPages) {
   let paginationEl = document.getElementById("pagination");
 
@@ -342,13 +278,13 @@ function renderPagination(totalPages) {
     <button class="pagination-btn" id="prev-page" ${
       currentPage === 1 ? "disabled" : ""
     }>
-      ← Previous
+      ← Anterior
     </button>
-    <span class="pagination-info">Page ${currentPage} of ${totalPages}</span>
+    <span class="pagination-info">Página ${currentPage} de ${totalPages}</span>
     <button class="pagination-btn" id="next-page" ${
       currentPage === totalPages ? "disabled" : ""
     }>
-      Next →
+      Próxima →
     </button>
   `;
 
@@ -369,6 +305,7 @@ function renderPagination(totalPages) {
   });
 }
 
+// filtra as cartas baseado na raridade e termo de busca
 function applyFilters() {
   const selectedRarity = rarityFilter.value;
   const searchTerm = searchInput.value.toLowerCase();
@@ -389,6 +326,7 @@ function applyFilters() {
   renderCards();
 }
 
+// ordena as cartas pelo criterio escolhido
 function applySorting() {
   const sortBy = sortFilter.value;
 
@@ -405,6 +343,7 @@ function applySorting() {
   });
 }
 
+// eventos dos filtros
 rarityFilter.addEventListener("change", applyFilters);
 sortFilter.addEventListener("change", () => {
   applySorting();
@@ -412,4 +351,5 @@ sortFilter.addEventListener("change", () => {
 });
 searchInput.addEventListener("input", applyFilters);
 
+// carrega as cartas quando a pagina iniciar
 loadCards();
