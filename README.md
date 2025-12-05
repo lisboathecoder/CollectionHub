@@ -5,11 +5,11 @@
 
 > Plataforma digital completa para colecionadores de Pokémon TCG Pocket. Organize, exiba e gerencie suas coleções com autenticação segura, upload de imagens e busca avançada.
 
-##Preview
+## Preview
 
 ![Screenshot do CollectionHub](./assets/images/Captura%20de%20Tela%202025-11-24%20às%2011.06.03.png)
 
-##Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 ### Backend
 
