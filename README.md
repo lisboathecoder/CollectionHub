@@ -5,11 +5,11 @@
 
 > Plataforma digital completa para colecionadores de Pokémon TCG Pocket. Organize, exiba e gerencie suas coleções com autenticação segura, upload de imagens e busca avançada.
 
-## 📸 Preview
+##Preview
 
 ![Screenshot do CollectionHub](./assets/images/Captura%20de%20Tela%202025-11-24%20às%2011.06.03.png)
 
-## 🛠️ Tecnologias Utilizadas
+##Tecnologias Utilizadas
 
 ### Backend
 
@@ -20,11 +20,11 @@
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg" alt="Prisma" width="40" height="40"/>
 </p>
 
-- **Node.js 22.x** - Runtime JavaScript
-- **Express 5.1.0** - Framework web
-- **PostgreSQL 14+** - Banco de dados relacional
-- **Prisma ORM 6.19.0** - ORM type-safe
-- **JWT (jsonwebtoken)** - Autenticação stateless
+- **Node.js**
+- **Express**
+- **PostgreSQL**
+- **Prisma ORM**
+- **JWT (jsonwebtoken)** - Utilizamos para autenticação
 - **bcryptjs** - Hash de senhas
 - **Resend API** - Envio de emails
 - **ImgBB API** - CDN de imagens
@@ -37,9 +37,9 @@
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="40" height="40"/>
 </p>
 
-- **HTML5** - Estrutura semântica
-- **CSS3** - Estilização (Grid, Flexbox, Animations)
-- **JavaScript (ES6+)** - Lógica do cliente
+- **HTML**
+- **CSS**
+- **JavaScript**
 
 ### Ferramentas
 
@@ -52,43 +52,41 @@
 - **Postman** - Testes de API
 - **Git** - Controle de versão
 - **VS Code** - IDE
-- Trello, Notion (gerenciamento)
-- BrModeloWeb (modelagem de dados)
+- **Trello, Notion** - Gerenciamento da equipe, suas funções, tarefas
+- **Prisma Console** - Para Modelagem de Diagrama Entidade-Relacionamento do banco de dados
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 CollectionHub/
-├── assets/                # Recursos estáticos
-│   ├── images/           # Imagens, ícones, logos
-│   ├── js/               # JavaScript modules
-│   └── styles/           # CSS files
-├── pages/                # Páginas HTML
-│   ├── app/              # Páginas autenticadas (dashboard, collection)
-│   ├── explore/          # Busca e exploração (sets, packs, search)
-│   ├── public/           # Páginas públicas (about, contact, faq)
-│   └── userLogin/        # Autenticação (login, register, 2FA, reset)
-├── prisma/               # Database
-│   ├── schema.prisma     # Database schema
-│   ├── seed.js           # Seed data
-│   └── migrations/       # Database migrations
+├── assets/               
+│   ├── images/           
+│   ├── js/               
+│   └── styles/           
+├── pages/
+│   ├── album/                
+│   ├── app/              
+│   ├── explore/          
+│   ├── public/           
+│   └── userLogin/       
+├── prisma/               
+│   ├── schema.prisma     
+│   ├── seed.js           
+│   └── migrations/       
 ├── src/
-│   ├── controllers/      # Business logic
-│   │   ├── Users/        # Auth, profile
-│   │   ├── Pokemon/      # Cards, sets, rarities
-│   │   └── Albums/       # Album CRUD
-│   ├── routes/           # API routes
-│   ├── middleware/       # Auth middleware
-│   ├── services/         # External services (email, auth)
-│   └── lib/              # Prisma singleton
-├── server.js             # Entry point
-├── routes.js             # API routes aggregator
-└── .env.example          # Environment template
+│   ├── controllers/     
+│   │   ├── Users/       
+│   │   ├── Pokemon/     
+│   │   └── Albums/      
+│   ├── routes/          
+│   ├── middleware/       
+│   ├── services/       
+│   └── lib/
+├── server.js             
+├── routes.js                 
 ```
 
-## 🤝 Colaboradores
-
-Agradecemos às seguintes pessoas que contribuíram para este projeto:
+## Nossa Equipe
 
 <table>
   <tr>
