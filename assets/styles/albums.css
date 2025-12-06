@@ -3237,7 +3237,7 @@ textarea.form-input {
 /* Custom Item Details Page */
 .custom-item-details-page {
   min-height: auto;
-  padding: 40px 20px 60px 20px;
+  padding: 120px 20px 60px 20px;
 }
 
 .custom-item-details-page .container {
@@ -3506,7 +3506,7 @@ textarea.form-input {
 
 @media (max-width: 968px) {
   .custom-item-details-page {
-    padding: 20px 15px;
+    padding: 110px 15px 50px 15px;
   }
 
   .custom-item-container {
@@ -3544,7 +3544,7 @@ textarea.form-input {
 
 @media (max-width: 600px) {
   .custom-item-details-page {
-    padding: 15px 10px;
+    padding: 100px 10px 40px 10px;
   }
 
   .custom-item-header h1 {
