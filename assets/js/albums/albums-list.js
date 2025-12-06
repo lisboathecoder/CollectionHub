@@ -1,8 +1,9 @@
-window.API_BASE_URL = window.API_BASE_URL || "http://localhost:3000/";
 let allAlbums = [];
 let filteredAlbums = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
+  console.log('📋 Albums List - API_BASE_URL:', window.API_BASE_URL);
+  console.log('📋 Albums List - apiUrl test:', apiUrl('api/albums'));
   await checkAuth();
   await loadAlbums();
 });
@@ -22,15 +23,22 @@ async function loadAlbums() {
   const emptyState = document.getElementById("emptyState");
 
   try {
-    const response = await fetch(apiUrl("api/albums"), {
+    const url = apiUrl("api/albums");
+    console.log('🔍 Buscando álbuns em:', url);
+    
+    const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
+    console.log('📡 Response status:', response.status);
+
     if (response.ok) {
       allAlbums = await response.json();
       filteredAlbums = [...allAlbums];
+      
+      console.log('📚 Álbuns carregados:', allAlbums);
 
       loadingState.style.display = "none";
 
@@ -42,12 +50,13 @@ async function loadAlbums() {
         displayAlbums(filteredAlbums);
       }
     } else {
-      throw new Error("Erro ao carregar álbuns");
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `Erro ao carregar lista de álbuns (${response.status})`);
     }
   } catch (error) {
     console.error("Erro ao carregar álbuns:", error);
     loadingState.style.display = "none";
-    showToast("Erro ao carregar álbuns", "error");
+    showToast("Erro ao carregar álbuns. Tente novamente.", "error", 6000);
   }
 }
 
@@ -176,7 +185,7 @@ async function deleteAlbum(albumId, albumName) {
     });
 
     if (response.ok) {
-      showToast("Álbum excluído com sucesso", "success");
+      showToast("✅ Álbum excluído com sucesso!", "success", 5000);
       await loadAlbums();
     } else {
       const error = await response.json();
@@ -209,18 +218,3 @@ function formatDate(dateString) {
   }
 }
 
-function showToast(message, type = "info") {
-  const toast = document.createElement("div");
-  toast.className = `toast-success ${type}`;
-  toast.textContent = message;
-  document.body.appendChild(toast);
-
-  setTimeout(() => {
-    toast.classList.add("show");
-  }, 100);
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
-}

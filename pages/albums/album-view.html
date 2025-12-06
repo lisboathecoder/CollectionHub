@@ -75,6 +75,14 @@
 
     <main class="album-view-container">
       <div class="album-header">
+        <div class="album-cover-section">
+          <div id="albumCoverWrapper" class="album-cover-wrapper">
+            <img id="albumCover" src="" alt="Capa do álbum" style="display: none;" />
+            <div id="albumCoverPlaceholder" class="album-cover-placeholder">
+              <i class="fa-solid fa-book"></i>
+            </div>
+          </div>
+        </div>
         <div class="album-info">
           <h1 id="albumName">Carregando...</h1>
           <p id="albumDescription">-</p>
@@ -126,7 +134,7 @@
           <input
             type="text"
             id="cardSearchInput"
-            placeholder="Pesquise cartas para adicionar ao álbum..."
+            placeholder="Busque cartas do Pokémon TCG Pocket..."
           />
           <button id="searchCardsBtn">
             <i class="fa-solid fa-search"></i>
@@ -136,6 +144,7 @@
             id="addCustomItemBtn"
             class="btn-custom-item"
             title="Adicionar item personalizado (qualquer colecionável)"
+            style="display: none;"
           >
             <i class="fa-solid fa-image"></i>
             Item Personalizado
@@ -191,6 +200,5 @@
     <script src="/assets/js/header.js"></script>
     <script src="/assets/js/global-search.js"></script>
     <script src="/assets/js/albums/album-view.js"></script>
-    <script src="/assets/js/albums/album-modal.js"></script>
   </body>
 </html>

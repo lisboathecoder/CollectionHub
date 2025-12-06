@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalhes do Item - CollectionHub</title>
+    <link rel="stylesheet" href="/assets/styles/global.css" />
+    <link rel="stylesheet" href="/assets/styles/style.css" /    >
+    <link rel="stylesheet" href="/assets/styles/albums.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+
+    <main class="custom-item-details-page">
+      <div class="container">
+        <button class="btn-back" onclick="window.history.back()">
+          <i class="fa-solid fa-arrow-left"></i>
+          Voltar
+        </button>
+
+        <div id="loadingState" class="loading-state">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          <p>Carregando detalhes...</p>
+        </div>
+
+        <div id="itemContent" style="display: none">
+          <div class="custom-item-container">
+            <div class="custom-item-image-section">
+              <div class="custom-item-image-wrapper">
+                <img id="itemImage" src="" alt="" style="display: none;" />
+                <div id="imagePlaceholder" class="custom-item-placeholder" style="display: none;">
+                  <i class="fa-solid fa-image"></i>
+                  <span>Sem imagem</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="custom-item-info-section">
+              <div class="custom-item-header">
+                <div class="custom-item-badge">
+                  <i class="fa-solid fa-star"></i>
+                  Item Personalizado
+                </div>
+                <h1 id="itemName">-</h1>
+              </div>
+
+              <div class="custom-item-metadata">
+                <div class="metadata-card">
+                  <div class="metadata-card-header">
+                    <i class="fa-solid fa-book"></i>
+                    <span>Álbum</span>
+                  </div>
+                  <div id="albumName" class="metadata-card-value">-</div>
+                </div>
+                <div class="metadata-card">
+                  <div class="metadata-card-header">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Quantidade</span>
+                  </div>
+                  <div id="itemQuantity" class="metadata-card-value">1</div>
+                </div>
+                <div class="metadata-card">
+                  <div class="metadata-card-header">
+                    <i class="fa-solid fa-calendar"></i>
+                    <span>Adicionado em</span>
+                  </div>
+                  <div id="itemDate" class="metadata-card-value">-</div>
+                </div>
+              </div>
+
+              <div id="notesSection" class="custom-item-notes-section" style="display: none">
+                <h3><i class="fa-solid fa-note-sticky"></i> Observações</h3>
+                <p id="itemNotes"></p>
+              </div>
+
+              <div class="custom-item-actions">
+                <button class="btn btn-secondary" onclick="editCustomItem()">
+                  <i class="fa-solid fa-edit"></i>
+                  Editar Item
+                </button>
+                <button class="btn btn-danger" onclick="deleteCustomItem()">
+                  <i class="fa-solid fa-trash"></i>
+                  Remover do Álbum
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/token-handler.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/toast.js"></script>
+    <script src="/assets/js/albums/custom-item-details.js"></script>
+  </body>
+</html>

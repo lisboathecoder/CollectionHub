@@ -18,11 +18,7 @@ router.use("/profile", ProfileRoutes);
 router.use("/albums", AlbumRoutes);
 router.use("/upload", UploadRoutes);
 router.use("/favorites", FavoritesRoutes);
-router.get(
-  "/activities",
-  authenticateToken,
-  activityController.getUserActivities
-);
+router.get("/activities", authenticateToken, activityController.getUserActivities);
 
 router.get("/health", (req, res) =>
   res.json({ ok: true, ts: new Date().toISOString() })

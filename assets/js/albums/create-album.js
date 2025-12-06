@@ -31,7 +31,8 @@ async function uploadImage(base64Image) {
   });
   
   if (!response.ok) {
-    throw new Error('Erro ao fazer upload da imagem');
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || errorData.message || `Falha ao fazer upload da imagem (${response.status}). Tente novamente.`);
   }
   
   const data = await response.json();
@@ -52,13 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = e.target.files[0];
       if (file) {
         if (!file.type.startsWith('image/')) {
-          showToast('Por favor, selecione uma imagem válida', 'error');
+          showToast('🖼️ Por favor, selecione uma imagem válida (JPG, PNG, GIF, etc.)', 'error', 5000);
           e.target.value = '';
           return;
         }
         
         if (file.size > 5 * 1024 * 1024) {
-          showToast('A imagem deve ter no máximo 5MB', 'error');
+          showToast('⚠️ A imagem deve ter no máximo 5MB', 'error', 5000);
           e.target.value = '';
           return;
         }
@@ -120,13 +121,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const isPublic = document.getElementById("isPublic").checked;
 
     if (!name) {
-      showToast("Por favor, insira um nome para o álbum", "error");
+      showToast("⚠️ Por favor, insira um nome para o álbum", "error", 4000);
       return;
     }
     
     // Validar categoria personalizada se for álbum custom
     if (gameTypeValue === "custom" && !customCategory) {
-      showToast("Por favor, defina uma categoria para o álbum personalizado", "error");
+      showToast("⚠️ Por favor, defina uma categoria para o álbum personalizado", "error", 5000);
       return;
     }
 
@@ -143,11 +144,13 @@ document.addEventListener("DOMContentLoaded", () => {
           '<i class="fa-solid fa-spinner fa-spin"></i> Enviando imagem...';
         try {
           const base64Image = await fileToBase64(coverImageFile);
+          console.log('📤 Fazendo upload da imagem, tamanho:', coverImageFile.size, 'bytes');
           coverUrl = await uploadImage(base64Image);
           console.log('✅ Upload da capa concluído:', coverUrl);
         } catch (uploadError) {
           console.error('❌ Erro no upload da capa:', uploadError);
-          showToast('Erro ao fazer upload da imagem da capa', "error");
+          const errorMsg = uploadError.message || 'Erro ao fazer upload da imagem da capa';
+          showToast(`❌ ${errorMsg}`, "error", 6000);
           submitBtn.disabled = false;
           submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Criar Álbum';
           return;
@@ -177,14 +180,20 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Erro ao criar álbum");
+        const error = await response.json().catch(() => ({}));
+        if (response.status === 400) {
+          throw new Error(error.message || "Dados inválidos. Verifique o nome e descrição do álbum.");
+        } else if (response.status === 401) {
+          throw new Error("Sessão expirada. Faça login novamente.");
+        } else {
+          throw new Error(error.message || error.error || `Erro ao criar álbum (${response.status})`);
+        }
       }
 
       const album = await response.json();
       console.log('✅ Álbum criado:', album);
 
-      showToast("Álbum criado com sucesso!", "success");
+      showToast("✨ Álbum criado com sucesso!", "success", 5000);
 
       // Check if there's a pending card to add
       const pendingCard = localStorage.getItem("pendingCard");
@@ -228,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 1500);
     } catch (error) {
       console.error('❌ Erro ao criar álbum:', error);
-      showToast(error.message || "Erro ao criar álbum", "error");
+      showToast(error.message || "Erro ao criar álbum. Tente novamente.", "error", 6000);
       submitBtn.disabled = false;
       submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Criar Álbum';
     }

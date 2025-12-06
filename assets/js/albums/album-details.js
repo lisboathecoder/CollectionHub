@@ -14,8 +14,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadAlbumDetails();
     setupEventListeners();
   } else {
-    alert("ID do álbum não encontrado");
-    window.location.href = "/pages/app/albums-list.html";
+    showToast("⚠️ ID do álbum não encontrado na URL. Redirecionando...", "error", 6000);
+    setTimeout(() => {
+      window.location.href = "/pages/albums/albums-list.html";
+    }, 2000);
   }
 });
 
@@ -40,7 +42,16 @@ async function loadAlbumDetails() {
     });
 
     if (!response.ok) {
-      throw new Error("Álbum não encontrado");
+      const errorData = await response.json().catch(() => ({}));
+      if (response.status === 404) {
+        throw new Error("Álbum não encontrado. Ele pode ter sido deletado ou você não tem permissão para acessá-lo.");
+      } else if (response.status === 401) {
+        throw new Error("Sessão expirada. Faça login novamente.");
+      } else if (response.status === 403) {
+        throw new Error("Você não tem permissão para acessar este álbum.");
+      } else {
+        throw new Error(errorData.error || errorData.message || `Erro ao carregar álbum (${response.status})`);
+      }
     }
 
     album = await response.json();
@@ -75,8 +86,9 @@ async function loadAlbumDetails() {
     albumContent.style.display = "block";
   } catch (error) {
     console.error("Erro ao carregar álbum:", error);
-    alert("Erro ao carregar álbum");
-    window.location.href = "/pages/app/albums-list.html";
+    const errorMsg = error.message || "Erro desconhecido ao carregar álbum";
+    alert(`Erro: ${errorMsg}`);
+    window.location.href = "/pages/albums/albums-list.html";
   }
 }
 
@@ -158,15 +170,15 @@ async function updateAlbum(updates) {
     });
 
     if (response.ok) {
-      showToast("Álbum atualizado com sucesso", "success");
+      showToast("✅ Álbum atualizado com sucesso!", "success", 5000);
       await loadAlbumDetails();
     } else {
       const error = await response.json();
-      showToast(error.error || "Erro ao atualizar álbum", "error");
+      showToast(error.error || "Erro ao atualizar álbum. Tente novamente.", "error", 6000);
     }
   } catch (error) {
     console.error("Erro ao atualizar álbum:", error);
-    showToast("Erro ao atualizar álbum", "error");
+    showToast("Erro ao atualizar álbum. Tente novamente.", "error", 6000);
   }
 }
 
@@ -190,17 +202,17 @@ async function deleteAlbum() {
     });
 
     if (response.ok) {
-      showToast("Álbum excluído com sucesso", "success");
+      showToast("✅ Álbum excluído com sucesso! Redirecionando...", "success", 5000);
       setTimeout(() => {
         window.location.href = "/pages/app/albums-list.html";
       }, 1500);
     } else {
       const error = await response.json();
-      showToast(error.error || "Erro ao excluir álbum", "error");
+      showToast(error.error || "Erro ao excluir álbum", "error", 6000);
     }
   } catch (error) {
     console.error("Erro ao excluir álbum:", error);
-    showToast("Erro ao excluir álbum", "error");
+    showToast("Erro ao excluir álbum. Tente novamente.", "error", 6000);
   }
 }
 
@@ -223,15 +235,15 @@ async function removeItem(itemId, itemName) {
     );
 
     if (response.ok) {
-      showToast("Carta removida do álbum", "success");
+      showToast("✅ Carta removida do álbum", "success", 5000);
       await loadAlbumDetails();
     } else {
       const error = await response.json();
-      showToast(error.error || "Erro ao remover carta", "error");
+      showToast(error.error || "Erro ao remover carta", "error", 6000);
     }
   } catch (error) {
     console.error("Erro ao remover carta:", error);
-    showToast("Erro ao remover carta", "error");
+    showToast("Erro ao remover carta. Tente novamente.", "error", 6000);
   }
 }
 
@@ -244,18 +256,4 @@ function formatDate(dateString) {
   });
 }
 
-function showToast(message, type = "info") {
-  const toast = document.createElement("div");
-  toast.className = `toast-success ${type}`;
-  toast.textContent = message;
-  document.body.appendChild(toast);
-
-  setTimeout(() => {
-    toast.classList.add("show");
-  }, 100);
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
-}
+// showToast agora é fornecido globalmente por /assets/js/toast.js

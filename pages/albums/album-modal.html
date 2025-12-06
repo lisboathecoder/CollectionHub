@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adicionar ao Álbum</title>
+  <link rel="stylesheet" href="/assets/styles/album-modal.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div id="albumModal" class="album-modal">
+    <div class="modal__backdrop" onclick="closeAlbumModal()"></div>
+    <div class="modal__content">
+      <div class="modal__header">
+        <div class="modal__header-content">
+          <div class="modal__icon">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <div>
+            <h2>Adicionar ao Álbum</h2>
+            <p class="modal__subtitle">Escolha um álbum para adicionar a carta</p>
+          </div>
+        </div>
+        <button class="modal__close" onclick="closeAlbumModal()">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="modal__body">
+        <div class="albums-section">
+          <h3 class="section-title">
+            <i class="fa-solid fa-folder"></i> Meus Álbuns
+          </h3>
+          <div id="albumsList" class="albums-list">
+            <div class="albums-loading">
+              <div class="spinner"></div>
+              <p>Carregando álbuns...</p>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn-create-album" onclick="goToCreateAlbum()">
+          <i class="fa-solid fa-plus-circle"></i>
+          <span>Criar Novo Álbum</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/albums/album-modal.js"></script>
+</body>
+</html>

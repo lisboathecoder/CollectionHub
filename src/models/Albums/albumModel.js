@@ -9,6 +9,7 @@ const includeAlbum = {
     include: {
       card: { include: { set: true, rarity: true } },
     },
+    orderBy: { createdAt: "desc" },
   },
 };
 

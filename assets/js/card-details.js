@@ -118,8 +118,9 @@ function displayCardDetails(card) {
   // configura o botao de adicionar ao album - vai direto pro modal de albuns
   const addToAlbumBtn = document.getElementById("addToAlbumBtn");
   addToAlbumBtn.addEventListener("click", () => {
-    if (typeof openAddToAlbumModal !== "undefined") {
-      openAddToAlbumModal(card);
+    if (true) {
+      localStorage.setItem('pendingCard', JSON.stringify(card));
+      window.location.href = '/pages/albums/albums-list.html';
     } else {
       alert("Álbuns não estão disponíveis no momento.");
     }

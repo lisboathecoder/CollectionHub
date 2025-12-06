@@ -19,21 +19,42 @@ function fileToBase64(file) {
 }
 
 async function uploadImageForEdit(base64Image, token) {
-  const response = await fetch(`${API_BASE}/api/upload`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({ image: base64Image })
-  });
-  
-  if (!response.ok) {
-    throw new Error('Erro ao fazer upload da imagem');
+  try {
+    console.log('📤 Iniciando upload de imagem...');
+    
+    const response = await fetch(`${API_BASE}/api/upload`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ image: base64Image })
+    });
+    
+    console.log('📥 Response status:', response.status);
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Upload error:', errorData);
+      
+      if (response.status === 413) {
+        throw new Error('Imagem muito grande. Tamanho máximo: 5MB');
+      } else if (response.status === 400) {
+        throw new Error(errorData.error || errorData.message || 'Formato de imagem inválido');
+      } else if (response.status === 401) {
+        throw new Error('Sessão expirada. Faça login novamente.');
+      } else {
+        throw new Error(errorData.error || errorData.message || `Erro ao fazer upload da imagem (${response.status})`);
+      }
+    }
+    
+    const data = await response.json();
+    console.log('✅ Upload concluído:', data.imageUrl);
+    return data.imageUrl;
+  } catch (error) {
+    console.error('❌ Erro no upload:', error);
+    throw error;
   }
-  
-  const data = await response.json();
-  return data.imageUrl;
 }
 
 // Função para remover imagem de capa no modal de edição
@@ -158,7 +179,16 @@ async function loadAlbum(albumId) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Error response:", errorText);
-      throw new Error("Erro ao carregar álbum");
+      
+      if (response.status === 404) {
+        throw new Error("Álbum não encontrado. Pode ter sido deletado ou você não tem permissão para acessá-lo.");
+      } else if (response.status === 401) {
+        throw new Error("Sessão expirada. Faça login novamente.");
+      } else if (response.status === 403) {
+        throw new Error("Você não tem permissão para acessar este álbum.");
+      } else {
+        throw new Error(`Erro ao carregar álbum: ${errorText || 'Erro desconhecido'}`);
+      }
     }
 
     currentAlbum = await response.json();
@@ -181,7 +211,26 @@ async function loadAlbum(albumId) {
     document.getElementById("albumDescription").textContent =
       currentAlbum.description || "Sem descrição";
 
+    // Display album cover
+    const albumCover = document.getElementById("albumCover");
+    const albumCoverPlaceholder = document.getElementById("albumCoverPlaceholder");
+    
+    if (currentAlbum.coverUrl && currentAlbum.coverUrl.trim() !== '') {
+      albumCover.src = currentAlbum.coverUrl;
+      albumCover.style.display = 'block';
+      albumCoverPlaceholder.style.display = 'none';
+      albumCover.onerror = () => {
+        albumCover.style.display = 'none';
+        albumCoverPlaceholder.style.display = 'flex';
+      };
+    } else {
+      albumCover.style.display = 'none';
+      albumCoverPlaceholder.style.display = 'flex';
+    }
+
     const items = currentAlbum.items || currentAlbum._count?.items || [];
+    console.log('📋 Items do album (album-view):', items);
+    
     const cardCount = Array.isArray(items)
       ? items.length
       : typeof items === "number"
@@ -242,6 +291,8 @@ async function loadAlbum(albumId) {
       currentAlbum.items.length > 0
     ) {
       albumCards = currentAlbum.items;
+      console.log('📦 Items do álbum:', albumCards);
+      console.log('🎨 Items personalizados:', albumCards.filter(item => item.customName));
       renderCards();
       // Verificar status dos favoritos após renderizar
       setTimeout(() => checkFavoritesStatus(), 500);
@@ -251,8 +302,10 @@ async function loadAlbum(albumId) {
     }
   } catch (error) {
     console.error("Error loading album:", error);
-    alert("Erro ao carregar álbum: " + error.message);
-    window.history.back();
+    showToast(error.message || "Erro ao carregar álbum", "error", 6000);
+    setTimeout(() => {
+      window.location.href = "/pages/albums/albums-list.html";
+    }, 3000);
   }
 }
 
@@ -274,22 +327,37 @@ function renderCards() {
     .map((item) => {
       const card = item.card || {};
       const isCustomItem = !item.cardId && item.customName;
-      const imageUrl =
-        item.customImage ||
-        card.imageUrl ||
-        "/assets/images/placeholder-card.png";
+      
+      // Para itens personalizados, usar customImage ou placeholder
+      let imageUrl;
+      if (isCustomItem) {
+        imageUrl = item.customImage && item.customImage.trim() !== '' 
+          ? item.customImage 
+          : "/assets/images/placeholder-card.png";
+        console.log('🎨 Item personalizado:', item.customName, 'customImage:', item.customImage, 'usando:', imageUrl);
+      } else {
+        imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
+      }
+      
       const name = item.customName || card.nameEn || "Unknown";
       const number = card.number || "-";
       const displayNumber = isCustomItem
         ? "<i class='fa-solid fa-star'></i> Personalizado"
         : `#${number}`;
 
+      // Define o link de destino baseado no tipo de item
+      const itemLink = isCustomItem
+        ? `/pages/albums/custom-item-details.html?id=${item.id}&albumId=${currentAlbum.id}`
+        : card.id
+        ? `/pages/explore/card-details.html?id=${card.id}`
+        : null;
+
       return `
             <div class="card-item ${
               isCustomItem ? "custom-item" : ""
             }" data-item-id="${item.id}" ${
-        !isCustomItem && card.id
-          ? `onclick="window.location.href='/pages/explore/card-details.html?id=${card.id}'" style="cursor: pointer;"`
+        itemLink
+          ? `onclick="window.location.href='${itemLink}'" style="cursor: pointer;"`
           : ""
       }>
                 <button class="remove-card-btn" onclick="event.stopPropagation(); window.removeCard(${
@@ -304,11 +372,14 @@ function renderCards() {
                 </button>`
                     : ""
                 }
-                <img src="${imageUrl}" alt="${name}" onerror="this.src='/assets/images/placeholder-card.png'">
+                ${imageUrl && imageUrl !== "/assets/images/placeholder-card.png" 
+                  ? `<img src="${imageUrl}" alt="${name}" onerror="this.style.display='none'; this.parentElement.insertAdjacentHTML('afterbegin', '<div style=\\"width:100%;aspect-ratio:2/3;background:linear-gradient(135deg,#1a1a2e,#2d2d44);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;gap:10px;\\"><i class=\\"fa-solid fa-image\\" style=\\"font-size:40px;color:#ff3e6c;\\"></i><span style=\\"color:#666;font-size:12px;\\">Sem imagem</span></div>');">`
+                  : `<div style="width:100%;aspect-ratio:2/3;background:linear-gradient(135deg,#1a1a2e,#2d2d44);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;gap:10px;"><i class="fa-solid fa-image" style="font-size:40px;color:#ff3e6c;"></i><span style="color:#666;font-size:12px;">Sem imagem</span></div>`
+                }
                 <div class="card-item-name">${name}</div>
                 <div class="card-item-number">${displayNumber}</div>
                 ${
-                  item.notes
+                  !isCustomItem && item.notes
                     ? `<div class="card-item-notes" title="${item.notes}"><i class="fa-solid fa-note-sticky"></i></div>`
                     : ""
                 }
@@ -340,7 +411,10 @@ async function searchCards() {
       `${API_BASE}/api/pokemon/cards/search?q=${encodeURIComponent(query)}`
     );
 
-    if (!response.ok) throw new Error("Erro ao buscar cartas");
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `Erro ao buscar cartas (${response.status})`);
+    }
 
     const data = await response.json();
     const cards = Array.isArray(data) ? data : data.cards || [];
@@ -398,7 +472,7 @@ window.addCardToAlbumById = async function (cardId) {
 
   if (!currentAlbum || !currentAlbum.id) {
     console.error("❌ Álbum inválido:", currentAlbum);
-    showToast("Álbum inválido", "error");
+    showToast("Álbum inválido ou não encontrado", "error", 5000);
     return;
   }
 
@@ -456,10 +530,10 @@ window.addCardToAlbumById = async function (cardId) {
     if (searchResults) searchResults.style.display = "none";
     if (searchInput) searchInput.value = "";
 
-    showToast("Carta adicionada com sucesso!", "success");
+    showToast("✨ Carta adicionada ao álbum com sucesso!", "success", 5000);
   } catch (error) {
     console.error("❌ Erro ao adicionar:", error);
-    showToast(error.message || "Erro ao adicionar carta", "error");
+    showToast(error.message || "Erro ao adicionar carta ao álbum", "error", 6000);
   } finally {
     if (addButton) {
       addButton.disabled = false;
@@ -487,7 +561,8 @@ window.removeCard = async function (itemId) {
     );
 
     if (!response.ok) {
-      throw new Error("Erro ao remover carta");
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `Erro ao remover carta do álbum (${response.status})`);
     }
 
     albumCards = albumCards.filter((item) => item.id !== itemId);
@@ -499,10 +574,10 @@ window.removeCard = async function (itemId) {
 
     renderCards();
 
-    showToast("Carta removida com sucesso", "success");
+    showToast("✅ Carta removida do álbum com sucesso", "success", 5000);
   } catch (error) {
     console.error("Error removing card:", error);
-    showToast("Erro ao remover carta", "error");
+    showToast(error.message || "Erro ao remover carta do álbum", "error", 6000);
   }
 };
 
@@ -618,12 +693,14 @@ window.editAlbum = function (albumId) {
       const file = e.target.files[0];
       if (file) {
         if (!file.type.startsWith('image/')) {
-          alert('Por favor, selecione uma imagem válida');
+          showToast('Por favor, selecione uma imagem válida (JPG, PNG, GIF, etc.)', 'error');
+          e.target.value = '';
           return;
         }
         
         if (file.size > 5 * 1024 * 1024) {
-          alert('A imagem deve ter no máximo 5MB');
+          showToast('A imagem deve ter no máximo 5MB', 'error');
+          e.target.value = '';
           return;
         }
         
@@ -657,7 +734,7 @@ window.editAlbum = function (albumId) {
       const coverInput = document.getElementById("editCoverImage");
 
       if (!name) {
-        showToast("Nome do álbum é obrigatório", "error");
+        showToast("Nome do álbum é obrigatório", "error", 5000);
         return;
       }
 
@@ -675,11 +752,13 @@ window.editAlbum = function (albumId) {
           }
           
           const file = coverInput.files[0];
+          console.log('📁 Arquivo selecionado:', file.name, 'Tamanho:', (file.size / 1024 / 1024).toFixed(2) + 'MB');
+          
           const base64Image = await fileToBase64(file);
           coverUrl = await uploadImageForEdit(base64Image, token);
           
           if (submitBtn) {
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando álbum...';
           }
         }
 
@@ -699,18 +778,25 @@ window.editAlbum = function (albumId) {
         });
 
         if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message || "Erro ao atualizar álbum");
+          const error = await response.json().catch(() => ({}));
+          throw new Error(error.error || error.message || `Erro ao atualizar álbum (${response.status})`);
         }
 
-        showToast("Álbum atualizado com sucesso!", "success");
+        showToast("✅ Álbum atualizado com sucesso!", "success", 5000);
         closeEditModal();
 
         // Recarrega o álbum
         await loadAlbum(albumId);
       } catch (error) {
-        console.error("Error updating album:", error);
-        showToast(error.message || "Erro ao atualizar álbum", "error");
+        console.error("❌ Error updating album:", error);
+        showToast(error.message || "Erro ao atualizar álbum", "error", 6000);
+        
+        // Reabilitar botão em caso de erro
+        const submitBtn = document.querySelector('.btn-primary');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fa-solid fa-save"></i> Salvar Alterações';
+        }
       }
     });
 };
@@ -720,10 +806,10 @@ window.shareAlbum = function (albumId) {
   navigator.clipboard
     .writeText(url)
     .then(() => {
-      showToast("Link copiado para a área de transferência!", "success");
+      showToast("🔗 Link copiado para a área de transferência!", "success", 4000);
     })
     .catch(() => {
-      showToast("Erro ao copiar link", "error");
+      showToast("Erro ao copiar link. Tente novamente.", "error", 5000);
     });
 };
 
@@ -731,7 +817,7 @@ window.deleteAlbum = async function (albumId) {
   // Verify ownership before allowing delete
   const currentUserId = await getCurrentUserId();
   if (currentAlbum && currentAlbum.userId !== currentUserId) {
-    showToast("Você não tem permissão para deletar este álbum", "error");
+    showToast("⚠️ Você não tem permissão para deletar este álbum", "error", 5000);
     return;
   }
 
@@ -754,78 +840,22 @@ window.deleteAlbum = async function (albumId) {
     });
 
     if (!response.ok) {
-      throw new Error("Erro ao deletar álbum");
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `Erro ao deletar álbum (${response.status})`);
     }
 
-    showToast("Álbum deletado com sucesso", "success");
+    showToast("Álbum deletado com sucesso! Redirecionando...", "success", 5000);
 
     setTimeout(() => {
-      window.location.href = "/pages/app/collection.html";
-    }, 1500);
+      window.location.href = "/pages/albums/albums-list.html";
+    }, 2500);
   } catch (error) {
     console.error("Error deleting album:", error);
-    showToast("Erro ao deletar álbum", "error");
+    showToast(error.message || "Erro ao deletar álbum", "error", 6000);
   }
 };
 
-function showToast(message, type = "info") {
-  const toast = document.createElement("div");
-  toast.className = "toast toast-" + type;
-  toast.textContent = message;
-  toast.style.cssText = `
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        background: ${
-          type === "success"
-            ? "#4caf50"
-            : type === "error"
-            ? "#f44336"
-            : "#2196f3"
-        };
-        color: white;
-        padding: 15px 25px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 10000;
-        animation: slideIn 0.3s ease-out;
-    `;
-
-  document.body.appendChild(toast);
-
-  setTimeout(() => {
-    toast.style.animation = "slideOut 0.3s ease-out";
-    setTimeout(() => {
-      document.body.removeChild(toast);
-    }, 300);
-  }, 5000); // Aumentado de 3000 para 4500ms (4.5 segundos)
-}
-
-const style = document.createElement("style");
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
+// showToast agora é fornecido globalmente por /assets/js/toast.js
 
 window.removeCard = removeCard;
 
@@ -983,7 +1013,7 @@ function openCustomItemModal() {
 function handleImageSelect(file, previewImg, uploadPlaceholder, imagePreview) {
   // Valida tamanho (5MB)
   if (file.size > 5 * 1024 * 1024) {
-    showToast("Imagem muito grande! Máximo 5MB", "error");
+    showToast("⚠️ Imagem muito grande! Máximo 5MB", "error", 5000);
     return;
   }
 
@@ -1006,12 +1036,12 @@ async function handleCustomItemSubmit(e) {
   const submitBtn = document.getElementById("submitCustomItemBtn");
 
   if (!name) {
-    showToast("Nome do item é obrigatório", "error");
+    showToast("⚠️ Nome do item é obrigatório", "error", 5000);
     return;
   }
 
   if (!imageInput.files[0]) {
-    showToast("Imagem é obrigatória", "error");
+    showToast("⚠️ Imagem é obrigatória", "error", 5000);
     return;
   }
 
@@ -1022,10 +1052,24 @@ async function handleCustomItemSubmit(e) {
 
   try {
     // 1. Resize e upload da imagem
+    console.log('🔄 Iniciando upload da imagem...');
     const imageUrl = await uploadCustomImage(imageInput.files[0]);
+    console.log('✅ URL da imagem recebida:', imageUrl);
+
+    if (!imageUrl || imageUrl.trim() === '') {
+      throw new Error('URL da imagem está vazia após upload');
+    }
 
     // 2. Adiciona item ao álbum
     const token = localStorage.getItem("token");
+    const requestBody = {
+      customName: name,
+      customImage: imageUrl,
+      notes: notes || null,
+    };
+    
+    console.log('📤 Enviando para API:', requestBody);
+    
     const response = await fetch(
       `${API_BASE}/api/albums/${currentAlbum.id}/cards`,
       {
@@ -1034,11 +1078,7 @@ async function handleCustomItemSubmit(e) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          customName: name,
-          customImage: imageUrl,
-          notes: notes || null,
-        }),
+        body: JSON.stringify(requestBody),
       }
     );
 
@@ -1049,6 +1089,7 @@ async function handleCustomItemSubmit(e) {
 
     const newItem = await response.json();
     console.log("✅ Item personalizado criado:", newItem);
+    console.log("🖼️ customImage retornado:", newItem.customImage);
 
     // Atualiza lista
     albumCards.push(newItem);
@@ -1063,11 +1104,11 @@ async function handleCustomItemSubmit(e) {
     // Re-renderiza
     renderCards();
 
-    showToast("Item personalizado adicionado com sucesso!", "success");
+    showToast("✨ Item personalizado adicionado com sucesso!", "success", 5000);
     closeCustomItemModal();
   } catch (error) {
     console.error("❌ Erro ao criar item:", error);
-    showToast(error.message || "Erro ao adicionar item", "error");
+    showToast(error.message || "Erro ao adicionar item personalizado", "error", 6000);
     submitBtn.disabled = false;
     submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Adicionar Item';
   }
@@ -1075,6 +1116,8 @@ async function handleCustomItemSubmit(e) {
 
 async function uploadCustomImage(file) {
   try {
+    console.log('📤 Redimensionando e enviando imagem customizada...');
+    
     // Resize para 600x600
     const resizedBase64 = await resizeImage(file, 600, 600);
 
@@ -1092,15 +1135,38 @@ async function uploadCustomImage(file) {
       }),
     });
 
+    console.log('📥 Upload response:', response.status);
+
     if (!response.ok) {
-      throw new Error("Erro ao fazer upload da imagem");
+      const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Upload error:', errorData);
+      
+      if (response.status === 413) {
+        throw new Error('Imagem muito grande. Tamanho máximo: 5MB');
+      } else if (response.status === 400) {
+        throw new Error(errorData.error || errorData.message || 'Formato de imagem inválido');
+      } else if (response.status === 401) {
+        throw new Error('Sessão expirada. Faça login novamente.');
+      } else {
+        throw new Error(errorData.error || errorData.message || `Erro ao fazer upload da imagem (${response.status})`);
+      }
     }
 
     const data = await response.json();
-    return data.url;
+    console.log('✅ Upload response completa:', data);
+    
+    const imageUrl = data.imageUrl || data.url;
+    console.log('📍 URL extraída:', imageUrl);
+    
+    if (!imageUrl) {
+      console.error('❌ URL não encontrada na resposta:', data);
+      throw new Error('URL da imagem não foi retornada pelo servidor');
+    }
+    
+    return imageUrl;
   } catch (error) {
     console.error("❌ Erro no upload:", error);
-    throw new Error("Erro ao fazer upload da imagem");
+    throw error;
   }
 }
 
@@ -1158,7 +1224,10 @@ window.toggleFavorite = async function (cardId, button) {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Faça login para adicionar favoritos");
+      showToast("⚠️ Faça login para adicionar cartas aos favoritos", "error", 5000);
+      setTimeout(() => {
+        window.location.href = "/pages/userLogin/login.html";
+      }, 1500);
       return;
     }
 

@@ -379,9 +379,6 @@ function getCollectionLogo(code) {
 }
 
 function openAddToAlbumModalWithCard(card) {
-  if (typeof openAddToAlbumModal === "function") {
-    openAddToAlbumModal(card);
-  } else {
-    console.error("openAddToAlbumModal function not found");
-  }
+  localStorage.setItem('pendingCard', JSON.stringify(card));
+  window.location.href = '/pages/albums/albums-list.html';
 }

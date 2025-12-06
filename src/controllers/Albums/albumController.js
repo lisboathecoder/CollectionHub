@@ -1,4 +1,4 @@
-import * as AlbumModel from "../../models/Albums/albumModel.js";
+import AlbumModel from "../../models/Albums/albumModel.js";
 
 export const listarAlbums = async (req, res) => {
   try {
