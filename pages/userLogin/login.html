@@ -1,123 +1,91 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Login</title>
-    <link rel="stylesheet" href="../../assets/styles/login.css" />
 
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/assets/images/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/assets/images/favicon-16x16.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/assets/images/favicon-32x32.png"
-    />
-    <link rel="manifest" href="/assets/images/site.webmanifest" />
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <link rel="stylesheet" href="../../assets/styles/login.css" />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="manifest" href="../../assets/images/site.webmanifest" />
-  </head>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-32x32.png" />
+  <link rel="manifest" href="/assets/images/site.webmanifest" />
 
-  <body>
-    <div class="container-de-conteudo">
-      <div class="login-container">
-        <div class="welcome">
-          <h1>Olá,</h1>
-          <h1>Bem-vindo de volta!</h1>
-        </div>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="manifest" href="../../assets/images/site.webmanifest" />
+</head>
 
-        <div class="message">
-          <p>Estamos muito felizes em ter você de volta!</p>
-        </div>
-
-        <div class="botoes">
-          <div class="github">
-            <button class="oauth-button github-button">
-              <i class="devicon-github-original"></i>
-            </button>
-          </div>
-          <div class="google">
-            <button class="oauth-button google-button">
-              <i class="devicon-google-plain"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="linha-divisoria"></div>
-
-        <form class="login-form">
-          <label for="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="commitcommunity@gmail.com"
-          />
-
-          <label for="password">Password</label>
-          <input type="password" id="password" placeholder="********" />
-
-          <a href="/pages/userLogin/forgotPassword.html" class="forgot-password"
-            >esqueceu sua senha?</a
-          >
-
-          <div class="checkbox-group primeira">
-            <input type="checkbox" id="signup" name="signup" />
-            <label for="signup">
-              Ao se cadastrar, você está criando uma conta no COMMIT e concorda
-              com os
-              <a href="#" class="link-blue">Termos de Uso</a> e
-              <a href="#" class="link-blue">Política de Privacidade</a> do
-              COMMIT.
-            </label>
-          </div>
-
-          <div class="checkbox-group">
-            <input type="checkbox" id="remember" name="remember" />
-            <label for="remember">
-              Lembre-me como
-              <a href="#" class="link-blue">Membro da Comunidade COMMIT</a>.
-            </label>
-          </div>
-
-          <div class="signup-text">
-            <span class="text-gray">Ainda não tem uma conta no nosso site?</span
-            ><br />
-            <a href="/pages/userLogin/register.html" class="link-blue"
-              >crie uma conta agora!</a
-            >
-          </div>
-
-          <button type="submit" class="login-button">Entrar</button>
-        </form>
+<body>
+  <div class="container-de-conteudo">
+    <div class="login-container">
+      <div class="welcome">
+        <h1>Olá,</h1>
+        <h1>Bem-vindo de volta!</h1>
       </div>
 
-      <img
-        src="../../assets/images/banners/login.png"
-        alt="Descrição da Imagem"
-        class="imagem-direita"
-      />
+      <div class="message">
+        <p>Estamos muito felizes em ter você de volta!</p>
+      </div>
+
+      <div class="botoes">
+        <div class="github">
+          <button class="oauth-button github-button">
+            <i class="devicon-github-original"></i>
+          </button>
+        </div>
+        <div class="google">
+          <button class="oauth-button google-button">
+            <i class="devicon-google-plain"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="linha-divisoria"></div>
+
+      <form class="login-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="commitcommunity@gmail.com" />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="********" />
+
+        <a href="/pages/userLogin/forgotPassword.html" class="forgot-password">esqueceu sua senha?</a>
+
+        <div class="checkbox-group primeira">
+          <input type="checkbox" id="signup" name="signup" />
+          <label for="signup">
+            Ao se cadastrar, você está criando uma conta no COMMIT e concorda
+            com os
+            <a href="#" class="link-blue">Termos de Uso</a> e
+            <a href="#" class="link-blue">Política de Privacidade</a> do
+            COMMIT.
+          </label>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="remember" name="remember" />
+          <label for="remember">
+            Lembre-me como
+            <a href="#" class="link-blue">Membro da Comunidade COMMIT</a>.
+          </label>
+        </div>
+
+        <div class="signup-text">
+          <span class="text-gray">Ainda não tem uma conta no nosso site?</span><br />
+          <a href="/pages/userLogin/register.html" class="link-blue">crie uma conta agora!</a>
+        </div>
+
+        <button type="submit" class="login-button">Entrar</button>
+      </form>
     </div>
 
-    <script src="../../assets/js/config.js"></script>
-    <script src="../../assets/js/login.js"></script>
-    <script src="../../assets/js/oauth.js"></script>
-  </body>
+    <img src="../../assets/images/banners/login.png" alt="Descrição da Imagem" class="imagem-direita" />
+  </div>
+
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/login.js"></script>
+  <script src="../../assets/js/oauth.js"></script>
+</body>
+
 </html>

@@ -1,136 +1,94 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perfil do Usuário - Collection Hub</title>
-    <link rel="stylesheet" href="/assets/styles/style.css" />
-    <link rel="stylesheet" href="/assets/styles/albums.css" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/assets/images/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/assets/images/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/assets/images/favicon-16x16.png"
-    />
-    <link rel="manifest" href="/assets/images/site.webmanifest" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-  </head>
-  <body>
-    <header class="navbar">
-      <div class="navbar-left">
-        <a href="/index.html">
-          <img
-            src="/assets/images/shop.png"
-            alt="icone da loja"
-            class="icone-imagem"
-          />
-        </a>
-        <div class="search-box">
-          <input
-            type="text"
-            placeholder="Buscar coleção..."
-            class="search-input"
-            id="searchInput"
-          />
-          <button class="search-btn">...</button>
-        </div>
-      </div>
 
-      <div class="logo">
-        <a href="/index.html">
-          <img
-            src="/assets/images/Collection logo branca.png"
-            alt="Hubb Logo"
-          />
-        </a>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil do Usuário - Collection Hub</title>
+  <link rel="stylesheet" href="/assets/styles/style.css" />
+  <link rel="stylesheet" href="/assets/styles/albums.css" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png" />
+  <link rel="manifest" href="/assets/images/site.webmanifest" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
 
-      <div class="navbar-right">
-        <img
-          src="/assets/images/shopbag.png"
-          alt="icone do shopbag"
-          class="icone-imagem"
-        />
-        <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
-          <img
-            src="/assets/images/icon.png"
-            alt="icone do perfil"
-            class="icone-imagem"
-            id="profileIcon"
-          />
-        </a>
+<body>
+  <header class="navbar">
+    <div class="navbar-left">
+      <a href="/index.html">
+        <img src="/assets/images/shop.png" alt="icone da loja" class="icone-imagem" />
+      </a>
+      <div class="search-box">
+        <input type="text" placeholder="Buscar coleção..." class="search-input" id="searchInput" />
+        <button class="search-btn">...</button>
       </div>
-    </header>
+    </div>
 
-    <main class="profile-container">
-      <div class="profile-header">
-        <div class="profile-avatar">
-          <img
-            id="userAvatar"
-            src="/assets/images/icon.png"
-            alt="User Avatar"
-          />
-        </div>
-        <div class="profile-info">
-          <h1 id="userName">Carregando...</h1>
-          <p class="user-email" id="userEmail">@carregando</p>
-          <div class="profile-stats">
-            <div class="stat">
-              <span class="stat-value" id="albumCount">0</span>
-              <span class="stat-label">Álbuns</span>
-            </div>
-            <div class="stat">
-              <span class="stat-value" id="cardCount">0</span>
-              <span class="stat-label">Cartas</span>
-            </div>
+    <div class="logo">
+      <a href="/index.html">
+        <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
+      </a>
+    </div>
+
+    <div class="navbar-right">
+      <img src="/assets/images/shopbag.png" alt="icone do shopbag" class="icone-imagem" />
+      <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
+        <img src="/assets/images/icon.png" alt="icone do perfil" class="icone-imagem" id="profileIcon" />
+      </a>
+    </div>
+  </header>
+
+  <main class="profile-container">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <img id="userAvatar" src="/assets/images/icon.png" alt="User Avatar" />
+      </div>
+      <div class="profile-info">
+        <h1 id="userName">Carregando...</h1>
+        <p class="user-email" id="userEmail">@carregando</p>
+        <div class="profile-stats">
+          <div class="stat">
+            <span class="stat-value" id="albumCount">0</span>
+            <span class="stat-label">Álbuns</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="cardCount">0</span>
+            <span class="stat-label">Cartas</span>
           </div>
         </div>
-        <div class="profile-actions">
-          <button class="btn-secondary" id="backBtn">
-            <i class="fa-solid fa-arrow-left"></i>
-            Voltar
-          </button>
-        </div>
       </div>
-
-      <div class="profile-tabs">
-        <button class="tab-button active" data-tab="albums">
-          <i class="fa-solid fa-book"></i>
-          Álbuns Públicos
+      <div class="profile-actions">
+        <button class="btn-secondary" id="backBtn">
+          <i class="fa-solid fa-arrow-left"></i>
+          Voltar
         </button>
       </div>
+    </div>
 
-      <div id="albumsTab" class="tab-content active">
-        <div class="albums-grid-list" id="userAlbums">
-          <div class="empty-state">
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            <h3>Carregando álbuns...</h3>
-          </div>
+    <div class="profile-tabs">
+      <button class="tab-button active" data-tab="albums">
+        <i class="fa-solid fa-book"></i>
+        Álbuns Públicos
+      </button>
+    </div>
+
+    <div id="albumsTab" class="tab-content active">
+      <div class="albums-grid-list" id="userAlbums">
+        <div class="empty-state">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          <h3>Carregando álbuns...</h3>
         </div>
       </div>
-    </main>
+    </div>
+  </main>
 
-    <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/header.js"></script>
-    <script src="/assets/js/global-search.js"></script>
-    <script src="/assets/js/user/user-profile.js"></script>
-  </body>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/header.js"></script>
+  <script src="/assets/js/global-search.js"></script>
+  <script src="/assets/js/user/user-profile.js"></script>
+</body>
+
 </html>

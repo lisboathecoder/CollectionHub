@@ -1,123 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Create Account</title>
-    <link rel="stylesheet" href="../../assets/styles/register.css" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/assets/images/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/assets/images/favicon-16x16.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/assets/images/favicon-32x32.png"
-    />
-    <link rel="manifest" href="/assets/images/site.webmanifest" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
-    />
-  </head>
 
-  <body>
-    <div class="container-de-conteudo">
-      <div class="register-container">
-        <div class="welcome">
-          <h1>Não tem uma conta?</h1>
-          <h1>Crie uma.</h1>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Create Account</title>
+  <link rel="stylesheet" href="../../assets/styles/register.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-32x32.png" />
+  <link rel="manifest" href="/assets/images/site.webmanifest" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+</head>
 
-        <div class="message">
-          <p>Estamos muito felizes em ter você conosco!</p>
-        </div>
-
-        <div class="botoes">
-          <div class="github">
-            <button class="oauth-button github-button">
-              <i class="devicon-github-original"></i>
-            </button>
-          </div>
-          <div class="google">
-            <button class="oauth-button google-button">
-              <i class="devicon-google-plain"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="linha-divisoria"></div>
-
-        <form class="register-form">
-          <label for="nickname">Apelido</label>
-          <input type="text" id="nickname" placeholder="Seu apelido..." />
-
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="seuemail@exemplo.com" />
-
-          <label for="password">Senha</label>
-          <input type="password" id="password" placeholder="************" />
-          <small class="password-hint">Mínimo 8 caracteres</small>
-
-          <label for="confirmPassword">Confirmar Senha</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            placeholder="************"
-          />
-
-          <div class="checkbox-group primeira">
-            <input type="checkbox" id="terms" name="terms" />
-            <label for="terms">
-              Ao se cadastrar, você está criando uma conta no COMMIT e concorda
-              com os
-              <a href="#" class="link-blue">Termos de Uso</a> e
-              <a href="#" class="link-blue">Política de Privacidade</a> do
-              COMMIT.
-            </label>
-          </div>
-
-          <div class="checkbox-group">
-            <input type="checkbox" id="remember" name="remember" />
-            <label for="remember">
-              Lembre-me como
-              <a href="#" class="link-blue">Membro da Comunidade COMMIT</a>.
-            </label>
-          </div>
-
-          <div class="signup-text">
-            <span class="text-gray">Já tem uma conta no nosso site?</span><br />
-            <a href="/pages/userLogin/login.html" class="link-blue"
-              >entre agora!</a
-            >
-          </div>
-
-          <button type="submit" class="register-button">Cadastrar</button>
-        </form>
+<body>
+  <div class="container-de-conteudo">
+    <div class="register-container">
+      <div class="welcome">
+        <h1>Não tem uma conta?</h1>
+        <h1>Crie uma.</h1>
       </div>
 
-      <img
-        src="../../assets/images/banners/login.png"
-        alt="Descrição da Imagem"
-        class="imagem-direita"
-      />
+      <div class="message">
+        <p>Estamos muito felizes em ter você conosco!</p>
+      </div>
+
+      <div class="botoes">
+        <div class="github">
+          <button class="oauth-button github-button">
+            <i class="devicon-github-original"></i>
+          </button>
+        </div>
+        <div class="google">
+          <button class="oauth-button google-button">
+            <i class="devicon-google-plain"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="linha-divisoria"></div>
+
+      <form class="register-form">
+        <label for="nickname">Apelido</label>
+        <input type="text" id="nickname" placeholder="Seu apelido..." />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="seuemail@exemplo.com" />
+
+        <label for="password">Senha</label>
+        <input type="password" id="password" placeholder="************" />
+        <small class="password-hint">Mínimo 8 caracteres</small>
+
+        <label for="confirmPassword">Confirmar Senha</label>
+        <input type="password" id="confirmPassword" placeholder="************" />
+
+        <div class="checkbox-group primeira">
+          <input type="checkbox" id="terms" name="terms" />
+          <label for="terms">
+            Ao se cadastrar, você está criando uma conta no COMMIT e concorda
+            com os
+            <a href="#" class="link-blue">Termos de Uso</a> e
+            <a href="#" class="link-blue">Política de Privacidade</a> do
+            COMMIT.
+          </label>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="remember" name="remember" />
+          <label for="remember">
+            Lembre-me como
+            <a href="#" class="link-blue">Membro da Comunidade COMMIT</a>.
+          </label>
+        </div>
+
+        <div class="signup-text">
+          <span class="text-gray">Já tem uma conta no nosso site?</span><br />
+          <a href="/pages/userLogin/login.html" class="link-blue">entre agora!</a>
+        </div>
+
+        <button type="submit" class="register-button">Cadastrar</button>
+      </form>
     </div>
 
-    <script src="../../assets/js/config.js"></script>
-    <script src="../../assets/js/register.js"></script>
-    <script src="../../assets/js/oauth.js"></script>
-  </body>
+    <img src="../../assets/images/banners/login.png" alt="Descrição da Imagem" class="imagem-direita" />
+  </div>
+
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/register.js"></script>
+  <script src="../../assets/js/oauth.js"></script>
+</body>
+
 </html>
