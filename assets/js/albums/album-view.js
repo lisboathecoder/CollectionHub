@@ -323,70 +323,103 @@ function renderCards() {
     return;
   }
 
-  grid.innerHTML = albumCards
-    .map((item) => {
-      const card = item.card || {};
-      const isCustomItem = !item.cardId && item.customName;
-      
-      // Para itens personalizados, usar customImage ou placeholder
-      let imageUrl;
-      if (isCustomItem) {
-        imageUrl = item.customImage && item.customImage.trim() !== '' 
-          ? item.customImage 
-          : "/assets/images/placeholder-card.png";
-        console.log('🎨 Item personalizado:', item.customName, 'customImage:', item.customImage, 'usando:', imageUrl);
-      } else {
-        imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
-      }
-      
-      const name = item.customName || card.nameEn || "Unknown";
-      const number = card.number || "-";
-      const displayNumber = isCustomItem
-        ? "<i class='fa-solid fa-star'></i> Personalizado"
-        : `#${number}`;
+  // Separar cartas Pokemon e itens personalizados
+  const pokemonCards = albumCards.filter(item => item.cardId);
+  const customItems = albumCards.filter(item => !item.cardId && item.customName);
 
-      // Define o link de destino baseado no tipo de item
-      const itemLink = isCustomItem
-        ? `/pages/albums/custom-item-details.html?id=${item.id}&albumId=${currentAlbum.id}`
-        : card.id
-        ? `/pages/explore/card-details.html?id=${card.id}`
-        : null;
+  // Função helper para renderizar um item
+  const renderItem = (item) => {
+    const card = item.card || {};
+    const isCustomItem = !item.cardId && item.customName;
+    
+    // Para itens personalizados, usar customImage ou placeholder
+    let imageUrl;
+    if (isCustomItem) {
+      imageUrl = item.customImage && item.customImage.trim() !== '' 
+        ? item.customImage 
+        : "/assets/images/placeholder-card.png";
+    } else {
+      imageUrl = card.imageUrl || "/assets/images/placeholder-card.png";
+    }
+    
+    const name = item.customName || card.nameEn || "Unknown";
+    const number = card.number || "-";
+    const displayNumber = isCustomItem
+      ? "<i class='fa-solid fa-star'></i> Personalizado"
+      : `#${number}`;
 
-      return `
-            <div class="card-item ${
-              isCustomItem ? "custom-item" : ""
-            }" data-item-id="${item.id}" ${
+    // Define o link de destino baseado no tipo de item
+    const itemLink = isCustomItem
+      ? `/pages/albums/custom-item-details.html?id=${item.id}&albumId=${currentAlbum.id}`
+      : card.id
+      ? `/pages/explore/card-details.html?id=${card.id}`
+      : null;
+
+    return `
+      <div class="card-item ${
+        isCustomItem ? "custom-item" : ""
+      }" data-item-id="${item.id}" ${
         itemLink
           ? `onclick="window.location.href='${itemLink}'" style="cursor: pointer;"`
           : ""
       }>
-                <button class="remove-card-btn" onclick="event.stopPropagation(); window.removeCard(${
-                  item.id
-                })">
-                    <i class="fa-solid fa-times"></i>
-                </button>
-                ${
-                  !isCustomItem && card.id
-                    ? `<button class="favorite-card-btn" onclick="event.stopPropagation(); window.toggleFavorite(${card.id}, this)" data-card-id="${card.id}">
-                    <i class="fa-solid fa-heart"></i>
-                </button>`
-                    : ""
-                }
-                ${imageUrl && imageUrl !== "/assets/images/placeholder-card.png" 
-                  ? `<img src="${imageUrl}" alt="${name}" onerror="this.style.display='none'; this.parentElement.insertAdjacentHTML('afterbegin', '<div style=\\"width:100%;aspect-ratio:2/3;background:linear-gradient(135deg,#1a1a2e,#2d2d44);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;gap:10px;\\"><i class=\\"fa-solid fa-image\\" style=\\"font-size:40px;color:#ff3e6c;\\"></i><span style=\\"color:#666;font-size:12px;\\">Sem imagem</span></div>');">`
-                  : `<div style="width:100%;aspect-ratio:2/3;background:linear-gradient(135deg,#1a1a2e,#2d2d44);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;gap:10px;"><i class="fa-solid fa-image" style="font-size:40px;color:#ff3e6c;"></i><span style="color:#666;font-size:12px;">Sem imagem</span></div>`
-                }
-                <div class="card-item-name">${name}</div>
-                <div class="card-item-number">${displayNumber}</div>
-                ${
-                  !isCustomItem && item.notes
-                    ? `<div class="card-item-notes" title="${item.notes}"><i class="fa-solid fa-note-sticky"></i></div>`
-                    : ""
-                }
-            </div>
-        `;
-    })
-    .join("");
+        <button class="remove-card-btn" onclick="event.stopPropagation(); window.removeCard(${
+          item.id
+        })">
+          <i class="fa-solid fa-times"></i>
+        </button>
+        ${
+          !isCustomItem && card.id
+            ? `<button class="favorite-card-btn" onclick="event.stopPropagation(); window.toggleFavorite(${card.id}, this)" data-card-id="${card.id}">
+            <i class="fa-solid fa-heart"></i>
+          </button>`
+            : ""
+        }
+        ${
+          isCustomItem
+            ? `<button class="edit-card-btn" onclick="event.stopPropagation(); window.location.href='${itemLink}'" title="Editar item">
+            <i class="fa-solid fa-pen"></i>
+          </button>`
+            : ""
+        }
+        <div class="card-item-image-wrapper">
+          ${imageUrl && imageUrl !== "/assets/images/placeholder-card.png" 
+            ? `<img src="${imageUrl}" alt="${name}" onerror="this.src='/assets/images/placeholder-card.png'; this.onerror=null;">`
+            : `<div class="card-item-placeholder">
+                <i class="fa-solid fa-image"></i>
+                <span>Sem imagem</span>
+              </div>`
+          }
+        </div>
+        <div class="card-item-info">
+          <div class="card-item-name">${name}</div>
+          <div class="card-item-number">${displayNumber}</div>
+        </div>
+      </div>
+    `;
+  };
+
+  // Construir HTML com seções separadas se houver ambos os tipos
+  let html = '';
+  
+  if (pokemonCards.length > 0 && customItems.length > 0) {
+    // Mostrar ambas as seções separadas
+    html += `
+      <div class="cards-section-divider">
+        <h3><i class="fa-solid fa-cards-blank"></i> Cartas Pokémon (${pokemonCards.length})</h3>
+      </div>
+      ${pokemonCards.map(renderItem).join('')}
+      <div class="cards-section-divider">
+        <h3><i class="fa-solid fa-star"></i> Itens Personalizados (${customItems.length})</h3>
+      </div>
+      ${customItems.map(renderItem).join('')}
+    `;
+  } else {
+    // Mostrar apenas o tipo disponível
+    html = albumCards.map(renderItem).join('');
+  }
+
+  grid.innerHTML = html;
 }
 
 let searchTimeout = null;
@@ -895,17 +928,20 @@ function openCustomItemModal() {
   modal.innerHTML = `
     <div class="modal-content custom-item-modal">
       <div class="modal-header">
-        <h2><i class="fa-solid fa-image"></i> Adicionar Item Personalizado</h2>
+        <div class="modal-header-content">
+          <i class="fa-solid fa-image"></i>
+          <h2>Adicionar Item Personalizado</h2>
+        </div>
         <button class="btn-close-modal" onclick="closeCustomItemModal()">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="modal-body">
-        <p style="color: #9aa7b0; margin-bottom: 20px;">
+        <div class="modal-info-box">
           <i class="fa-solid fa-circle-info"></i> 
-          Adicione qualquer colecionável: figuras, moedas, selos, quadrinhos, etc.
-        </p>
-        <form id="customItemForm">
+          <span>Adicione qualquer colecionável: figuras, moedas, selos, quadrinhos, etc.</span>
+        </div>
+        <form id="customItemForm" class="custom-item-form">
           <div class="form-group">
             <label for="customItemName">Nome do Item *</label>
             <input 
@@ -937,7 +973,6 @@ function openCustomItemModal() {
                 id="customItemImage" 
                 accept="image/*" 
                 style="display: none;"
-                required
               />
               <div class="upload-placeholder" id="uploadPlaceholder">
                 <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -946,9 +981,11 @@ function openCustomItemModal() {
               </div>
               <div class="image-preview" id="imagePreview" style="display: none;">
                 <img src="" alt="Preview" id="previewImg" />
-                <button type="button" class="btn-change-image" onclick="document.getElementById('customItemImage').click()">
-                  <i class="fa-solid fa-rotate"></i> Trocar Imagem
-                </button>
+                <div class="image-preview-actions">
+                  <button type="button" class="btn-change-image" onclick="document.getElementById('customItemImage').click()">
+                    <i class="fa-solid fa-rotate"></i> Trocar Imagem
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -965,6 +1002,7 @@ function openCustomItemModal() {
   `;
 
   document.body.appendChild(modal);
+  document.body.classList.add('modal-open');
   setTimeout(() => modal.classList.add("active"), 10);
 
   // Event listeners
@@ -974,25 +1012,51 @@ function openCustomItemModal() {
   const imagePreview = document.getElementById("imagePreview");
   const previewImg = document.getElementById("previewImg");
 
-  // Click na área de upload
-  uploadPlaceholder.addEventListener("click", () => imageInput.click());
+  // Click na área de upload (placeholder e área inteira)
+  uploadPlaceholder.addEventListener("click", () => {
+    console.log('📸 Click no placeholder');
+    imageInput.click();
+  });
+  
+  uploadArea.addEventListener("click", (e) => {
+    // Se clicar na área mas não em um botão
+    if (e.target === uploadArea || e.target.closest('.upload-placeholder')) {
+      console.log('📸 Click na área de upload');
+      imageInput.click();
+    }
+  });
 
   // Drag & Drop
   uploadArea.addEventListener("dragover", (e) => {
     e.preventDefault();
+    e.stopPropagation();
     uploadArea.classList.add("drag-over");
   });
 
-  uploadArea.addEventListener("dragleave", () => {
+  uploadArea.addEventListener("dragleave", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     uploadArea.classList.remove("drag-over");
   });
 
   uploadArea.addEventListener("drop", (e) => {
     e.preventDefault();
+    e.stopPropagation();
     uploadArea.classList.remove("drag-over");
+    
     const file = e.dataTransfer.files[0];
+    console.log('📁 Arquivo arrastado:', file);
+    
     if (file && file.type.startsWith("image/")) {
+      // Criar um novo FileList e atribuir ao input
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      imageInput.files = dataTransfer.files;
+      
+      // Mostrar preview
       handleImageSelect(file, previewImg, uploadPlaceholder, imagePreview);
+    } else {
+      showToast("⚠️ Por favor, selecione uma imagem válida", "error", 3000);
     }
   });
 
@@ -1005,12 +1069,18 @@ function openCustomItemModal() {
   });
 
   // Form submit
-  document
-    .getElementById("customItemForm")
-    .addEventListener("submit", handleCustomItemSubmit);
+  const customItemForm = document.getElementById("customItemForm");
+  if (customItemForm) {
+    console.log('✅ Form encontrado, adicionando listener de submit');
+    customItemForm.addEventListener("submit", handleCustomItemSubmit);
+  } else {
+    console.error('❌ Form customItemForm não encontrado!');
+  }
 }
 
 function handleImageSelect(file, previewImg, uploadPlaceholder, imagePreview) {
+  console.log('🖼️ handleImageSelect chamado:', file.name, file.size);
+  
   // Valida tamanho (5MB)
   if (file.size > 5 * 1024 * 1024) {
     showToast("⚠️ Imagem muito grande! Máximo 5MB", "error", 5000);
@@ -1023,17 +1093,21 @@ function handleImageSelect(file, previewImg, uploadPlaceholder, imagePreview) {
     previewImg.src = e.target.result;
     uploadPlaceholder.style.display = "none";
     imagePreview.style.display = "flex";
+    console.log('✅ Preview atualizado');
   };
   reader.readAsDataURL(file);
 }
 
 async function handleCustomItemSubmit(e) {
   e.preventDefault();
+  console.log('🎯 handleCustomItemSubmit chamado');
 
   const name = document.getElementById("customItemName").value.trim();
   const notes = document.getElementById("customItemNotes").value.trim();
   const imageInput = document.getElementById("customItemImage");
   const submitBtn = document.getElementById("submitCustomItemBtn");
+
+  console.log('📋 Dados do form:', { name, notes, hasImage: !!imageInput.files[0] });
 
   if (!name) {
     showToast("⚠️ Nome do item é obrigatório", "error", 5000);
@@ -1215,6 +1289,7 @@ window.closeCustomItemModal = function () {
   const modal = document.getElementById("customItemModal");
   if (modal) {
     modal.classList.remove("active");
+    document.body.classList.remove('modal-open');
     setTimeout(() => modal.remove(), 300);
   }
 };

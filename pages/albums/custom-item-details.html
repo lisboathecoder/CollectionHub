@@ -1,102 +1,167 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detalhes do Item - CollectionHub</title>
-    <link rel="stylesheet" href="/assets/styles/global.css" />
-    <link rel="stylesheet" href="/assets/styles/style.css" /    >
-    <link rel="stylesheet" href="/assets/styles/albums.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-  </head>
-  <body>
-    <div id="header-placeholder"></div>
 
-    <main class="custom-item-details-page">
-      <div class="container">
-        <button class="btn-back" onclick="window.history.back()">
-          <i class="fa-solid fa-arrow-left"></i>
-          Voltar
-        </button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalhes do Item - CollectionHub</title>
+  <link rel="stylesheet" href="/assets/styles/global.css" />
+  <link rel="stylesheet" href="/assets/styles/style.css" />
+  <link rel="stylesheet" href="/assets/styles/albums.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<header class="navbar">
+  <div class="navbar-left">
+    <div class="search-box">
+      <input type="text" placeholder="Search Collection..." class="search-input" id="searchInput" />
+      <button class="search-btn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+  </div>
+  <div class="logo">
+    <a href="/index.html">
+      <img src="/assets/images/Collection logo branca.png" alt="Hubb Logo" />
+    </a>
+  </div>
+  <div class="navbar-right">
+    <a href="/pages/userLogin/login.html" class="nav-item" id="profileLink">
+      <img src="/assets/images/icon.png" alt="" class="icone-imagem" id="profileImage" />
+    </a>
+  </div>
+</header>
 
-        <div id="loadingState" class="loading-state">
-          <i class="fa-solid fa-spinner fa-spin"></i>
-          <p>Carregando detalhes...</p>
-        </div>
+<body>
+  <main class="custom-item-details-page">
+    <div class="container">
+      <button class="btn-back" onclick="window.history.back()">
+        <i class="fa-solid fa-arrow-left"></i>
+        Voltar
+      </button>
 
-        <div id="itemContent" style="display: none">
-          <div class="custom-item-container">
-            <div class="custom-item-image-section">
-              <div class="custom-item-image-wrapper">
-                <img id="itemImage" src="" alt="" style="display: none;" />
-                <div id="imagePlaceholder" class="custom-item-placeholder" style="display: none;">
-                  <i class="fa-solid fa-image"></i>
-                  <span>Sem imagem</span>
+      <div id="loadingState" class="loading-state">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <p>Carregando detalhes...</p>
+      </div>
+
+      <div id="itemContent" style="display: none">
+        <div class="custom-item-container">
+          <div class="custom-item-image-section">
+            <div class="custom-item-image-wrapper">
+              <img id="itemImage" src="" alt="" style="display: none;" />
+              <div id="imagePlaceholder" class="custom-item-placeholder" style="display: none;">
+                <i class="fa-solid fa-image"></i>
+                <span>Sem imagem</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="custom-item-info-section">
+            <div class="custom-item-header">
+              <div class="custom-item-badge">
+                <i class="fa-solid fa-star"></i>
+                Item Personalizado
+              </div>
+              <h1 id="itemName">-</h1>
+            </div>
+
+            <div class="custom-item-metadata">
+              <div class="metadata-card">
+                <div class="metadata-card-header">
+                  <i class="fa-solid fa-book"></i>
+                  <span>Álbum</span>
                 </div>
+                <div id="albumName" class="metadata-card-value">-</div>
+              </div>
+              <div class="metadata-card">
+                <div class="metadata-card-header">
+                  <i class="fa-solid fa-layer-group"></i>
+                  <span>Quantidade</span>
+                </div>
+                <div id="itemQuantity" class="metadata-card-value">1</div>
+              </div>
+              <div class="metadata-card">
+                <div class="metadata-card-header">
+                  <i class="fa-solid fa-calendar"></i>
+                  <span>Adicionado em</span>
+                </div>
+                <div id="itemDate" class="metadata-card-value">-</div>
               </div>
             </div>
 
-            <div class="custom-item-info-section">
-              <div class="custom-item-header">
-                <div class="custom-item-badge">
-                  <i class="fa-solid fa-star"></i>
-                  Item Personalizado
-                </div>
-                <h1 id="itemName">-</h1>
-              </div>
+            <div id="notesSection" class="custom-item-notes-section" style="display: none">
+              <h3><i class="fa-solid fa-note-sticky"></i> Observações</h3>
+              <p id="itemNotes"></p>
+            </div>
 
-              <div class="custom-item-metadata">
-                <div class="metadata-card">
-                  <div class="metadata-card-header">
-                    <i class="fa-solid fa-book"></i>
-                    <span>Álbum</span>
-                  </div>
-                  <div id="albumName" class="metadata-card-value">-</div>
-                </div>
-                <div class="metadata-card">
-                  <div class="metadata-card-header">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span>Quantidade</span>
-                  </div>
-                  <div id="itemQuantity" class="metadata-card-value">1</div>
-                </div>
-                <div class="metadata-card">
-                  <div class="metadata-card-header">
-                    <i class="fa-solid fa-calendar"></i>
-                    <span>Adicionado em</span>
-                  </div>
-                  <div id="itemDate" class="metadata-card-value">-</div>
-                </div>
-              </div>
-
-              <div id="notesSection" class="custom-item-notes-section" style="display: none">
-                <h3><i class="fa-solid fa-note-sticky"></i> Observações</h3>
-                <p id="itemNotes"></p>
-              </div>
-
-              <div class="custom-item-actions">
-                <button class="btn btn-secondary" onclick="editCustomItem()">
-                  <i class="fa-solid fa-edit"></i>
-                  Editar Item
-                </button>
-                <button class="btn btn-danger" onclick="deleteCustomItem()">
-                  <i class="fa-solid fa-trash"></i>
-                  Remover do Álbum
-                </button>
-              </div>
+            <div class="custom-item-actions">
+              <button class="btn btn-secondary" onclick="editCustomItem()">
+                <i class="fa-solid fa-edit"></i>
+                Editar Item
+              </button>
+              <button class="btn btn-danger" onclick="deleteCustomItem()">
+                <i class="fa-solid fa-trash"></i>
+                Remover do Álbum
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </main>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section footer-nav">
+        <h4 class="footer-heading">Navegação</h4>
+        <a href="/pages/public/about.html" class="footer-link">Sobre</a>
+        <a href="/pages/public/contact.html" class="footer-link">Contato</a>
+        <a href="/pages/public/faq.html" class="footer-link">FAQ</a>
+      </div>
 
-    <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/token-handler.js"></script>
-    <script src="/assets/js/header.js"></script>
-    <script src="/assets/js/toast.js"></script>
-    <script src="/assets/js/albums/custom-item-details.js"></script>
-  </body>
+      <div class="footer-section footer-info">
+        <div class="footer-logo">
+          Collection<span class="text-primary">Hub</span>
+        </div>
+        <p>&copy; 2025 CollectionHub. Todos os direitos reservados.</p>
+      </div>
+
+      <div class="footer-section footer-social">
+        <h4 class="footer-heading">Siga-nos</h4>
+        <div class="social-icons">
+          <a href="https://www.instagram.com/collectionhub.co/" target="_blank" class="social-link"
+            aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="feather feather-instagram">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="mailto:collectionhub2025@gmail.com" class="social-link" aria-label="Email">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="feather feather-mail">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="small-print">
+        Design inspirado em comunidades de colecionáveis digitais.
+      </p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/header.js"></script>
+  <script src="/assets/js/token-handler.js"></script>
+  <script src="/assets/js/global-search.js?v=2"></script>
+  <script src="/assets/js/toast.js"></script>
+  <script src="/assets/js/albums/custom-item-details.js"></script>
+</body>
+
 </html>

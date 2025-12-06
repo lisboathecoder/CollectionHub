@@ -73,8 +73,27 @@ document.addEventListener("DOMContentLoaded", () => {
             profileImage.addEventListener("click", (e) => {
               e.preventDefault();
               e.stopPropagation();
-              dropdown.style.display =
-                dropdown.style.display === "none" ? "block" : "none";
+              
+              // Toggle dropdown
+              const isVisible = dropdown.style.display === "block";
+              dropdown.style.display = isVisible ? "none" : "block";
+              
+              if (!isVisible) {
+                // Calcular posição do botão em relação à tela
+                const rect = profileLink.getBoundingClientRect();
+                const windowWidth = window.innerWidth;
+                const dropdownWidth = 180; // min-width do dropdown
+                
+                // Se o botão está mais à esquerda (menos de metade da tela), abre para direita
+                // Se está mais à direita, abre para esquerda
+                if (rect.left < windowWidth / 2) {
+                  dropdown.style.right = "auto";
+                  dropdown.style.left = "0";
+                } else {
+                  dropdown.style.right = "0";
+                  dropdown.style.left = "auto";
+                }
+              }
             });
 
             document.addEventListener("click", (e) => {
